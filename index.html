@@ -1,15 +1,67 @@
 <html>
 <head>
-	<title>~%</title>
-	<link href="https://fonts.googleapis.com/css?family=Yantramanav" rel="stylesheet">
+<title>~%</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<script>
+</script>
+<style>
+.block {
+	font-size: 10em;
+	font-family: 'Roboto', sans-serif;
+	line-height: 95%;
+	letter-spacing: 0.01em;
+}
+
+.blink {
+    -webkit-animation: blink 1.25s linear infinite;
+    -moz-animation: blink 1.25s linear infinite;
+    -ms-animation: blink 1.25s linear infinite;
+    -o-animation: blink 1.25s linear infinite;
+    animation: blink 1.25s linear infinite;
+}
+
+@-webkit-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@-moz-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@-ms-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@-o-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+</style>
 </head>
 <body>
-<div style="display: flex; align-items: center; justify-content: center;">
-	<div style="display: flex; align-items: center; justify-content: center; align-self: flex-start;"></div>
-	<div style="display: flex; align-items: center; justify-content: center; flex: none; max-width: 50%">
-		<div style="font-size: 20em; font-family: 'Yantramanav', sans-serif;">~%</div>
-	</div>
-	<div style="display: flex; align-items: center; justify-content: center; align-self: flex-end;"></div>
+<div class="block">
+<div>~%</div>
+<div>~%</div>
+<div>~%<span class="blink">&#9608;</span></div>
+</div>
 </div>
 </body>
 </html>
