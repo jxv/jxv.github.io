@@ -1,0 +1,38 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>ready or not here i come</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<script>
+var theta = 0;
+setInterval(function () { document.body.style.setProperty('--angle', theta + 'deg'); theta += 0.2; if (theta >= 360) theta = 0; }, 10);
+</script>
+<style>
+
+body {
+--angle: 0deg;
+--color1: #fff;
+--color2: #000;
+
+background: repeating-linear-gradient(var(--angle), 
+              var(--color1), var(--color1) 50px,
+              var(--color2) 0, var(--color2) 100px);
+
+height: 100%;
+
+}
+
+.block {
+color: red;
+text-shadow: 0.06em 0.03em magenta;
+font-family: 'Roboto', monospace;
+font-size: 3em;
+}
+
+</style>
+</head>
+<body style="--angle:232.6deg;">
+<div class="block">
+nice weather we're having
+</div>
+
+
+</body></html>
