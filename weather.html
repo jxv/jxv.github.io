@@ -15,9 +15,11 @@ function step(cur) {
   const adjust = 1 + (msPerFrame - delta);
 
   //
+  const ofs = (scale * Math.sin(theta * Math.PI / 180)) | 0;
 
   document.body.style.setProperty('--angle', phi + 'deg');
-  document.body.style.setProperty('--width', 100 + ((scale * Math.sin(theta * Math.PI / 180)) | 0) + 'px');
+  document.body.style.setProperty('--width', 100 + ofs + 'px');
+  document.body.style.setProperty('--width2', 50 - ofs + 'px');
   
   theta += 0.1 * adjust;
   if (theta >= 360) theta = 0;
@@ -39,12 +41,13 @@ body {
   --angle: 0deg;
   --color1: #fff;
   --color2: #000;
-  --width: 80px;
+  --width: 100px;
+  --width2: 50px;
   background:
     repeating-linear-gradient(
       var(--angle), 
       var(--color1),
-      var(--color1) 50px,
+      var(--color1) var(--width2, 50px),
       var(--color2) 0,
       var(--color2) var(--width, 100px)
     );
