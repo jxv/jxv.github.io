@@ -2,7 +2,7 @@
 <title>ready or not here i come</title>
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 <script>
-const scale = 30.0;
+const scale = 20.0;
 const fps = 60.0;
 const msPerFrame = 1000.0 / fps;
 
@@ -15,13 +15,13 @@ function step(cur) {
   const adjust = 1 + (msPerFrame - delta);
 
   //
-  const ofs = (scale * Math.sin(theta * Math.PI / 180)) | 0;
+  const ofs = (scale * Math.sin((theta + phi) * Math.PI / 180)) | 0;
 
   document.body.style.setProperty('--angle', phi + 'deg');
   document.body.style.setProperty('--width', 100 + ofs + 'px');
   document.body.style.setProperty('--width2', 50 - ofs + 'px');
   
-  theta += 0.1 * adjust;
+  theta += 0.15 * adjust;
   if (theta >= 360) theta = 0;
 
   phi += 0.1 + Math.sin(theta) * 1.5;
