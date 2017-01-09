@@ -15,7 +15,7 @@ function step(cur) {
   const adjust = 1 + (msPerFrame - delta);
 
   //
-  const ofs = (scale * Math.sin((theta + phi) * Math.PI / 180)) | 0;
+  const ofs = (scale * Math.sin((theta + phi * 0.2) * Math.PI / 180)) | 0;
 
   document.body.style.setProperty('--angle', phi + 'deg');
   document.body.style.setProperty('--width', 100 + ofs + 'px');
