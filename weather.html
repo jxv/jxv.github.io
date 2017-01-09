@@ -2,8 +2,19 @@
 <title>ready or not here i come</title>
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 <script>
+var phi = 0;
 var theta = 0;
-setInterval(function () { document.body.style.setProperty('--angle', theta + 'deg'); theta += 0.2; if (theta >= 360) theta = 0; }, 10);
+const scale = 30.0;
+setInterval(function () {
+	document.body.style.setProperty('--angle', phi + 'deg');
+	document.body.style.setProperty('--width', 100 + ((scale * Math.sin(theta * Math.PI / 180)) | 0) + 'px');
+	theta += 0.1;
+	if (theta >= 360) theta = 0;
+	
+	phi += 0.1 + Math.sin(theta) * 5;
+	if (phi >= 360) phi = 0;
+	
+}, 1);
 </script>
 <style>
 
@@ -11,10 +22,10 @@ body {
 --angle: 0deg;
 --color1: #fff;
 --color2: #000;
-
+--width: 80px;
 background: repeating-linear-gradient(var(--angle), 
               var(--color1), var(--color1) 50px,
-              var(--color2) 0, var(--color2) 100px);
+              var(--color2) 0, var(--color2) var(--width, 100px));
 
 height: 100%;
 
@@ -29,7 +40,7 @@ font-size: 3em;
 
 </style>
 </head>
-<body style="--angle:232.6deg;">
+<body>
 <div class="block">
 nice weather we're having
 </div>
