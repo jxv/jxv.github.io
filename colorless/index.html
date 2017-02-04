@@ -3,25 +3,217 @@
 <title>Colorless</title>
 <script>
 </script>
-<link href="https://fonts.googleapis.com/css?family=Crimson+Text|Sahitya|Share+Tech+Mono" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Crimson+Text|Inconsolata|Fondamento" rel="stylesheet">
 <style>
 
 body {
-  color: #eee;
+  color: #777;
   background-color: #222;
-  font-family: 'Crimson Text', serif;
 }
 
-h1, h2, h3, h4, h5 {
-  font-family: 'Sahitya', serif;
+h1 {
+  color: #eee;
+  font-family: 'Fondamento', serif;
+  letter-spacing: 0.1em;
+  text-shadow: 1px 3px 5px #111;
+  font-size: 5em;
+  font-weight: 300;
+  margin-left: 70px;
+}
+
+h2, h3, h4, h5 {
+  font-family: 'Crimson Text', serif;
+  font-size: 1em;
+  color: #eee;
+}
+
+p, li {
+  font-family: 'Crimson Text', serif;
+  font-size: 1em;
+  color: #777;
+}
+
+li {
+  font-style: italic;
+}
+
+.container {
+  width: 900px;
+  margin: auto;
+  margin-left: 70px;
+}
+
+.code-spec {
+  color: #ab7;
+  background-color: #111;
+  box-shadow: inset 0 0 10px #070707;
+  padding: 20px;
+  font-family: 'Inconsolata', monospace;
+  font-size: 1em;
 }
 
 </style>
 </head>
 <body>
 <h1>Colorless</h1>
-<p>Hello, World!</p>
-<h5>#colorless on irc.freenode.net</h5>
-</p>
+<div class="container">
+  <p>
+    <h2>Values</h2><br/>
+    Correctness &gt; Language Diversity &gt; Performance
+
+    <div>
+		"By and large, Facebook’s engineering culture has tended towards choosing the best tools and implementations available over standardizing on any one programming language and begrudgingly accepting its inherent limitations - Thrift: Scalable Cross-Language Services Implementation by Mark Slee, Aditya Agarwal and Marc Kwiatkowski
+    </div>
+
+  </p>
+  <br/>
+  <p>
+    <h2>Colorless-JSON</h2><br/>
+  </p>
+  <br/>
+  <p>
+    <h2>Language Targets</h2>
+    <ul>
+      <li>ActionScript
+      <li>C#
+      <li>Chicken Scheme
+      <li>Clojure
+      <li>CoffeeScript
+      <li>CommonLisp
+      <li>C++
+      <li>Crystal
+      <li>D
+      <li>Dart
+      <li>Delphi
+      <li>Elixir
+      <li>Elm
+      <li>Erlang
+      <li>F#
+      <li>Frege
+      <li>Gambit Scheme
+      <li>Go
+      <li>Groovy
+      <li>Guile Scheme
+      <li>Hackett
+      <li>Haskell
+      <li>Haxe
+      <li>Hy
+      <li>Idris
+      <li>Io
+      <li>Java
+      <li>JavaScript
+      <li>Julia
+      <li>Kotlin
+      <li>LabVIEW
+      <li>Lua
+      <li>Nim
+      <li>OCaml
+      <li>Objective-C
+      <li>Octave
+      <li>PHP
+      <li>Perl
+      <li>Prolog
+      <li>PureScript
+      <li>Python
+      <li>R
+      <li>Racket
+      <li>Ruby
+      <li>Rust
+      <li>Scala
+      <li>Squeak
+      <li>Swift
+      <li>TypeScript
+      <li>Vala
+    </ul>
+  </p>
+  <br/>
+  <p>
+    <h2>Example</h2>
+  </p>
+  <div class="code-spec">
+  @Colorless(0,0);<br/>
+  <br/>
+  //// Module version specifier<br/>
+  <br/>
+  %Imports.0;<br/>
+  %Spec.0;<br/>
+  %Deck.0;<br/>
+  %Calculator.1;</br>
+  <br/>
+  //// Imports<br/>
+  <br/>
+  // Imports without version<br/>
+  <br/>
+  &gt;%Imports;<br/>
+  &gt;%Calculator;<br/>
+  <br/>
+  // While self importing is elegant, it's not useful.<br/>
+  // Below is this module, 'Services.0', which is referenced as '%'.<br/>
+  <br/>
+  &gt;%;<br/>
+  <br/>
+  //// Domains<br/>
+  <br/>
+  // Simple domain<br/>
+  <br/>
+  !Calculator: {<br/>
+  &nbsp;&nbsp;%Calculator; // all functions and required types<br/>
+  };<br/>
+  <br/>
+  <br/>
+  <br/>
+  // Hook in types from other modules<br/>
+  <br/>
+  !Example: {<br/>
+  &nbsp;&nbsp;%Imports &gt; Error;<br/>
+  &nbsp;&nbsp;%Spec &lt; %Imports;<br/>
+  &nbsp;&nbsp;%Spec &lt; %Deck;<br/>
+  &nbsp;&nbsp;%Spec;<br/>
+  };<br/>
+  <br/>
+  // Domains inside domain<br/>
+  <br/>
+  <br/>
+  !Combined: {<br/>
+  &nbsp;&nbsp;!Example;<br/>
+  &nbsp;&nbsp;!Calculator;<br/>
+  };<br/>
+  <br/>
+  // Service<br/>
+  <br/>
+  $Root: HTTP {<br/>
+  &nbsp;&nbsp;address: "127.0.0.1",<br/>
+  &nbsp;&nbsp;path: "/",<br/>
+  &nbsp;&nbsp;format: JSON,<br/>
+  &nbsp;&nbsp;meta: Header,<br/>
+  &nbsp;&nbsp;port: 80,<br/>
+  &nbsp;&nbsp;domain: !Combined,<br/>
+  &nbsp;&nbsp;error: Error,<br/>
+  };<br/>
+  <br/>
+  $Calculator: HTTP {<br/>
+  &nbsp;&nbsp;address: "127.0.0.1",<br/>
+  &nbsp;&nbsp;path: "calculator",<br/>
+  &nbsp;&nbsp;format: JSON,<br/>
+  &nbsp;&nbsp;meta: Header,<br/>
+  &nbsp;&nbsp;port: 80,<br/>
+  &nbsp;&nbsp;domain: !Calculator,<br/>
+  &nbsp;&nbsp;error: Error,<br/>
+  };<br/>
+  <br/>
+  $Example: HTTP {<br/>
+  &nbsp;&nbsp;address: "127.0.0.1",<br/>
+  &nbsp;&nbsp;path: "/example/example",<br/>
+  &nbsp;&nbsp;format: JSON,<br/>
+  &nbsp;&nbsp;meta: Header,<br/>
+  &nbsp;&nbsp;port: 80,<br/>
+  &nbsp;&nbsp;domain: !Example,<br/>
+  &nbsp;&nbsp;error: Error,<br/>
+  };<br/>
+  </div>
+  <br/>
+  <h5>GitHub &nbsp;&nbsp; IRC</h5>
+  </p>
+</div>
 </body>
 </html>
