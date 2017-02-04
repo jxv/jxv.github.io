@@ -3,7 +3,7 @@
 <title>Colorless</title>
 <script>
 </script>
-<link href="https://fonts.googleapis.com/css?family=Crimson+Text|Inconsolata|Fondamento" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Crimson+Text|Inconsolata|Fondamento|Exo+2" rel="stylesheet">
 <style>
 
 body {
@@ -12,19 +12,23 @@ body {
 }
 
 h1 {
-  color: #eee;
-  font-family: 'Fondamento', serif;
-  letter-spacing: 0.1em;
+  color: #B300ff;
+  font-family: 'Exo 2', serif;
+  letter-spacing: 0.5em;
   text-shadow: 1px 3px 5px #111;
-  font-size: 5em;
-  font-weight: 300;
+  font-size: 1.6em;
+  font-weight: 600;
+  font-style: italic;
   margin-left: 70px;
+  margin-top: 90px;
+  margin-bottom: 50px;
 }
 
 h2, h3, h4, h5 {
-  font-family: 'Crimson Text', serif;
+  font-family: 'Crimson Text', sans-serif;
   font-size: 1em;
   color: #eee;
+  letter-spacing: 0.1em;
 }
 
 p, li {
@@ -43,6 +47,15 @@ li {
   margin-left: 70px;
 }
 
+.block-quote {
+  color: #555;
+  border-left: #777 solid 1px;
+  padding-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
 .code-spec {
   color: #ab7;
   background-color: #111;
@@ -55,15 +68,16 @@ li {
 </style>
 </head>
 <body>
-<h1>Colorless</h1>
+<h1 style="text-shadow: 1px 3px 3px #000;"><span style="color: #f7a;">C</span><span style="color: #f77;">o</span><span style="color: #fa7;">l</span><span style="color: #af7;">o</span><span style="color: #7f7;">r</span><span style="color: #7fa;">l</span><span style="color: #7af;">e</span><span style="color: #77f;">s</span><span style="color: #a7f;">s</span></h1>
 <div class="container">
   <p>
     <h2>Values</h2><br/>
     Correctness &gt; Language Diversity &gt; Performance
 
-    <div>
-		"By and large, Facebook’s engineering culture has tended towards choosing the best tools and implementations available over standardizing on any one programming language and begrudgingly accepting its inherent limitations - Thrift: Scalable Cross-Language Services Implementation by Mark Slee, Aditya Agarwal and Marc Kwiatkowski
+    <div class="block-quote">
+		"By and large, Facebook’s engineering culture has tended towards choosing the best tools and implementations available over standardizing on any one programming language and begrudgingly accepting its inherent limitations."
     </div>
+    <div style="font-style: italic; padding-left: 20px;">Thrift: Scalable Cross-Language Services Implementation by Mark Slee, Aditya Agarwal, and Marc Kwiatkowski</div>
 
   </p>
   <br/>
