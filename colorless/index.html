@@ -152,28 +152,27 @@ li {
   <br/>
   <p>
     <h2>Colorless+JSON</h2><br/>
-    The serializing mapping of Colorless into JSON is predictable.
+    The mapping of Colorless+JSON into transported JSON is predictable.
   </p>
   <div class="code-spec">
-  Color: Red, Blue, Green, Custom { r: u8, g: u8, b: u8 };  
+  {"n": "Color", "c": [ "Red", "Blue", "Green", { "n": "Custom", m: { "r": "U8", "g": "U8", "b": "U8" } } ] }
   </div>
   <div class="json-spec">
-  { "Red": null }<br/>
+  { "n": "Red" }<br/>
   <br/>
-  { "Blue": null }<br/>
+  { "n": "Blue" }<br/>
   <br/>
-  { "Green": null }<br/>
+  { "n": "Green" }<br/>
   <br/>
-  { "Custom": { "r": 234, "g": 240, "b": 10 } }<br/>
+  { "n": "Custom", "m": { "r": 234, "g": 240, "b": 10 } }<br/>
   <br/>
   </div>
   <br/>
   <div class="code-spec">
-  helloWorld(): str;<br/>
+  { "n": "helloWorld", "o": "String" }<br/>
   </div>
   <div class="json-spec">
-  { "_fn": "helloWorld",<br/>
-  &nbsp;&nbsp;"_args": {} } <br/>
+  { "n": "helloWorld" }<br/>
   </div> 
   <p>
     <a href="./json.html">More</a>
@@ -183,85 +182,27 @@ li {
     <h2>Example</h2>
   </p>
   <div class="code-spec">
-  @Colorless(0,0);<br/>
-  <br/>
-  //// Module version specifier<br/>
-  <br/>
-  %Imports.0;<br/>
-  %Spec.0;<br/>
-  %Deck.0;<br/>
-  %Calculator.1;</br>
-  <br/>
-  //// Imports<br/>
-  <br/>
-  // Imports without version<br/>
-  <br/>
-  &gt;%Imports;<br/>
-  &gt;%Calculator;<br/>
-  <br/>
-  // While self importing is elegant, it's not useful.<br/>
-  // Below is this module, 'Services.0', which is referenced as '%'.<br/>
-  <br/>
-  &gt;%;<br/>
-  <br/>
-  //// Domains<br/>
-  <br/>
-  // Simple domain<br/>
-  <br/>
-  !Calculator: {<br/>
-  &nbsp;&nbsp;%Calculator; // all functions and required types<br/>
-  };<br/>
-  <br/>
-  <br/>
-  <br/>
-  // Hook in types from other modules<br/>
-  <br/>
-  !Example: {<br/>
-  &nbsp;&nbsp;%Imports &gt; Error;<br/>
-  &nbsp;&nbsp;%Spec &lt; %Imports;<br/>
-  &nbsp;&nbsp;%Spec &lt; %Deck;<br/>
-  &nbsp;&nbsp;%Spec;<br/>
-  };<br/>
-  <br/>
-  // Domains inside domain<br/>
-  <br/>
-  <br/>
-  !Combined: {<br/>
-  &nbsp;&nbsp;!Example;<br/>
-  &nbsp;&nbsp;!Calculator;<br/>
-  };<br/>
-  <br/>
-  // Service<br/>
-  <br/>
-  $Root: HTTP {<br/>
-  &nbsp;&nbsp;address: "127.0.0.1",<br/>
-  &nbsp;&nbsp;path: "/",<br/>
-  &nbsp;&nbsp;format: JSON,<br/>
-  &nbsp;&nbsp;meta: Header,<br/>
-  &nbsp;&nbsp;port: 80,<br/>
-  &nbsp;&nbsp;domain: !Combined,<br/>
-  &nbsp;&nbsp;error: Error,<br/>
-  };<br/>
-  <br/>
-  $Calculator: HTTP {<br/>
-  &nbsp;&nbsp;address: "127.0.0.1",<br/>
-  &nbsp;&nbsp;path: "calculator",<br/>
-  &nbsp;&nbsp;format: JSON,<br/>
-  &nbsp;&nbsp;meta: Header,<br/>
-  &nbsp;&nbsp;port: 80,<br/>
-  &nbsp;&nbsp;domain: !Calculator,<br/>
-  &nbsp;&nbsp;error: Error,<br/>
-  };<br/>
-  <br/>
-  $Example: HTTP {<br/>
-  &nbsp;&nbsp;address: "127.0.0.1",<br/>
-  &nbsp;&nbsp;path: "/example/example",<br/>
-  &nbsp;&nbsp;format: JSON,<br/>
-  &nbsp;&nbsp;meta: Header,<br/>
-  &nbsp;&nbsp;port: 80,<br/>
-  &nbsp;&nbsp;domain: !Example,<br/>
-  &nbsp;&nbsp;error: Error,<br/>
-  };<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"colorless":&nbsp;{&nbsp;"major":&nbsp;0,&nbsp;"minor":&nbsp;0&nbsp;},<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"functions":&nbsp;[<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"n":&nbsp;"helloWorld",&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;],<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"domains":&nbsp;[&nbsp;{&nbsp;"name":&nbsp;"HelloWorld"&nbsp;}&nbsp;],<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"rpc":&nbsp;[<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"http",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"HelloWorld",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"address":&nbsp;"127.0.0.1",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"path":&nbsp;"/",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"format":&nbsp;"json",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"port":&nbsp;8000,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"domain":&nbsp;"HelloWorld",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"error":&nbsp;"Unit"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</br><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;]</br><br/>
+}</br>
   </div>
   <br/>
   <h5><a href="https://github.com/jxv/colorless">GitHub</a> &nbsp;&nbsp; <a href="https://webchat.freenode.net/?channels=#colorless">IRC</a></h5>
