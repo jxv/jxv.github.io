@@ -175,7 +175,10 @@ An IDL for RPC and Stream Processing
   </p>
   <p>Enum</p>
   <div class="code-spec">
-  { "t": "Enum", "n": "Color", "e": [ "Red", "Blue", "Green", { "n": "Custom", m: { "r": "U8", "g": "U8", "b": "U8" } } ] }
+    { "t": "Enum", "n": "Color", "e": [<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Red", "Blue", "Green", { "n": "Custom", m: { "r": "U8", "g": "U8", "b": "U8" } }<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;]<br/>
+    }
   </div>
   <div class="json-spec">
   { "n": "Red" }<br/>
@@ -206,7 +209,7 @@ An IDL for RPC and Stream Processing
 {<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"colorless":&nbsp;{&nbsp;"major":&nbsp;0,&nbsp;"minor":&nbsp;0&nbsp;},<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"types":&nbsp;[<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"t":&nbsp;"Fn"&nbsp;,&nbsp;"n":&nbsp;"HelloWorld",&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"t":&nbsp;"Fn",&nbsp;"n":&nbsp;"HelloWorld",&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;],<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"domains":&nbsp;[&nbsp;{&nbsp;"name":&nbsp;"HelloWorld"&nbsp;}&nbsp;],<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"rpc":&nbsp;[<br/>
