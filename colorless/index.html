@@ -173,8 +173,9 @@ An IDL for RPC and Stream Processing
     <h2>Colorless+JSON</h2><br/>
     The mapping of Colorless+JSON into transported JSON is predictable.
   </p>
+  <p>Enum</p>
   <div class="code-spec">
-  {"n": "Color", "c": [ "Red", "Blue", "Green", { "n": "Custom", m: { "r": "U8", "g": "U8", "b": "U8" } } ] }
+  { "t": "Enum", "n": "Color", "e": [ "Red", "Blue", "Green", { "n": "Custom", m: { "r": "U8", "g": "U8", "b": "U8" } } ] }
   </div>
   <div class="json-spec">
   { "n": "Red" }<br/>
@@ -187,8 +188,9 @@ An IDL for RPC and Stream Processing
   <br/>
   </div>
   <br/>
+  <p>Function</p>
   <div class="code-spec">
-  { "n": "HelloWorld", "o": "String" }<br/>
+  { "t": "Fn", "n": "HelloWorld", "o": "String" }<br/>
   </div>
   <div class="json-spec">
   { "n": "HelloWorld" }<br/>
@@ -203,8 +205,8 @@ An IDL for RPC and Stream Processing
   <div class="code-spec">
 {<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"colorless":&nbsp;{&nbsp;"major":&nbsp;0,&nbsp;"minor":&nbsp;0&nbsp;},<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;"functions":&nbsp;[<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"n":&nbsp;"HelloWorld",&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"types":&nbsp;[<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"t":&nbsp;"Fn"&nbsp;,&nbsp;"n":&nbsp;"HelloWorld",&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;],<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"domains":&nbsp;[&nbsp;{&nbsp;"name":&nbsp;"HelloWorld"&nbsp;}&nbsp;],<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"rpc":&nbsp;[<br/>
