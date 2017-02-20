@@ -194,7 +194,7 @@ An IDL for RPC and Stream Processing
 
   <p>Struct</p>
   <div class="code-spec">
-    { "n": "Coordinate", "m": [ [ "x", "F32" ], [ "y", "F32" ] ] }
+    { "n": "Coordinate", "m": [ [ "xCoordinate", "F32" ], [ "yCoordinate", "F32" ] ] }
   </div>
   <div class="request-spec">
   [ 1.0, 2.0 ]
@@ -207,7 +207,7 @@ An IDL for RPC and Stream Processing
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Red",<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Blue",<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Green",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "n": "Custom", m: [ [ "r", "U8" ], [ "g", "U8" ], [ "b", "U8" ] ] }<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "n": "Custom", m: [ [ "red", "U8" ], [ "green", "U8" ], [ "blue", "U8" ] ] }<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;]<br/>
   }
   </div>
@@ -268,11 +268,11 @@ An IDL for RPC and Stream Processing
 &nbsp;&nbsp;&nbsp;&nbsp;],<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"rpc":&nbsp;[<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"protocol":&nbsp;"http",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"protocol":&nbsp;"HTTP",<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"HelloWorld",<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"address":&nbsp;"127.0.0.1",<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"path":&nbsp;"/",<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"format":&nbsp;"json",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"format":&nbsp;"JSON",<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"port":&nbsp;8000,<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"send":&nbsp;[<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "message": "Hello", "error": "Unit" }<br/>
