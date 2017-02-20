@@ -67,9 +67,17 @@ li {
   font-size: 1em;
 }
 
-.json-spec {
+.request-spec {
   color: #dd7;
   background-color: #333;
+  padding: 20px;
+  font-family: 'Inconsolata', monospace;
+  font-size: 1em;
+}
+
+.response-spec {
+  color: #dd7;
+  background-color: #444;
   padding: 20px;
   font-family: 'Inconsolata', monospace;
   font-size: 1em;
@@ -173,34 +181,78 @@ An IDL for RPC and Stream Processing
     <h2>Colorless+JSON</h2><br/>
     The mapping of Colorless+JSON into transported JSON is predictable.
   </p>
+
+
+  <p>Wrapper</p>
+  <div class="code-spec">
+  { "n": "Id", "w": "String" }
+  </div>
+  <div class="request-spec">
+  "SomeId"
+  </div>
+  <br/>
+
+  <p>Struct</p>
+  <div class="code-spec">
+    { "n": "Coordinate", "m": [ [ "x", "F32" ], [ "y", "F32" ] ] }
+  </div>
+  <div class="request-spec">
+  [ 1.0, 2.0 ]
+  </div>
+  <br/>
+
   <p>Enum</p>
   <div class="code-spec">
-    { "t": "Enum", "n": "Color", "e": [<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Red",<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Blue",<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Green"<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "n": "Custom", m: { "r": "U8", "g": "U8", "b": "U8" } }<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp;]<br/>
-    }
+  { "n": "Color", "e": [<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Red",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Blue",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Green",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "n": "Custom", m: [ [ "r", "U8" ], [ "g", "U8" ], [ "b", "U8" ] ] }<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;]<br/>
+  }
   </div>
-  <div class="json-spec">
+  <div class="request-spec">
   { "n": "Red" }<br/>
   <br/>
   { "n": "Blue" }<br/>
   <br/>
   { "n": "Green" }<br/>
   <br/>
-  { "n": "Custom", "m": { "r": 234, "g": 240, "b": 10 } }<br/>
-  <br/>
+  { "n": "Custom", "m": [ 234, 240, 10 ] }<br/>
   </div>
   <br/>
-  <p>Function</p>
+
+  <p>Union</p>
   <div class="code-spec">
-  { "t": "Fn", "n": "HelloWorld", "o": "String" }<br/>
+  { "n": "Stuff", "u": [<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Id",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Coordinate",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Color"<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;]<br/>
+  }
   </div>
-  <div class="json-spec">
-  { "n": "HelloWorld" }<br/>
+  <div class="request-spec">
+  { "n": "Id", "w": "SomeId" }<br/>
+  <br/>
+  { "n": "Coordinate", "m": [ 1.0, 2.0 ] }<br/>
+  <br/>
+  { "n": "Color", "e": { "n": "Blue" } }<br/>
+  </div>
+  <br/>
+
+  <p>All types double as functions.</p>
+  <div class="code-spec">
+  { "n": "Hello", "m": [ [ "target", "String" ] ], "o": "String" }<br/>
+  </div>
+  <div class="request-spec">
+  [ "World" ]
   </div> 
+  <div class="response-spec">
+  "Hello, World!"
+  </div> 
+
+  <br/>
+
   <p>
     <a href="./json.html">More</a>
   </p>
@@ -212,22 +264,20 @@ An IDL for RPC and Stream Processing
 {<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"colorless":&nbsp;{&nbsp;"major":&nbsp;0,&nbsp;"minor":&nbsp;0&nbsp;},<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"types":&nbsp;[<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"t":&nbsp;"Fn",&nbsp;"n":&nbsp;"HelloWorld",&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"n":&nbsp;"Hello",&nbsp;"m":&nbsp;[ [ "target", "String" ] ],&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;],<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;"domains":&nbsp;[&nbsp;{&nbsp;"name":&nbsp;"HelloWorld"&nbsp;}&nbsp;],<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;"rpc":&nbsp;[<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"http",<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"HelloWorld",<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"address":&nbsp;"127.0.0.1",<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"path":&nbsp;"/",<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"format":&nbsp;"json",<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"port":&nbsp;8000,<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"domain":&nbsp;"HelloWorld",<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"error":&nbsp;"Unit"<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</br><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"protocol":&nbsp;"http",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"HelloWorld",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"address":&nbsp;"127.0.0.1",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"path":&nbsp;"/",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"format":&nbsp;"json",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"port":&nbsp;8000,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"send":&nbsp;[<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "message": "Hello", "error": "Unit" }<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;]</br><br/>
 }</br>
   </div>
