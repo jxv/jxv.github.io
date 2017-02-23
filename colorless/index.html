@@ -115,7 +115,7 @@ An IDL for RPC and Stream Processing
 
   <p>Struct</p>
   <div class="code-spec">
-    { "n": "Coordinate", "m": [ [ "xCoordinate", "F32" ], [ "yCoordinate", "F32" ] ] }
+  { "n": "Coordinate", "m": [ {"x":"F32"}, {"y":"F32"} ] }
   </div>
   <div class="request-spec">
   [ 1.0, 2.0 ]
@@ -128,7 +128,7 @@ An IDL for RPC and Stream Processing
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Red",<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Blue",<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Green",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "n": "Custom", m: [ [ "red", "U8" ], [ "green", "U8" ], [ "blue", "U8" ] ] }<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "n": "Custom", "m": [ {"red":"U8"}, {"green":"U8"}, {"blue":"U8"} ] }<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;]<br/>
   }
   </div>
@@ -163,7 +163,7 @@ An IDL for RPC and Stream Processing
 
   <p>All types double as functions.</p>
   <div class="code-spec">
-  { "n": "Hello", "m": [ [ "target", "String" ] ], "o": "String" }<br/>
+    { "n": "Hello", "m": [ { "target":"String"} ], "o": "String" }<br/>
   </div>
   <div class="request-spec">
   [ "World" ]
@@ -185,7 +185,7 @@ An IDL for RPC and Stream Processing
   {<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;"colorless":&nbsp;{&nbsp;"major":&nbsp;0,&nbsp;"minor":&nbsp;0&nbsp;},<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;"types":&nbsp;[<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"n":&nbsp;"Hello",&nbsp;"m":&nbsp;[ [ "target", "String" ] ],&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"n":&nbsp;"Hello",&nbsp;"m":&nbsp;[ {"target":"String"} ],&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;],<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;"rpc":&nbsp;[<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
