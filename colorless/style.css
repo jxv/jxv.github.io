@@ -31,10 +31,6 @@ p, li {
   color: #777;
 }
 
-li {
-  font-style: italic;
-}
-
 .container {
   width: 900px;
   margin: auto;
@@ -43,7 +39,6 @@ li {
 
 .block-quote {
   color: #555;
-  border-left: #777 solid 1px;
   padding-left: 20px;
   margin-top: 20px;
   margin-bottom: 20px;
