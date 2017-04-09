@@ -118,7 +118,7 @@ IDL for RPC and Stream Processing
   { "n": "Coordinate", "m": [ {"x":"F32"}, {"y":"F32"} ] }
   </div>
   <div class="request-spec">
-  [ 1.0, 2.0 ]
+  { "x": 1.0, "y": 2.0 }
   </div>
   <br/>
 
@@ -139,7 +139,7 @@ IDL for RPC and Stream Processing
   <br/>
   { "n": "Green" }<br/>
   <br/>
-  { "n": "Custom", "m": [ 234, 240, 10 ] }<br/>
+  { "n": "Custom", "m": { "r": 234, "g": 240, "b": 10 } }<br/>
   </div>
   <br/>
 
@@ -155,7 +155,7 @@ IDL for RPC and Stream Processing
   <div class="request-spec">
   { "n": "Id", "w": "SomeId" }<br/>
   <br/>
-  { "n": "Coordinate", "m": [ 1.0, 2.0 ] }<br/>
+  { "n": "Coordinate", "m": { "x": 1.0, "y": 2.0 } }<br/>
   <br/>
   { "n": "Color", "e": { "n": "Blue" } }<br/>
   </div>
@@ -166,7 +166,7 @@ IDL for RPC and Stream Processing
     { "n": "Hello", "m": [ {"target":"String"} ], "o": "String" }<br/>
   </div>
   <div class="request-spec">
-  [ "World" ]
+  { "target": "World" }
   </div> 
   <div class="response-spec">
   "Hello, World!"
