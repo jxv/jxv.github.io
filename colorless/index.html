@@ -106,7 +106,7 @@ IDL for RPC and Stream Processing
 
   <p>Wrapper</p>
   <div class="code-spec">
-  { "name": "Id", "wrap": "String" }
+  { "n": "Id", "w": "String" }
   </div>
   <div class="request-spec">
   "SomeId"
@@ -115,7 +115,7 @@ IDL for RPC and Stream Processing
 
   <p>Struct</p>
   <div class="code-spec">
-  { "name": "Coordinate", "members": [ {"x":"F32"}, {"y":"F32"} ] }
+  { "n": "Coordinate", "m": [ {"x":"F32"}, {"y":"F32"} ] }
   </div>
   <div class="request-spec">
   { "x": 1.0, "y": 2.0 }
@@ -124,46 +124,28 @@ IDL for RPC and Stream Processing
 
   <p>Enum</p>
   <div class="code-spec">
-  { "name": "Color", "enum": [<br/>
+  { "n": "Color", "e": [<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Red",<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Blue",<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Green",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "name": "Custom", "members": [ {"red":"U8"}, {"green":"U8"}, {"blue":"U8"} ] }<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "e": "Custom", "m": [ {"r":"U8"}, {"g":"U8"}, {"b":"U8"} ] }<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;]<br/>
   }
   </div>
   <div class="request-spec">
-  { "name": "Red" }<br/>
+  { "e": "Red" }<br/>
   <br/>
-  { "name": "Blue" }<br/>
+  { "e": "Blue" }<br/>
   <br/>
-  { "name": "Green" }<br/>
+  { "e": "Green" }<br/>
   <br/>
-  { "name": "Custom", "members": { "r": 234, "g": 240, "b": 10 } }<br/>
-  </div>
-  <br/>
-
-  <p>Union</p>
-  <div class="code-spec">
-  { "name": "Stuff", "union": [<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Id",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Coordinate",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Color"<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;]<br/>
-  }
-  </div>
-  <div class="request-spec">
-  { "name": "Id", "wrap": "SomeId" }<br/>
-  <br/>
-  { "name": "Coordinate", "members": { "x": 1.0, "y": 2.0 } }<br/>
-  <br/>
-  { "name": "Color", "enum": { "name": "Blue" } }<br/>
+  { "e": "Custom", "m": { "r": 234, "g": 240, "b": 10 } }<br/>
   </div>
   <br/>
 
   <p>All types double as functions.</p>
   <div class="code-spec">
-    { "name": "Hello", "members": [ {"target":"String"} ], "output": "String" }<br/>
+  { "n": "Hello", "m": [ {"target":"String"} ], "o": "String" }<br/>
   </div>
   <div class="request-spec">
   { "target": "World" }
@@ -185,21 +167,18 @@ IDL for RPC and Stream Processing
   {<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;"colorless":&nbsp;{&nbsp;"major":&nbsp;0,&nbsp;"minor":&nbsp;0&nbsp;},<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;"types":&nbsp;[<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"name":&nbsp;"Hello",&nbsp;"members":&nbsp;[ {"target":"String"} ],&nbsp;"output":&nbsp;"String"&nbsp;}<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;"n":&nbsp;"Hello",&nbsp;"m":&nbsp;[ {"target":"String"} ],&nbsp;"o":&nbsp;"String"&nbsp;}<br/>
   &nbsp;&nbsp;&nbsp;&nbsp;],<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;"rpc":&nbsp;[<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"protocol":&nbsp;"Http",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"HelloWorld",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"address":&nbsp;"127.0.0.1",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"path":&nbsp;"/",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"format":&nbsp;"Json",<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"port":&nbsp;8000,<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"send":&nbsp;[<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "message": "Hello", "error": "Unit" }<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>
-  &nbsp;&nbsp;&nbsp;&nbsp;]</br><br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;"rpc":&nbsp;{<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"protocol":&nbsp;"Https",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"HelloWorld",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"address":&nbsp;"127.0.0.1",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"path":&nbsp;"/",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"format":&nbsp;"Json",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"meta":&nbsp;"Unit",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"port":&nbsp;8000,<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"error":&nbsp;"String",<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;}</br><br/>
   }</br>
   </div>
   <br/>
