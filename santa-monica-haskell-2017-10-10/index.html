@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>colorless</title>
+
+<!-- Don't alter this, CSSS needs it to work -->
+<link href="slideshow.css" rel="stylesheet" />
+
+<!-- Theme-specific styles go here (themes can be reused in multiple talks) -->
+<link href="theme.css" rel="stylesheet" />
+
+<!-- Talk-specific styles go here -->
+<link href="talk.css" rel="stylesheet" />
+
+<!-- Take care of prefixes -->
+<script src="prefixfree.min.js"></script>
+
+</head>
+<body data-duration="45">
+
+<header id="intro" class="slide">
+	<h1>Rethinking IDLs</h1>
+</header>
+
+<section>
+	<header class="slide">
+		<h1>Interface Description Language?</h1>
+	</header>
+
+	<section class="slide">
+		<h2>Motivation</h2>
+		<ul>
+		<li>Common interface</li>
+		<li>Implement against the interface not documentation</li>
+		<li>Multi-language support</li>
+		<li>"By and large, Facebook’s engineering culture has tended towards choosing the best tools and implementations available over standardizing on any one programming language and begrudgingly accepting its inherent limitations"<i> - Thrift: Scalable Cross-Language Services Implementation by
+Mark Slee, Aditya Agarwal and Marc Kwiatkowski</i></li>
+	  </ul>
+	</section>
+
+	<section class="slide">
+		<h2>Thrift</h2>
+		<ul>
+		<li>Targets many languages (C++, Java, Python, Ruby, Haskell, etc.)</li>
+		<li>Provides HTTP server and client libraries</li>
+		<li>Documentation</li>
+		<li>Binary protocol (faster than HTTP)</li>
+		<li>Field identifiers for versioning</li>
+		<li>Also optionals for versioning</li>
+		<li>Fractured communities (Apache and Facebook)</li>
+	</ul>
+	</section>
+</section>
+
+
+<section>
+	<header class="slide">
+		<h1>colorless</h1>
+	</header>
+
+	<section class="slide">
+		<h2>Values</h2>
+		<ul>
+		<li>Correctness > Languages support > Performance</li>
+		<li>JSON/HTTP</li>
+		<li>Booleans, lists, maps, char, string, (un)signed int, floating point (32/64bit)</li>
+		</ul>
+	</section>
+
+
+	<section class="slide">
+		<h2>Features</h2>
+		<ul>
+		<li>Automated versioning</li>
+		<li>Spec history comparsion</li>
+		<li>Chaining and sequencing calls</li>
+		<li>Custom errors</li>
+		<li>Spec, service, domain, modules</li>
+		<li>Sum Types</li>
+		<li>Other goodies: type parameters, type level values, phantom types, collections</li>
+	</ul>
+	</section>
+
+		<section class="slide">
+			<h2>Future?</h2>
+			<ul>
+			<li>Describing safe or idempondent calls</li>
+			<li>Event based</li>
+			<li>Serverless</li>
+		</ul>
+		</section>
+</section>
+
+<footer class="slide">
+	<h2>End</h2>
+</footer>
+
+<script src="slideshow.js"></script>
+
+<!-- Uncomment the plugins you need
+<script src="plugins/css-edit.js"></script>
+<script src="plugins/css-snippets.js"></script>
+<script src="plugins/css-controls.js"></script>
+<script src="plugins/code-highlight.js"></script>
+-->
+<script>var slideshow = new SlideShow();</script>
+
+</body>
+</html>

@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Colorless | The Programmatic IDL</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Oswald);
+      @import url(https://fonts.googleapis.com/css?family=Space+Mono);
+      @import url(https://fonts.googleapis.com/css?family=Karla);
+
+      .remark-slide-content > h1 {
+        font-size: 4em;
+      }
+
+      h1, h2, h3, h4, h5 {
+        font-family: 'Oswald', sans-serif;
+        font-weight: bold;
+        color: #333;
+      }
+
+      h2 {
+        font-style: italic;
+      }
+
+      .remark-code, .remark-inline-code {
+        font-family: 'Space Mono';
+        font-size: 0.7em;
+      }
+
+      body {
+        padding: 0;
+        min-height: 100%;
+        height: 100%;
+        font-family: 'Karla', sans-serif;
+        background-color: #333;
+      }
+
+      img[alt="logo"] {
+        max-width: 100%;
+      }
+      img[alt="icon"] {
+        width: 100px;
+      }
+
+      .remark-slide-scaler {
+        box-shadow: none;
+        font-size: 300%;
+      }
+
+      .remark-slide-content {
+        background: #fff;
+        box-shadow: inset 0 -20px 100px #aaa;
+        font-size: 0.6em;
+      }
+
+      .remark-slide-content:after {
+        content: "";
+        position: absolute;
+        bottom: 5px;
+        left: 35px;
+        height: 40px;
+        width: 120px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url("https://raw.githubusercontent.com/jxv/colorless-data/master/colorless.png");
+    }
+    </style>
+  </head>
+  <body style="background-color: #333">
+    <textarea id="source">
+
+class: center, middle
+
+# **COLORLESS**
+
+#### | _The Programmatic IDL_
+
+```
+October 10th 2017
+Santa Monica, CA
+```
+
+
+???
+
+Hi, everybody.
+
+This is a two part talk.
+
+Part one is about IDLs in the abstract.
+
+And second part is about my IDL, Colorless.
+
+So, if you've never heard or know what IDLs are.
+
+Don't worry.
+
+
+---
+
+## Introduction
+
+```haskell
+main :: IO ()
+main = do
+  putStrLn "Joe Vargas"
+  putStrLn "@jxv on Slack"
+```
+???
+
+But before I go into the details, I want to introduce myself.
+
+I'm Joe Vargas, and I've been writing Haskell for about 5 years.
+
+But I've only been writing useful Haskell programs for half that time.
+
+Most of those useful programs have been writing web applications.
+
+Today, that means writing or consuming web APIs.
+
+---
+
+## RESTful APIs
+
+![rest](rest.png)
+
+---
+
+## RESTful APIs
+
+### As a producer (Server)
+* Write API code
+* Write documentation
+
+### As a consumer (Client)
+* Read documentation
+* Write integration code
+
+???
+
+I imagine most of you are familiar with APIs.
+
+If not, I'll very quickly go over this.
+
+There's two main parts to this puzzle.
+
+---
+
+## IDL: the Term
+
+#### Interface Description Language
+
+##### Interface "Definition" Language
+
+---
+
+## IDL: vs Regular Code
+
+* Write interface
+* Implementation behind interface
+* Some code consumes interface
+* Clean separation
+
+???
+
+Ignoring web APIs, when you write code in the same codebase.
+
+You write some kind of interface.
+
+You then write an implementation of the interface.
+
+And you can implement a consumer against the interface without being bounded by the implementation.
+
+This is basic abstraction. Nothing new.
+
+---
+
+## IDL: vs Regular Code
+
+![code](code.png)
+
+---
+
+## IDL: Concept
+
+![idlq](idlq.png)
+
+---
+
+## IDL: Concept
+
+
+### As a producer
+* Write spec
+* Generate stubs
+* Attach glue code
+
+### As a consumer
+* Download spec
+* Generate SDK from spec
+* Attach glue code
+
+---
+
+## IDL: Colorless with Add-ons
+
+![idla](idla.png)
+
+* Unclear client/server communication
+* Haskell server-side: `scotty` add-on
+* Haskell clilent-side: `http-client` add-on
+
+???
+
+You don't need to change your current web library/framework
+
+Just patch it in.
+
+Servant add-on support is in the works.
+
+---
+
+class: center, middle
+
+![warning](warning.png)
+### [CAUTION: &nbsp;DEMO]
+
+Hello World
+
+---
+
+## Hello World: Spec
+
+```json
+{ "colorless": { "major": 0, "minor": 0 },
+  "types":
+    [ { "n":"Hello",
+        "m":[{"target":"String"}],
+        "o": "String" } ],
+  "pull":
+    { "name": "HelloWorld",
+      "protocol": "http",
+      "host": "localhost",
+      "port": 8080,
+      "path": "/",
+      "meta": "Unit",
+      "error": "Unit" } }
+```
+
+???
+
+Pull is the configuration related to server
+
+It's called pull as opposed to push. Where the client drives the communication.
+
+---
+
+## Hello World: Transport Request
+
+```json
+{ "colorless": { "major": 0, "minor": 0 },
+  "version": { "major": 0, "minor": 0 },
+  "meta": null,
+  "query":
+     { "n": "Hello",
+       "m": {"target": "Haskeller"} } }
+```
+
+???
+
+Processed in this order
+
+* Colorless version compatibility
+  * Keeping this transport spec simple
+  * Not eager to break this. So slowly add features.
+* API version compatibility
+* Meta is non-evaluable data
+* Query is whatever custom code
+
+---
+
+## Hello World: Transport Response
+
+```json
+{ "tag": "Success",
+  "success": "Hi, Haskeller" }
+```
+
+---
+
+## Hello World: Service Calls and Types
+
+```json
+{ "n":"Hello",
+  "m":[{"target":"String"}],
+  "o": "String" }
+```
+
+```haskell
+data Hello = Hello
+  { helloTarget :: Text }
+
+helloWorld'Hello
+  :: HelloWorld'Service m
+  => Hello -> m Text
+```
+
+
+---
+
+class: center, middle
+
+# Spec Overview
+
+---
+
+## Spec Overview: Built-in Types
+
+* **Unit**
+* **Bool**
+* **String** _(Text)_
+* **I8, I16, I32, I64** _(Int)_
+* **U8, U16, U32, U64** _(Word)_
+* **F32** _(Float)_**, F64** _(Double)_
+* **List, Tuples, Option** _(Maybe)_**, Either**
+
+---
+
+## Spec Overview: Built-in Types
+
+```json
+null // Unit
+false // Bool
+"str" // String
+10 // I8, I16, I32, I64, U8, U16, U32, U64, F32, F64
+
+"something" // Option String
+null // Option String
+
+{"tag":"Left", "left":"string"} // Either String I64
+{"tag":"Right", "right": 10} // Either String I64
+```
+
+* Note: list and tuples are coming up soon
+
+---
+
+## Spec Overview: Custom Types
+
+* **Wrap** _(Newtype)_
+* **Struct** _(Record)_
+* **Enum** _(Sum)_
+
+```json
+{"n":"Wrap", "w": "Unit"}
+{ "n":"Struct",
+  "m": [{"member":"Unit"}],
+  "o": "Unit"}
+{ "n":"Enum",
+  "e":
+    [ "Tag",
+      {"tag": "TagWithMems": [{"member":"Unit"}]}
+    ] }
+```
+
+---
+
+## Spec Overview: Service Calls
+
+**Hollow**, **Wrap**, **Struct**, **Enum**
+
+```json
+{"n":"Hollow", "o": "Unit"}
+{"n":"Wrap", "w": "Unit", "o": "Unit"}
+{ "n":"Struct",
+  "m": [{"member":"Unit"}],
+  "o": "Unit"}
+{ "n":"Enum",
+  "e":
+    [ "Tag",
+      {"tag": "TagWithMems": [{"member":"Unit"}]}
+    ]
+  "o": "Unit"}
+```
+
+---
+
+class: center, middle
+
+![warning](warning.png)
+### [CAUTION: DEMO]
+
+Phonebook
+
+---
+
+class: center, middle
+
+# Query Lang
+
+---
+
+## Query Lang: Built-in Primitives
+
+* **Unit**
+* **Bool**
+* **String** _(Text)_
+* **I8, I16, I32, I64** _(Int)_
+* **U8, U16, U32, U64** _(Word)_
+* **F32** _(Float)_**, F64** _(Double)_
+
+---
+
+## Query Lang: Built-in Primitives
+
+```haskell
+unit :: Expr ()
+bool :: Bool -> Expr Bool
+string :: String -> Expr String
+i8 :: I8 -> Expr I8
+f32 :: Float -> Expr Float
+
+ex :: ToExpr a => a -> Expr a
+```
+
+---
+
+## Query Lang: Built-in Functions
+
+```json
+"=="
+"!="
+"+"
+"-"
+"*"
+"/"
+"concat"
+```
+
+---
+
+## Query Lang: Built-in Functions
+
+```json
+["==", 1, 1]
+["!=", "asdf", "asdf"]
+["+", 37, 10]
+["-", 80, 6]
+["*", 4, 7]
+["/", 100, 10]
+["concat", "hello", "world"]
+```
+
+```haskell
+eq :: Expr a -> Expr a -> Expr Bool
+add :: Num a => Expr a -> Expr a -> Expr a
+concaT :: Expr Text -> Expr Text -> Expr Text
+```
+
+---
+
+## Query Lang: Built-in Functions
+
+```json
+["==", 1, 1] -> true
+["!=", "asdf", "asdf"] -> false
+["+", 37, 10] -> 47
+["-", 80, 6] -> 74
+["*", 4, 7] -> 28
+["/", 100, 10] -> 10
+["concat", "hello", "world"] -> "helloworld"
+```
+```haskell
+eq :: Expr a -> Expr a -> Expr Bool
+add :: Num a => Expr a -> Expr a -> Expr a
+concaT :: Expr Text -> Expr Text -> Expr Text
+```
+
+---
+
+## Query Lang: Built-in constructors
+
+```json
+"list"
+"tuple"
+```
+```haskell
+list :: [Expr a] -> Expr [a]
+tuple2 :: Expr a -> Expr b -> Expr (a, b)
+
+ex :: ToExpr a => [a] -> Expr [a]
+ex :: (ToExpr a, ToExpr b) => (a,b) -> Expr (a,b)
+```
+
+---
+
+## Query Lang: Built-in constructors
+
+```json
+["list",[1,2,3,4]]
+["tuple",[5,"x"]]
+```
+```haskell
+list [i8 1, ex 2, ex 3, ex 4]
+tuple2 (i8 5, string "hello")
+
+ex [1 :: Int8, 2, 3, 4, 5]
+ex (1 :: Int8, "hello" :: Text)
+```
+
+
+---
+
+## Query Lang: Built-in constructors
+
+```json
+["list",[1,2,3,4]] -> [1,2,3,4]
+["tuple",[5,"x"]] -> [5,"x"]
+```
+```haskell
+list [i8 1, ex 2, ex 3, ex 4]
+tuple2 (i8 5, string "hello")
+
+ex [1 :: Int8, 2, 3, 4, 5]
+ex (1 :: Int8, "hello" :: Text)
+```
+
+---
+
+## Query Lang: Defining variables
+
+```json
+["def","myVar",100]
+```
+```haskell
+def :: Symbol -> Expr a -> Stmt (Expr a)
+
+def "myVar" (i64 100)
+```
+
+---
+
+## Query Lang: Defining variables
+
+```json
+["def","myVar",100] -> {"@":"myVar"}
+```
+```haskell
+myVar <- def "myVar" (i64 100)
+
+myVar :: Expr I64
+```
+
+---
+
+## Query Lang: Referencing variables
+
+```json
+{"@":"myVar"}
+```
+---
+
+## Query Lang: Referencing variables
+
+```json
+{"@":"myVar"} -> 100
+```
+
+---
+
+## Query Lang: If
+
+```json
+["if", false, "isTrue", "isFalse"]
+```
+```haskell
+iF :: Expr Bool -> Expr a -> Expr a -> Expr a
+
+iF (bool False) (string "isTrue") (string "isFalse")
+```
+
+---
+
+## Query Lang: If
+
+```json
+["if", false, "isTrue", "isFalse"] -> "isFalse"
+```
+```haskell
+iF :: Expr Bool -> Expr a -> Expr a -> Expr a
+
+iF (bool False) (string "isTrue") (string "isFalse")
+```
+
+---
+
+## Query Lang: Runtime Lambdas
+
+```json
+["fn",
+  [{"x":"I64"}, {"y":"I64"}],
+  ["+", {"@":"x"}, {"@":"y"}]]
+```
+```haskell
+fn2
+  :: Symbol -> Symbol
+  -> (Expr a -> Expr b -> Expr c)
+  -> Expr (Fn ((Expr a, Expr b) -> c))
+
+fn2 "x" "y" add
+  :: Expr (Fn ((Expr Int64, Expr Int64) -> Int64))
+```
+
+---
+
+## Query Lang: Runtime Functions
+
+```json
+["def", "addI64",
+  ["fn",
+    [{"x":"I64"}, {"y":"I64"}],
+    ["+", {"@":"x"}, {"@":"y"}]]]
+```
+```haskell
+defn $ fn2 "x" "y" add
+  :: Stmt
+      (Expr (Fn ((Expr Int64, Expr Int64) -> Int64))
+```
+
+
+---
+
+## Query Lang: Runtime Functions
+
+```json
+["addI64", 1, 2]
+[{"@":"addI64"}, 1, 2]
+```
+---
+
+## Query Lang: Runtime Functions
+
+```json
+["addI64", 1, 2] -> 3
+[{"@":"addI64"}, 1, 2] -> 3
+```
+
+---
+
+## Query Lang: Getting members
+
+```json
+["get", ["x","z"], {"x": {"z": 1}, "y": 2}]
+```
+```haskell
+data A = A { aX :: B, aY :: Int8 }
+data B = B { bZ :: Int8 }
+
+get :: Path (a -> b) -> Expr a -> Expr b
+
+get (a'x <.> b'z) (ex (A (B 1) 2)) :: Expr Int8
+```
+
+---
+
+## Query Lang: Getting members
+
+```json
+["get", ["x","z"], {"x": {"z": 1}, "y": 2}] -> 1
+```
+```haskell
+data A = A { aX :: B, aY :: Int8 }
+data B = B { bZ :: Int8 }
+
+get :: Path (a -> b) -> Expr a -> Expr b
+
+get (a'x <.> b'z) (ex (A (B 1) 2)) :: Expr Int8
+```
+
+---
+
+## Query Lang: Sequencing expressions
+
+```json
+["do",
+  ["def", "point", {"x": {"z":1}, "y": 2}],
+  ["get", ["x","z"], {"@":"point"}]]
+```
+```haskell
+dO $ do
+  p <- def "point" (ex (A (B 1) 2))
+  stmt $ get (a'x <.> b'z) p
+```
+
+---
+
+class: center, middle
+
+![warning](warning.png)
+### [CAUTION: DEMO]
+
+Calculator
+
+---
+
+class: center, middle
+
+# Service Errors
+
+???
+
+Logic errors, such Authorization failure
+
+It is custom, so you decide
+
+---
+
+## Service Errors
+
+```json
+"pull": {
+  "name": "HelloWorld",
+  "error": "Unit",
+  ...
+}
+```
+```haskell
+helloWorld'throw :: HelloWorld'Thrower => () -> m a
+```
+```json
+{ "tag":"error"
+  "error":
+    { "tag": "service",
+      "service": null } }
+```
+
+---
+
+class: center, middle
+
+# Meta Middleware
+
+---
+
+## Meta Middleware
+
+```haskell
+helloWorld'handler
+  :: HelloWorld'Service meta m
+  => Options
+  -> (() -> m meta) // Middleware
+  -> Request
+  -> m (Either Response Response)
+```
+
+---
+
+## Meta Middleware
+
+```haskell
+helloWorld'handler
+  :: HelloWorld'Service meta m
+  => Options
+  -> (Maybe Creds -> m meta) // Middleware
+  -> Request
+  -> m (Either Response Response)
+```
+
+---
+
+class: center, middle
+
+![warning](warning.png)
+### [CAUTION: DEMO]
+
+Secure Phonebook
+
+---
+
+class: center, middle
+
+# Versioning
+
+???
+
+IDLs does not imply any special form of versioning
+
+Most APIs techonolgies, not just IDLs, treat versioning as an afterthought.
+
+Human error
+
+**Explain** Public spec
+
+Recall the api version in the transport
+
+
+---
+
+## Versioning: The Problem
+
+![version](version.png)
+
+---
+
+## Versioning: Automation
+
+* Clone the previous spec
+* Add/Remove/Modify
+* Diff for major and minor changes
+
+???
+
+**EXPLAIN** how colorless has a sequential specs which are collapsed.
+
+If for some reason you feel like you need to forego the automated versioning,
+Colorless does allow you to force the version.
+
+Although I generally would not advise this,
+I would treat it as an escape hatch if you made a mistake or have certain API support requirements.
+
+---
+
+## Versioning: Deprecation
+
+* Don't delete old specs
+* Decide the oldest API version to support
+* Public spec will reflect the changes
+
+???
+
+Explain how it breaks the old version on server
+
+Remind that it checks api version in the spec
+
+---
+
+class: center, middle
+
+![warning](warning.png)
+### [CAUTION: DEMO]
+
+Hello Goodbye
+
+---
+
+## Roadmap
+
+* More built-in functions
+* Event streaming with Websockets
+* Target **40+** languages
+  * Clojure, Java, JavaScript, Node, PureScript, Python, Ruby, Scala, Swift, etc.
+
+???
+
+* Built-in
+  * Basic: lengthList
+  * Higher order: mapList, mapOption, filterList, etc
+  * Lens-like and/or GraphQL-like traversing
+
+* Event streaming
+  * CQRS compatible
+
+---
+
+## Links
+
+**Website**
+
+* https://www.colorless-idl.org
+
+**Slack**
+
+* https://colorless-idl.slack.com
+
+**Code**
+* https://github.com/jxv/colorless
+* https://github.com/jxv/colorless-haskell
+
+---
+
+class: center, middle
+
+# Questions?
+
+---
+
+class: center, middle
+
+# Bye
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
