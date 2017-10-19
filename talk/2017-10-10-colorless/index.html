@@ -80,22 +80,6 @@ October 10th 2017
 Santa Monica, CA
 ```
 
-
-???
-
-Hi, everybody.
-
-This is a two part talk.
-
-Part one is about IDLs in the abstract.
-
-And second part is about my IDL, Colorless.
-
-So, if you've never heard or know what IDLs are.
-
-Don't worry.
-
-
 ---
 
 ## Introduction
@@ -106,17 +90,6 @@ main = do
   putStrLn "Joe Vargas"
   putStrLn "@jxv on Slack"
 ```
-???
-
-But before I go into the details, I want to introduce myself.
-
-I'm Joe Vargas, and I've been writing Haskell for about 5 years.
-
-But I've only been writing useful Haskell programs for half that time.
-
-Most of those useful programs have been writing web applications.
-
-Today, that means writing or consuming web APIs.
 
 ---
 
@@ -136,13 +109,6 @@ Today, that means writing or consuming web APIs.
 * Read documentation
 * Write integration code
 
-???
-
-I imagine most of you are familiar with APIs.
-
-If not, I'll very quickly go over this.
-
-There's two main parts to this puzzle.
 
 ---
 
@@ -160,18 +126,6 @@ There's two main parts to this puzzle.
 * Implementation behind interface
 * Some code consumes interface
 * Clean separation
-
-???
-
-Ignoring web APIs, when you write code in the same codebase.
-
-You write some kind of interface.
-
-You then write an implementation of the interface.
-
-And you can implement a consumer against the interface without being bounded by the implementation.
-
-This is basic abstraction. Nothing new.
 
 ---
 
@@ -210,14 +164,6 @@ This is basic abstraction. Nothing new.
 * Haskell server-side: `scotty` add-on
 * Haskell clilent-side: `http-client` add-on
 
-???
-
-You don't need to change your current web library/framework
-
-Just patch it in.
-
-Servant add-on support is in the works.
-
 ---
 
 class: center, middle
@@ -247,12 +193,6 @@ Hello World
       "error": "Unit" } }
 ```
 
-???
-
-Pull is the configuration related to server
-
-It's called pull as opposed to push. Where the client drives the communication.
-
 ---
 
 ## Hello World: Transport Request
@@ -265,17 +205,6 @@ It's called pull as opposed to push. Where the client drives the communication.
      { "n": "Hello",
        "m": {"target": "Haskeller"} } }
 ```
-
-???
-
-Processed in this order
-
-* Colorless version compatibility
-  * Keeping this transport spec simple
-  * Not eager to break this. So slowly add features.
-* API version compatibility
-* Meta is non-evaluable data
-* Query is whatever custom code
 
 ---
 
@@ -707,12 +636,6 @@ class: center, middle
 
 # Service Errors
 
-???
-
-Logic errors, such Authorization failure
-
-It is custom, so you decide
-
 ---
 
 ## Service Errors
@@ -781,19 +704,6 @@ class: center, middle
 
 # Versioning
 
-???
-
-IDLs does not imply any special form of versioning
-
-Most APIs techonolgies, not just IDLs, treat versioning as an afterthought.
-
-Human error
-
-**Explain** Public spec
-
-Recall the api version in the transport
-
-
 ---
 
 ## Versioning: The Problem
@@ -808,16 +718,6 @@ Recall the api version in the transport
 * Add/Remove/Modify
 * Diff for major and minor changes
 
-???
-
-**EXPLAIN** how colorless has a sequential specs which are collapsed.
-
-If for some reason you feel like you need to forego the automated versioning,
-Colorless does allow you to force the version.
-
-Although I generally would not advise this,
-I would treat it as an escape hatch if you made a mistake or have certain API support requirements.
-
 ---
 
 ## Versioning: Deprecation
@@ -825,12 +725,6 @@ I would treat it as an escape hatch if you made a mistake or have certain API su
 * Don't delete old specs
 * Decide the oldest API version to support
 * Public spec will reflect the changes
-
-???
-
-Explain how it breaks the old version on server
-
-Remind that it checks api version in the spec
 
 ---
 
@@ -849,16 +743,6 @@ Hello Goodbye
 * Event streaming with Websockets
 * Target **40+** languages
   * Clojure, Java, JavaScript, Node, PureScript, Python, Ruby, Scala, Swift, etc.
-
-???
-
-* Built-in
-  * Basic: lengthList
-  * Higher order: mapList, mapOption, filterList, etc
-  * Lens-like and/or GraphQL-like traversing
-
-* Event streaming
-  * CQRS compatible
 
 ---
 
