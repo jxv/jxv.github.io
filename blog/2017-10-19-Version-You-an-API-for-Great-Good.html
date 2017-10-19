@@ -1,0 +1,167 @@
+<!DOCTYPE HTML><html><head><title> Version You an API for Great Good!</title><link href="style.css" type="text/css" rel="stylesheet"></head><body><div id="wrapper"><div id="header"><br />
+<br />
+<table>
+  <tr>
+    <td>
+      <a href="index.html">
+        <img height="48px" width="48px" src="https://avatars3.githubusercontent.com/u/3070597?s=30&amp;v=4" style="border-radius:50%" />
+      </a>
+    </td>
+    <td>
+       
+       
+    </td>
+    <td>
+      <div>
+        <a href="index.html" style="text-decoration:none">
+          <span style="font-weight:bold;font-family:'Open Sans', sans-serif;color:#000">Joe Vargas</span>
+        </a>
+      </div>
+      <div>
+        <a href="http://jxv.io">jxv.io</a>
+         
+        <a href="https://github.com/jxv"><img src="github.png" height="16px" width="16px" /></a>
+         
+        <a href="https://twitter.com/jxv_io"><img src="twitter.png" height="16px" width="16px" /></a>
+      </div>
+    </td>
+  </tr>
+</table>
+<br /></div><div id="content"><h1>Version You an API for Great Good!</h1><p><b>October 19th, 2017</b></p><h3>Fluid, The Programmatic IDL</h3><p><a href="https://github.com/jxv/fluid">Fluid</a> is yet another API-sliver-bullet on the block.
+And it boasts a wacky tagline, “The Programmatic IDL.”</p><p>Yes, a programmatic API.
+All queries are complete programs[1].
+The requester sends a JSON[2] value to a language interpreter running on the server.
+The server runs the program making multiple API calls in one fell swoop[3].
+On the client side, Fluid provides and generates a typesafe, query DSL[4].
+This is a benefit of IDLs.
+It makes for a great pairing as you won’t be visibly stuck with JSON.</p><p>While that sounds very well — flashy and interesting.
+It isn’t the main motivation as hinted in the title.</p><p>It’s the way Fluid handles versioning/evolution.
+I believe versioning is the cornerstone feature for APIs.
+It should be taken with respective importance.
+<i>Lemme explain.</i></p><h2>The Versioning Problem</h2><p>There are many ways to make a mess of RESTful APIs. Versioning is just one way. Rather than iterating through the problems in ad hoc solutions, we’ll iterate through the general problems.</p><h3>Why version?</h3><p>For starters, you don’t necessarily integrate with an API you own. Second, these interfaces exist in different code bases. They are mutable and easy to forget. Features get added, removed, and updated. These kinds of changes should be represented somehow.</p><h3>Where to version</h3><p>The version can be placed somewhere as insider the header, possibly using a registered vendor MIME type. Or inside the request payload. Or even as a query parameter. Or as a subdomain. My favorite solution is simply to prefix an endpoint’s path with <code>/v1/</code> , <code>/v2/</code>, <code>/v3/</code>, etc. Nevertheless, the overall lack of consistency with placement is nothing short of ironic.</p><h3>What to version</h3><p>What exactly constitutes a major breaking change or minor change? Is it when a new endpoint is added? Old one removed? A type or resource is changed? Query parameters optionalized? Headers adjusted.</p><p>That line becomes horrifically blurry when optionalizing fields on JSON objects. It abuses the optional aspect to act as a means for both API introductions and deprecations. Nevermind you’d need to deal with the resulting edge cases from excessive optionalizing.</p><h3>How to version</h3><p>Hopefully, your APIs are versioned by a reproducible process. It could be based on features, resources, or endpoints. Gut feelings or “it’s been long enough” aren’t reproducible. In the end, it’s still a flesh-bodied someone manually bumping the versions. People make mistakes.</p><h2>Automating the version</h2><p>With a reproducible versioning process in place, it could then be automated.</p><p>Fluid does the semantic versioning, so we'll talk about versions in those terms. Major is breaking. Minor is non-breaking.</p><h3>Diff for changes</h3><p>By now most programmers understand the value of version control. Seeing and storing diffs between different code commits is extremely useful. Whether you realize it or not, every diff semantically represents a version change — even all the way down to the microscopic happenings. It may not be a major or minor change, but it’s a change nonetheless.</p><p>The same diff’ing idea can be applied to APIs if they were represented as code. And they can. This is where IDLs come into play.</p><h3>APIs as an IDL Spec</h3><p>If you’ve ever dealt with Thrift, ProtoBuf, or another IDL, you understand this already.</p><p>In a typical and self-contained code base, we abstract effects through some kind of interface. It could be a class, a monad, or whatever. An IDL enforces that abstraction into language agnostic interface. This interface is the spec. With a generator, the spec creates a client side SDK and a server-side stubs. It doesn’t stop there. It the spec can create documentation as well.</p><h3>Diff’ing the Specs</h3><p>Consider this simple pseudo-code IDL spec. It starts with version <code>0.0</code>.</p><pre><code>function Hello(target: String) -&gt; String</code></pre><p><i><sup><sub>Figure: Spec 1</sub></sup></i></p><p>Duplicate it and add a custom greeting.</p><pre><code>function Hello(greeting: String, target: String) -&gt; String</code></pre><p><i><sup><sub>Figure: Spec 2</sub></sup></i></p><p>Now you have two specs[5].</p><p>We added another argument to the function <code>Hello</code>.
+Because not all changes are created equal, there will be either a major or minor version difference.</p><p>Because any client that depended on the previous version of <code>Hello</code> will break, it’s a breaking change — a new major version at <code>1.0</code>.
+You may argue greeting should have a default value as decided by the previous implementation.
+It shouldn’t.
+Those differences should remain in the server implementation and not in the spec.
+It’s a skewed variation of the optionalizing hack.</p><p>Alright.
+Let’s make a couple more changes.</p><pre><code>function Hello(greeting: String, target: String) -&gt; String
+
+type Color = Red | Green | Blue
+
+function FavoriteColor() -&gt; Color</code></pre><p><i><sup><sub>Figure: Spec 3</sub></sup></i></p><p>Because <code>Color</code> and <code>FavoriteColor</code> don’t modify or remove from the previous, the difference is a minor bump to version <code>1.1</code>. Everything is still possible as it was in <code>1.0</code>.</p><pre><code>function Hello(greeting: String, target: String) -&gt; String
+
+type Color = Red | Green | Blue | Yellow
+
+function FavoriteColor() -&gt; Color</code></pre><p><i><sup><sub>Figure: Spec 4</sub></sup></i></p><p>The added <code>Yellow</code> to the <code>Color</code> type is a bit more subtle.
+It causes a major version bump to version <code>2.0</code>.
+The reason is the previous client implementation can’t exhaustively match the output of <code>FavoriteColor</code>.</p><p>For the sake of completeness, the spec below removes the function <code>FavoriteColor</code> causing a major version bump as well.</p><pre><code>function Hello(greeting: String, target: String) -&gt; String
+
+type Color = Red | Green | Blue | Yellow</code></pre><p><i><sup><sub>Figure: Spec 5</sub></sup></i></p><p>It’s now version <code>3.0</code>.</p><p>To draw a conclusion from this exercise, I’ll extend to the following:</p><blockquote><p><i>All modifications and removals of existing types and existing functions break APIs.</i>
+<i>Additions of new types and new functions don’t.</i></p></blockquote><h2>Handling requests with different versions</h2><p>The example specs gives creates 4 different major versions: <code>0.0</code>, <code>1.1</code>, <code>2.0</code>, and <code>3.0</code>.</p><h3>Dispatch to service</h3><h3>Type reuse</h3><h3>Published specs</h3><h2>Deprecating versions</h2><h2>Fluid’s Implementation</h2><p>Fluid applies all the theories described above.
+In practice, specs are stored as separate files in the same directory and chronologically ordered using alphanumerical names.</p><h3>The spec</h3><p>The Fluid spec format is in JSON, for pragmatic reasons.
+Admittely, it was a hurdle to shoehorn, yet what turned out isn't terrible.
+I think it's rather clean and legible format.
+But you can judge for yourself.</p><p>Here’s the first of the translations from the above pseudo-code specs.</p><pre><code>{
+  &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+  &quot;types&quot;: [
+    { &quot;n&quot;: &quot;Hello&quot;, &quot;m&quot;: [{&quot;target&quot;:&quot;String&quot;}], &quot;o&quot;: &quot;String&quot; }
+  ],
+  &quot;pull&quot;: {
+    &quot;name&quot;: &quot;Example&quot;,
+    &quot;meta&quot;: &quot;Unit&quot;,
+    &quot;error&quot;: &quot;Unit&quot;,
+    &quot;protocol&quot;: &quot;http&quot;,
+    &quot;host&quot;: &quot;localhost&quot;,
+    &quot;port&quot;: 8080,
+    &quot;path&quot;: &quot;/&quot;
+  }
+}</code></pre><p><i><sup><sub>Figure: Spec 1, Version 0.0</sub></sup></i></p><p>The key <code>&quot;fluid&quot;</code> describes the implementation version of the  transport. It does not describe the API version. It will be needed for when Fluid features are added, modified, or removed.</p><h3>More specs</h3><pre><code>{
+  &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+  &quot;types&quot;: [
+    {
+      &quot;n&quot;: &quot;Hello&quot;,
+      &quot;m&quot;: [{&quot;greeting&quot;:&quot;String&quot;}, {&quot;target&quot;:&quot;String&quot;}],
+      &quot;o&quot;: &quot;String&quot;
+    }
+  ],
+  &quot;pull&quot;: {
+    &quot;name&quot;: &quot;Example&quot;,
+    &quot;meta&quot;: &quot;Unit&quot;,
+    &quot;error&quot;: &quot;Unit&quot;,
+    &quot;protocol&quot;: &quot;http&quot;,
+    &quot;host&quot;: &quot;localhost&quot;,
+    &quot;port&quot;: 8080,
+    &quot;path&quot;: &quot;/&quot;
+  }
+}</code></pre><p><i><sup><sub>Figure: Spec 2, Version 1.0</sub></sup></i></p><br /><pre><code>{
+  &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+  &quot;types&quot;: [
+    {
+      &quot;n&quot;: &quot;Hello&quot;,
+      &quot;m&quot;: [{&quot;greeting&quot;:&quot;String&quot;}, {&quot;target&quot;:&quot;String&quot;}],
+      &quot;o&quot;: &quot;String&quot;
+    },
+    { &quot;n&quot;: &quot;Color&quot;, &quot;e&quot;: [&quot;Red&quot;,&quot;Green&quot;,&quot;Blue&quot;] },
+    { &quot;n&quot;: &quot;FavoriteColor&quot;, &quot;o&quot;: &quot;Color&quot; }
+  ],
+  &quot;pull&quot;: {
+    &quot;name&quot;: &quot;Example&quot;,
+    &quot;meta&quot;: &quot;Unit&quot;,
+    &quot;error&quot;: &quot;Unit&quot;,
+    &quot;protocol&quot;: &quot;http&quot;,
+    &quot;host&quot;: &quot;localhost&quot;,
+    &quot;port&quot;: 8080,
+    &quot;path&quot;: &quot;/&quot;
+  }
+}</code></pre><p><i><sup><sub>Figure: Spec 3, Version 1.1</sub></sup></i></p><br /><pre><code>{
+  &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+  &quot;types&quot;: [
+    {
+      &quot;n&quot;: &quot;Hello&quot;,
+      &quot;m&quot;: [{&quot;greeting&quot;:&quot;String&quot;}, {&quot;target&quot;:&quot;String&quot;}],
+      &quot;o&quot;: &quot;String&quot;
+    },
+    { &quot;n&quot;: &quot;Color&quot;, &quot;e&quot;: [&quot;Red&quot;,&quot;Green&quot;,&quot;Blue&quot;,&quot;Yellow&quot;] },
+    { &quot;n&quot;: &quot;FavoriteColor&quot;, &quot;o&quot;: &quot;Color&quot; }
+  ],
+  &quot;pull&quot;: {
+    &quot;name&quot;: &quot;Example&quot;,
+    &quot;meta&quot;: &quot;Unit&quot;,
+    &quot;error&quot;: &quot;Unit&quot;,
+    &quot;protocol&quot;: &quot;http&quot;,
+    &quot;host&quot;: &quot;localhost&quot;,
+    &quot;port&quot;: 8080,
+    &quot;path&quot;: &quot;/&quot;
+  }
+}</code></pre><p><i><sup><sub>Figure: Spec 4, Version 2.0</sub></sup></i></p><br /><pre><code>{
+  &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+  &quot;types&quot;: [
+    {
+      &quot;n&quot;: &quot;Hello&quot;,
+      &quot;m&quot;: [{&quot;greeting&quot;:&quot;String&quot;}, {&quot;target&quot;:&quot;String&quot;}],
+      &quot;o&quot;: &quot;String&quot;
+    },
+    { &quot;n&quot;: &quot;Color&quot;, &quot;e&quot;: [&quot;Red&quot;,&quot;Green&quot;,&quot;Blue&quot;,&quot;Yellow&quot;] }
+  ],
+  &quot;pull&quot;: {
+    &quot;name&quot;: &quot;Example&quot;,
+    &quot;meta&quot;: &quot;Unit&quot;,
+    &quot;error&quot;: &quot;Unit&quot;,
+    &quot;protocol&quot;: &quot;http&quot;,
+    &quot;host&quot;: &quot;localhost&quot;,
+    &quot;port&quot;: 8080,
+    &quot;path&quot;: &quot;/&quot;
+  }
+}</code></pre><p><i><sup><sub>Figure: Spec 5, Version 3.0</sub></sup></i></p><p>Notice there’s no <code>&quot;version&quot;</code> key in any of the specs. It’s not required as the specs are automatically versioned as described in the previous section[tk].</p><br />
+<br /><hr /><p><i>Note: Fluid was previously named Colorless.</i></p><p>[1] That might sound scary. I recently talked at a local meetup and received plenty of related concerns from the audience. Their concerns have since been addressed with a reasonable solution. It's no longer scary. What that looks like pends as another post.</p><p>[2] People will hate on JSON even when abstracted. Sorry, it’s not my ideal either.</p><p>[3] GraphQL does something similar with its resolver.</p><p>[4] Only Haskell has been fleshed out on both ends. There’s more to come for other languages.</p><p>[5] <i>spec win everytime</i></p><p>[tk] You can cautiously add the version if you wish. Including key <code>&quot;version&quot;</code> with an object such as <code>{&quot;major&quot;: 0, &quot;minor&quot;: 0}</code> will force the API version of the spec. Be sure not to go backwards.</p></div><div id="footer"><br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /></div></div></body></html>
