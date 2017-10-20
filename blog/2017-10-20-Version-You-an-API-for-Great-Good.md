@@ -1,17 +1,17 @@
 # Version You an API for Great Good!
 
-**October 19th, 2017**
+**October 20th, 2017**
 
 ### Fluid, The Programmatic IDL
 
-[Fluid](https://github.com/jxv/fluid) is yet another API-sliver-bullet on the block.
+[Fluid](https://github.com/jxv/fluid) is yet another API-silver-bullet on the block.
 And it boasts a wacky tagline, “The Programmatic IDL.”
 
 Yes, a programmatic API.
 All queries are complete programs[1].
 The requester sends a JSON[2] value to a language interpreter running on the server.
 The server runs the program making multiple API calls in one fell swoop[3].
-On the client side, Fluid provides and generates a typesafe, query DSL[4].
+On the client side, Fluid provides and generates a typesafe, query DSL.
 This is a benefit of IDLs.
 It makes for a great pairing as you won’t be visibly stuck with JSON. 
 
@@ -25,7 +25,7 @@ _Lemme explain._
 
 ## The Versioning Problem
 
-There are many ways to make a mess of RESTful APIs. Versioning is just one way. Rather than iterating through the problems in ad hoc solutions, we’ll iterate through the general problems.
+There are many ways to make a mess of RESTful APIs. Versioning is just one way. Rather than iterating through the problems inside ad hoc solutions, we’ll iterate through the general problems.
 
 ### Why version?
 
@@ -43,29 +43,48 @@ That line becomes horrifically blurry when optionalizing fields on JSON objects.
 
 ### How to version
 
-Hopefully, your APIs are versioned by a reproducible process. It could be based on features, resources, or endpoints. Gut feelings or “it’s been long enough” aren’t reproducible. In the end, it’s still a flesh-bodied someone manually bumping the versions. People make mistakes.
+Hopefully, your APIs are versioned by a reproducible process.
+It could be based on features, resources, or endpoints.
+Gut feelings or “it’s been long enough” aren’t reproducible.
+Nevertheless, it’s still a flesh-bodied someone manually bumping the versions in the end.
+People make mistakes.
 
 ## Automating the version
 
 With a reproducible versioning process in place, it could then be automated.
 
-Fluid does the semantic versioning, so we'll talk about versions in those terms. Major is breaking. Minor is non-breaking.
+Fluid does automatic semantic versioning, so we'll talk about versions in those terms.
+Major is breaking.
+Minor is non-breaking.
+Patch is ignored because it's a server implementation detail.
 
 ### Diff for changes
 
-By now most programmers understand the value of version control. Seeing and storing diffs between different code commits is extremely useful. Whether you realize it or not, every diff semantically represents a version change — even all the way down to the microscopic happenings. It may not be a major or minor change, but it’s a change nonetheless.
+By now most programmers understand the value of version control.
+Seeing and storing diffs between different code commits is extremely useful.
+Whether you realize it or not, every diff semantically represents a version change — even all the way down to the microscopic happenings.
+It may not be a major or minor change, but it’s a change nonetheless.
 
-The same diff’ing idea can be applied to APIs if they were represented as code. And they can. This is where IDLs come into play.
+The same diff’ing idea can be applied to APIs if they were represented as code.
+And they can.
+This is where IDLs come into play.
 
 ### APIs as an IDL Spec
 
 If you’ve ever dealt with Thrift, ProtoBuf, or another IDL, you understand this already.
 
-In a typical and self-contained code base, we abstract effects through some kind of interface. It could be a class, a monad, or whatever. An IDL enforces that abstraction into language agnostic interface. This interface is the spec. With a generator, the spec creates a client side SDK and a server-side stubs. It doesn’t stop there. It the spec can create documentation as well.
+In a typical and self-contained code base, we abstract effects through some kind of interface.
+It could be a class, a monad, or whatever.
+An IDL enforces that abstraction into language agnostic interface.
+This interface is the spec.
+With a generator, the spec creates a client side SDK and a server-side stubs.
+It doesn’t stop there.
+It the spec can create documentation as well.
 
 ### Diff’ing the Specs
 
-Consider this simple pseudo-code IDL spec. It starts with version `0.0`.
+Consider this simple pseudo-code IDL spec.
+It starts with version `0.0`.
 
 ```
 function Hello(target: String) -> String
@@ -79,16 +98,16 @@ function Hello(greeting: String, target: String) -> String
 ```
 _<sup><sub>Figure: Spec 2</sub></sup>_
 
-Now you have two specs[5].
+Now you have two specs[4].
 
 We added another argument to the function `Hello`.
 Because not all changes are created equal, there will be either a major or minor version difference.
 
 Because any client that depended on the previous version of `Hello` will break, it’s a breaking change — a new major version at `1.0`.
-You may argue greeting should have a default value as decided by the previous implementation.
+You may argue `greeting` should have a default value as decided by the previous implementation.
 It shouldn’t.
+Doing that is a skewed variation of the optionalizing hack.
 Those differences should remain in the server implementation and not in the spec.
-It’s a skewed variation of the optionalizing hack.
 
 Alright.
 Let’s make a couple more changes.
@@ -147,6 +166,9 @@ The example specs gives creates 4 different major versions: `0.0`, `1.1`, `2.0`,
 
 ## Deprecating versions
 
+### Dropping support
+
+### Manual curation
 
 ## Fluid’s Implementation
 
@@ -160,7 +182,7 @@ Admittely, it was a hurdle to shoehorn, yet what turned out isn't terrible.
 I think it's rather clean and legible format.
 But you can judge for yourself.
 
-Here’s the first of the translations from the above pseudo-code specs.
+Here’s the first spec translation into a real Fluid spec.
 
 ```
 {
@@ -182,7 +204,13 @@ Here’s the first of the translations from the above pseudo-code specs.
 _<sup><sub>Figure: Spec 1, Version 0.0</sub></sup>_
 
 
-The key `"fluid"` describes the implementation version of the  transport. It does not describe the API version. It will be needed for when Fluid features are added, modified, or removed.
+The key `"fluid"` describes the implementation version of the  transport.
+It does not describe the API version.
+It will be needed for when Fluid features are added, modified, or removed.
+
+### Meta and Error
+
+### Pull
 
 ### More specs
 
@@ -290,7 +318,61 @@ _<sup><sub>Figure: Spec 4, Version 2.0</sub></sup>_
 ```
 _<sup><sub>Figure: Spec 5, Version 3.0</sub></sup>_
 
-Notice there’s no `"version"` key in any of the specs. It’s not required as the specs are automatically versioned as described in the previous section[tk].
+Notice there’s no `"version"` key in any of the specs.
+It’s not required as the specs are automatically versioned as described in the previous section[tk].
+
+### Handler map
+
+### Add-ons
+
+## What's next
+
+### Language support
+
+I want to target 40+ languages officially.
+You can find the <a href="https://github.com/jxv/fluid/blob/master/targets.txt">full list in repo</a>.
+Currently, only a full Haskell implementation exists because it was dogfooded with a <a href="https://www.camp47.com">different project</a>.
+The implementation serves as a nice template, but that still leaves a lot porting ahead.
+
+On the flip side, it doesn't matter too much.
+You can today integrate with servers without an existing client implementation.
+It wasn't covered in this post, but the query in transport JSON is actually readable and fairly predictable.
+This was intentional for the client on the outset.
+So even if you downright hate IDLs, you'll never be stuck.
+
+### Event sourcing
+
+Another open-ended design decision is event sourcing.
+In particular, I wanted to allow for CQRS.
+As far as the spec is concerned, functions are types that happen to have output.
+And all functions have no more than one input.
+The inputs needing multiple arguments just use types with members.
+The inputs needing a different kind or number of arguments use enumerals.
+Then the inputs (and outputs) can be logged and stored forever with their associated versions.
+In reality, this area hasn't been touched.
+So I only guarded for minimal architectural changes.
+
+### Documentation and Playground
+
+Generating documentation is the clearest chasm to cross.
+Having a spec format with a semantic parser is half-way there.
+The dumbest generator will instantly add value.
+
+On the other hand, the playground will need some creative love.
+I'm imagining a generated web-client app for poking around with servers.
+It could be something along the lines of Postman attached with documentation.
+Or, it could be stricter with "views" for different versions and "combo boxed values" for enumerals. 
+Nothing is set in stone.
+The only requirement is that a `GET` with the playground to the Fluid endpoint should expose a field of dirty hacker possibilties.
+
+### Contributions
+
+If you wish contribute in a big or small way, <a href="https://join.slack.com/t/fluid-idl/shared_invite/enQtMjU4NDA2NzM4MDM5LTc0NmM1NWE4M2Q5N2U4NDBjOTNmOTAzYTdmYzIyY2RhYTkxOTRjYjRiMjliOGNmOGQyN2ZmOWMwZTZiOTU0OTQ%22">join the slack</a>.
+There's plenty to do with the barrier of entry still low.
+Feel free to contact me directly through my handle, `jxv`.
+I won't bite.
+
+Thanks for reading!
 
 <br/>
 <br/>
@@ -305,8 +387,6 @@ _Note: Fluid was previously named Colorless._
 
 [3] GraphQL does something similar with its resolver.
 
-[4] Only Haskell has been fleshed out on both ends. There’s more to come for other languages.
-
-[5] _spec win everytime_
+[4] _spec win everytime_
 
 [tk] You can cautiously add the version if you wish. Including key `"version"` with an object such as `{"major": 0, "minor": 0}` will force the API version of the spec. Be sure not to go backwards.
