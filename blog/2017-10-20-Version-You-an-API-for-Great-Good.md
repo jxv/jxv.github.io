@@ -12,8 +12,9 @@ All queries are complete programs[1].
 The requester sends a JSON[2] value to a language interpreter running on the server.
 The server runs the program making multiple API calls in one fell swoop[3].
 On the client side, Fluid provides and generates a typesafe, query DSL.
-This is a benefit of IDLs.
-It makes for a great pairing as you won’t be visibly stuck with JSON. 
+This is a possible benefit of IDLs.
+It makes for a great pairing as you won’t be visibly stuck with JSON.
+Instead, you write in your language of choice.
 
 While that sounds very well — flashy and interesting.
 It isn’t the main motivation as hinted in the title.
@@ -78,8 +79,8 @@ It could be a class, a monad, or whatever.
 An IDL enforces that abstraction into language agnostic interface.
 This interface is the spec.
 With a generator, the spec creates a client side SDK and a server-side stubs.
-It doesn’t stop there.
-It the spec can create documentation as well.
+It doesn’t have to stop there.
+The spec can create documentation as well.
 
 ### Diff’ing the Specs
 
@@ -160,26 +161,59 @@ The example specs gives creates 4 different major versions: `0.0`, `1.1`, `2.0`,
 
 ### Dispatch to service
 
+While I think versioned endpoints makes the most sense for RESTful APIs,
+IDLs only really need a single endpoint.
+Everything important happens through the payload.
+By passing the version inside the payload, the client offloaded a little work to the server.
+IDL generated servers are plenty capable dispatching to the correct service version.
+
 ### Type reuse
 
 ### Published specs
 
 ## Deprecating versions
 
+Not all of versioning is about adding new versions.
+Sometimes you need to remove old ones.
+Everyone rightfully does this differently.
+API sunsetting needs a flexible deprecation system.
+
 ### Dropping support
 
+How do you specify which versions to drop?
+Stating a range of the supported major versions sounds like a common approach.
+That should be easy then.
+Obviously, it also implies anything outside the range is not supported.
+You'll probably always want to support the latest version, so just mentioning the oldest supported version is enough.
+
+What about type reuse from older unsupported versions?
+Those get bumped up into new oldest version.
+
 ### Manual curation
+
+The real world is complicated.
+How you choose what APIs to support long term doesn't have to follow predictable guidelines.
+Whether it's support for important clients or in-house legacy tools,
+an automated versioner shouldn't over impose.
+There needs to be a fallback.
+
+Overriding the version inside the spec is a way out.
+It's something I don't eagerly reccommend because abuse defeats the purpose of automated versioning.
+Yet, that option becomes a no-brainer when you need absolutely need it.
 
 ## Fluid’s Implementation
 
 Fluid applies all the theories described above.
-In practice, specs are stored as separate files in the same directory and chronologically ordered using alphanumerical names.
+In practice, there were many, snickering devils hiding in the details.
+Not suprising.
+Siloed ideas and working code in one area evolved into becoming needless and overcomplicated in another area.
+For these reasons, many parts of Fluid were thrown out, redesigned, and rewritten over the better part of a year.
+I believe this to be a strength which you can benefit from.
 
 ### The spec
 
-The Fluid spec format is in JSON, for pragmatic reasons.
-Admittely, it was a hurdle to shoehorn, yet what turned out isn't terrible.
-I think it's rather clean and legible format.
+A Fluid spec is in the pragmatic JSON format.
+Admittedly, it was a hurdle to shoehorn, yet what turned out is far from terrible.
 But you can judge for yourself.
 
 Here’s the first spec translation into a real Fluid spec.
@@ -203,16 +237,63 @@ Here’s the first spec translation into a real Fluid spec.
 ```
 _<sup><sub>Figure: Spec 1, Version 0.0</sub></sup>_
 
+That's many lines more compared the original pseudo-code spec.
+Let's them break down by keys.
 
-The key `"fluid"` describes the implementation version of the  transport.
-It does not describe the API version.
-It will be needed for when Fluid features are added, modified, or removed.
+#### Types
 
-### Meta and Error
+The only remotely recognizable thing is the `Hello` line. Quick comparsion to the fake spec:
 
-### Pull
+```
+function Hello(target: String) -> String
+
+{ "n": "Hello", "m": [{"target":"String"}], "o": "String" }
+```
+
+The `"n"` means name and `"o"` means output.
+Easy comparsion.
+The `"m"` is trickier though.
+It means members.
+_Wait. Isn't this a function? Shouldn't it mean arguments?_
+Yes and no.
+
+It's true that `Hello` the function takes an argument.
+The argument is not `target`, it's `Hello` the struct.
+`Hello` the struct has the member `target`.
+The full reasoning is explained later in the __What's next > Event sourcing__ section.
+For now, just understand they're different.
+
+Here's a closer equivalent in pesudo-code:
+```
+type HelloTheStruct = { target: String }
+
+function HelloTheFunction(arg: HelloTheStruct) -> String
+```
+
+Types and functions exist in separate namespaces in Fluid, so the names are overloaded.
+
+#### Fluid
+
+The value of key `"fluid"` describes the implementation version of the  transport.
+It does not describe the generated API version.
+Fluid is a newborn, so it's currently `{"major": 0, "minor": 0}`.
+It definitely will be needed when features are added, modified, or removed.
+
+
+#### Pull
+
+The name `"pull"` comes by comparison to push, like push notifications.
+It's just RPC.
+The object contains where and how to communicate with the server.
+
+##### Address
+##### Meta
+##### Error
 
 ### More specs
+
+Specs are stored as separate files in the same directory and chronologically ordered using alphanumerical names.
+
 
 ```
 {
@@ -325,6 +406,24 @@ It’s not required as the specs are automatically versioned as described in the
 
 ### Add-ons
 
+The core of Fluid does not specify exactly how to send or recieve data.
+The strongest opinion is JSON.
+The address related info in `"pull"` is actually a lie.
+It's intended for the client, but as a server or client you can do whatever.
+
+You probably don't want to do whatever though.
+You want to do what the `"pull"` says.
+But still, Fluid isn't a HTTP server or client.
+At the its ultimate level, Fluid creates a JSON to JSON function.
+
+The JSON to JSON function exposes a gap here.
+You actually need to send and recieve data somehow.
+Add-ons fill in that gap by generating boilerplate code between Fluid with HTTP server and client libraries.
+Fluid's design is flexible enough where you aren't limited to which libraries to combine with.
+
+As the name implies, add-ons aren't required.
+If the add-ons are too opinionated, it's your choice to do something different with Fluid.
+
 ## What's next
 
 ### Language support
@@ -332,10 +431,10 @@ It’s not required as the specs are automatically versioned as described in the
 I want to target 40+ languages officially.
 You can find the <a href="https://github.com/jxv/fluid/blob/master/targets.txt">full list in repo</a>.
 Currently, only a full Haskell implementation exists because it was dogfooded with a <a href="https://www.camp47.com">different project</a>.
-The implementation serves as a nice template, but that still leaves a lot porting ahead.
+The implementation serves as a nice template, but that still leaves a hefty amount of porting ahead.
 
-On the flip side, it doesn't matter too much.
-You can today integrate with servers without an existing client implementation.
+On the flip side, the amount doesn't matter too much.
+You can integrate with servers without an existing client implementation today.
 It wasn't covered in this post, but the query in transport JSON is actually readable and fairly predictable.
 This was intentional for the client on the outset.
 So even if you downright hate IDLs, you'll never be stuck.
