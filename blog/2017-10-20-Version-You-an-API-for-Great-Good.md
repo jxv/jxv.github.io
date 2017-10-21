@@ -661,6 +661,13 @@ Thanks for reading!
 <br/>
 <br/>
 
+[/r/haskell thread](https://www.reddit.com/r/haskell/comments/77rmxg/version_you_an_api_for_great_good/)
+
+[/r/programming thread](https://www.reddit.com/r/programming/comments/77rvko/version_you_an_api_for_great_good/)
+
+<br/>
+<br/>
+
 <hr />
 
 _Note: Fluid was previously named Colorless._
