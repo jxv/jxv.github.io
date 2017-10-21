@@ -665,6 +665,8 @@ Thanks for reading!
 
 [/r/programming thread](https://www.reddit.com/r/programming/comments/77rvko/version_you_an_api_for_great_good/)
 
+[HN thread](https://news.ycombinator.com/item?id=15521052)
+
 <br/>
 <br/>
 
