@@ -101,7 +101,7 @@ _<sup><sub>Figure: Spec 2</sub></sup>_
 
 Now you have two specs[4].
 
-We added another argument to the function `Hello`.
+We added another argument to the function[5] `Hello`.
 Because not all changes are created equal, there will be either a major or minor version difference.
 
 Because any client that depended on the previous version of `Hello` will break, it’s a breaking change — a new major version at `1.0`.
@@ -158,18 +158,21 @@ To draw a conclusion from this exercise, I’ll extend to the following:
 ## Handling requests with different versions
 
 The example specs gives creates 4 different major versions: `0.0`, `1.1`, `2.0`, and `3.0`. 
+Version `1.0` can be excluded from generation as `1.1` can cover exactly the same aspects.
 
 ### Dispatch to service
 
 While I think versioned endpoints makes the most sense for RESTful APIs,
 IDLs only really need a single endpoint.
-Everything important happens through the payload.
+Everything important happens through the payload anyways.
 By passing the version inside the payload, the client offloaded a little work to the server.
 IDL generated servers are plenty capable dispatching to the correct service version.
 
 ### Type reuse
 
-### Published specs
+An IDL, which is smart enough to recognize changes between types in different specs, shouldn't recreate the same types.
+Especially for statically type languages, it's useful.
+Function definitions can be reused if all the types involved are the same between different service versions.
 
 ## Deprecating versions
 
@@ -287,13 +290,26 @@ It's just RPC.
 The object contains where and how to communicate with the server.
 
 ##### Address
+
+The address is the combined make up of: `"protocol"`, `"host"`, `"port"`, and `"path"`.
+To keep things simple, they're kept separated.
+
 ##### Meta
+
+`"meta"` is akin to the HTTP usage of headers.
+There aren't rules how to use it.
+However, authentication information is a good fit.
+
 ##### Error
 
-### More specs
+HTTP status codes doesn't cover all possible error cases.
+They would only cover the some amongst all IDL servers.
+But they won't cover the errors related to a specific service.
+That's what this `"error"` represents.
 
-Specs are stored as separate files in the same directory and chronologically ordered using alphanumerical names.
+### Next spec
 
+Here's the next spec, prepending `greeting` to the member list.
 
 ```
 {
@@ -318,7 +334,96 @@ Specs are stored as separate files in the same directory and chronologically ord
 ```
 _<sup><sub>Figure: Spec 2, Version 1.0</sub></sup>_
 
+Order is important for members.
+Not all languages treat members as elements in a dictionary or a (hash)map.
+They require an order for each of the members.
+There's not reasonable alternative.
+So it's better to be consistent about ordering.
+
+Recall that the automated versioner diffs consecutive specs.
+We can't delete the old spec because that will destroy the API history and therefore versioning process.
+This spec needs to be completely separate file from the previous spec as to retain the history.
+
+Because there's more than one file now, we need an organization system.
+A file hierarchy of sorts.
+The specs should be stored as separate files in the same directory and chronologically ordered using alphanumerical file names.
+The ordering of which specs to diff into the next version is decided by the names.
+
 <br />
+
+
+### Handler map
+
+Now that we have two real specs[4].
+We need a function to combine the different service interfaces into a data structure indexed by their version.
+Below is real generated Haskell code doing exactly that.
+
+```
+example'handlerMap ::
+  ( MonadIO m, MonadCatch m
+  , V0.Example'Service meta0 m, V1.Example'Service meta1 m)
+  => (xtra -> Hooks m () meta0) -> (xtra -> Hooks m () meta1)
+  -> xtra
+  -> Map
+       Major
+       (Minor, Request -> m (Either Response Response))
+example'handlerMap hooks0 hooks1 xtra = R.fromList
+    [ (0, (0, V0.example'handler hooks0 xtra))
+    , (1, (0, V1.example'handler hooks1 xtra))
+    ]
+```
+
+I won't cover the gritty details of type signature except for the last part, the output.
+
+`Map Major (Minor, Request -> m (Either Response Response))`
+
+Whenever a client sends a request, it includes a version.
+The version decides which tuple to look up respective to the major verson.
+Finally, it compares the minor version.
+Equal or less than?
+Good.
+Greater than?
+Bad and throw an error.
+
+The second part of the tuple looks more web API-ish.
+
+`Request -> m (Either Response Response)`
+
+It takes a parsed Request and returns either an runtime error'ed Response or some completed Response.
+Every Fluid handler boils down to this function.
+
+Of course, this is all possible because of the first two arguments of `example'handlerMap`.
+They contain the different service handlers for each version.
+With the `Map` usage, different versioned services can share the same endpoint.
+
+### Add-ons
+
+The existence of add-ons reduces ramp-up time.
+They also patch onto an existing API libraries easily.
+This is because the core of Fluid does not specify exactly how to send or recieve data.
+Add-ons fill the gap by generating boilerplate code between Fluid with HTTP server and client libraries.
+
+In addition, Fluid doesn't hard code the `"pull"` configuration.
+The configuration is intended to be plugged into a HTTP server or client as adaptor code.
+
+There's a couple benefits from this.
+
+1. Fluid's design is flexible enough where you aren't limited to which libraries to combine with.
+2. Generated code is allowed to be used outside production environments.
+
+So the spec's address information from `"pull"` is a partial lie.
+The configuration generated isn't used anywhere by default.
+You can really do whatever in regards to transmitting.
+
+But you probably don't want to do just whatever.
+You want to do what the `"pull"` says.
+Add-ons bridge the gap in dumb and opininated manner.
+No ambiguity.
+And if an add-on doesn't exist for a language or library, it's simple to implement.
+
+### Rest of the specs
+
+For curiosity sake, here's the translations of the remaining specs.
 
 ```
 {
@@ -399,30 +504,109 @@ _<sup><sub>Figure: Spec 4, Version 2.0</sub></sup>_
 ```
 _<sup><sub>Figure: Spec 5, Version 3.0</sub></sup>_
 
-Notice there’s no `"version"` key in any of the specs.
-It’s not required as the specs are automatically versioned as described in the previous section[tk].
+### Published specs
 
-### Handler map
+So earlier, I made a tiny, little-baby lie.
+Specs don't have to be separate files.
+It's just wise to do so for API owners.
 
-### Add-ons
+For a published spec, which should be treated as a read-only file, the rules change.
 
-The core of Fluid does not specify exactly how to send or recieve data.
-The strongest opinion is JSON.
-The address related info in `"pull"` is actually a lie.
-It's intended for the client, but as a server or client you can do whatever.
+A publicly exposed spec should only expose what's needed to generate client code or mock server.
+There's no reason to make that a collection of files when it can be a JSON file holding an array of specs.
+As mentioned way above, it's possible to force a version.
+Published specs force versions.
+Again, it's not a problem as a read-only file.
+No touchy.
 
-You probably don't want to do whatever though.
-You want to do what the `"pull"` says.
-But still, Fluid isn't a HTTP server or client.
-At the its ultimate level, Fluid creates a JSON to JSON function.
+Here are the examples as a published spec in all its glory. Recall that version `1.0` is dropped.
 
-The JSON to JSON function exposes a gap here.
-You actually need to send and recieve data somehow.
-Add-ons fill in that gap by generating boilerplate code between Fluid with HTTP server and client libraries.
-Fluid's design is flexible enough where you aren't limited to which libraries to combine with.
-
-As the name implies, add-ons aren't required.
-If the add-ons are too opinionated, it's your choice to do something different with Fluid.
+```
+[
+	{
+		"fluid": { "major": 0, "minor": 0 },
+		"version": { "major": 0, "minor": 0 },
+		"types": [
+			{ "n": "Hello", "m": [{"target":"String"}], "o": "String" }
+		],
+		"pull": {
+			"name": "Example",
+			"meta": "Unit",
+			"error": "Unit",
+			"protocol": "http",
+			"host": "localhost",
+			"port": 8080,
+			"path": "/"
+		}
+	},
+	{
+		"fluid": { "major": 0, "minor": 0 },
+		"version": { "major": 1, "minor": 1 },
+		"types": [
+			{
+				"n": "Hello",
+				"m": [{"greeting":"String"}, {"target":"String"}],
+				"o": "String"
+			},
+			{ "n": "Color", "e": ["Red","Green","Blue"] },
+			{ "n": "FavoriteColor", "o": "Color" }
+		],
+		"pull": {
+			"name": "Example",
+			"meta": "Unit",
+			"error": "Unit",
+			"protocol": "http",
+			"host": "localhost",
+			"port": 8080,
+			"path": "/"
+		}
+	},
+	{
+		"fluid": { "major": 0, "minor": 0 },
+		"version": { "major": 2, "minor": 0 },
+		"types": [
+			{
+				"n": "Hello",
+				"m": [{"greeting":"String"}, {"target":"String"}],
+				"o": "String"
+			},
+			{ "n": "Color", "e": ["Red","Green","Blue","Yellow"] },
+			{ "n": "FavoriteColor", "o": "Color" }
+		],
+		"pull": {
+			"name": "Example",
+			"meta": "Unit",
+			"error": "Unit",
+			"protocol": "http",
+			"host": "localhost",
+			"port": 8080,
+			"path": "/"
+		}
+	},
+	{
+		"fluid": { "major": 0, "minor": 0 },
+		"version": { "major": 3, "minor": 0 },
+		"types": [
+			{
+				"n": "Hello",
+				"m": [{"greeting":"String"}, {"target":"String"}],
+				"o": "String"
+			},
+			{ "n": "Color", "e": ["Red","Green","Blue","Yellow"] }
+		],
+		"pull": {
+			"name": "Example",
+			"meta": "Unit",
+			"error": "Unit",
+			"protocol": "http",
+			"host": "localhost",
+			"port": 8080,
+			"path": "/"
+		}
+	}
+]
+```
+_<sup><sub>Figure: Published Spec, Versions 0.0, 1.1, 2.0, 3.0</sub></sup>_
 
 ## What's next
 
@@ -488,4 +672,4 @@ _Note: Fluid was previously named Colorless._
 
 [4] _spec win everytime_
 
-[tk] You can cautiously add the version if you wish. Including key `"version"` with an object such as `{"major": 0, "minor": 0}` will force the API version of the spec. Be sure not to go backwards.
+[5] Function will be used often to mean service call. But not all functions are service calls.

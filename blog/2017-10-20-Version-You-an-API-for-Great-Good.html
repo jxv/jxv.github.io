@@ -58,7 +58,7 @@ This interface is the spec.
 With a generator, the spec creates a client side SDK and a server-side stubs.
 It doesn’t have to stop there.
 The spec can create documentation as well.</p><h3>Diff’ing the Specs</h3><p>Consider this simple pseudo-code IDL spec.
-It starts with version <code>0.0</code>.</p><pre><code>function Hello(target: String) -&gt; String</code></pre><p><i><sup><sub>Figure: Spec 1</sub></sup></i></p><p>Duplicate it and add a custom greeting.</p><pre><code>function Hello(greeting: String, target: String) -&gt; String</code></pre><p><i><sup><sub>Figure: Spec 2</sub></sup></i></p><p>Now you have two specs[4].</p><p>We added another argument to the function <code>Hello</code>.
+It starts with version <code>0.0</code>.</p><pre><code>function Hello(target: String) -&gt; String</code></pre><p><i><sup><sub>Figure: Spec 1</sub></sup></i></p><p>Duplicate it and add a custom greeting.</p><pre><code>function Hello(greeting: String, target: String) -&gt; String</code></pre><p><i><sup><sub>Figure: Spec 2</sub></sup></i></p><p>Now you have two specs[4].</p><p>We added another argument to the function[5] <code>Hello</code>.
 Because not all changes are created equal, there will be either a major or minor version difference.</p><p>Because any client that depended on the previous version of <code>Hello</code> will break, it’s a breaking change — a new major version at <code>1.0</code>.
 You may argue <code>greeting</code> should have a default value as decided by the previous implementation.
 It shouldn’t.
@@ -77,11 +77,14 @@ It causes a major version bump to version <code>2.0</code>.
 The reason is the previous client implementation can’t exhaustively match the output of <code>FavoriteColor</code>.</p><p>For the sake of completeness, the spec below removes the function <code>FavoriteColor</code> causing a major version bump as well.</p><pre><code>function Hello(greeting: String, target: String) -&gt; String
 
 type Color = Red | Green | Blue | Yellow</code></pre><p><i><sup><sub>Figure: Spec 5</sub></sup></i></p><p>It’s now version <code>3.0</code>.</p><p>To draw a conclusion from this exercise, I’ll extend to the following:</p><blockquote><p><i>All modifications and removals of existing types and existing functions break APIs.</i>
-<i>Additions of new types and new functions don’t.</i></p></blockquote><h2>Handling requests with different versions</h2><p>The example specs gives creates 4 different major versions: <code>0.0</code>, <code>1.1</code>, <code>2.0</code>, and <code>3.0</code>.</p><h3>Dispatch to service</h3><p>While I think versioned endpoints makes the most sense for RESTful APIs,
+<i>Additions of new types and new functions don’t.</i></p></blockquote><h2>Handling requests with different versions</h2><p>The example specs gives creates 4 different major versions: <code>0.0</code>, <code>1.1</code>, <code>2.0</code>, and <code>3.0</code>. 
+Version <code>1.0</code> can be excluded from generation as <code>1.1</code> can cover exactly the same aspects.</p><h3>Dispatch to service</h3><p>While I think versioned endpoints makes the most sense for RESTful APIs,
 IDLs only really need a single endpoint.
-Everything important happens through the payload.
+Everything important happens through the payload anyways.
 By passing the version inside the payload, the client offloaded a little work to the server.
-IDL generated servers are plenty capable dispatching to the correct service version.</p><h3>Type reuse</h3><h3>Published specs</h3><h2>Deprecating versions</h2><p>Not all of versioning is about adding new versions.
+IDL generated servers are plenty capable dispatching to the correct service version.</p><h3>Type reuse</h3><p>An IDL, which is smart enough to recognize changes between types in different specs, shouldn't recreate the same types.
+Especially for statically type languages, it's useful.
+Function definitions can be reused if all the types involved are the same between different service versions.</p><h2>Deprecating versions</h2><p>Not all of versioning is about adding new versions.
 Sometimes you need to remove old ones.
 Everyone rightfully does this differently.
 API sunsetting needs a flexible deprecation system.</p><h3>Dropping support</h3><p>How do you specify which versions to drop?
@@ -135,7 +138,13 @@ It does not describe the generated API version.
 Fluid is a newborn, so it's currently <code>{&quot;major&quot;: 0, &quot;minor&quot;: 0}</code>.
 It definitely will be needed when features are added, modified, or removed.</p><h4>Pull</h4><p>The name <code>&quot;pull&quot;</code> comes by comparison to push, like push notifications.
 It's just RPC.
-The object contains where and how to communicate with the server.</p><h5>Address</h5><h5>Meta</h5><h5>Error</h5><h3>More specs</h3><p>Specs are stored as separate files in the same directory and chronologically ordered using alphanumerical names.</p><pre><code>{
+The object contains where and how to communicate with the server.</p><h5>Address</h5><p>The address is the combined make up of: <code>&quot;protocol&quot;</code>, <code>&quot;host&quot;</code>, <code>&quot;port&quot;</code>, and <code>&quot;path&quot;</code>.
+To keep things simple, they're kept separated.</p><h5>Meta</h5><p><code>&quot;meta&quot;</code> is akin to the HTTP usage of headers.
+There aren't rules how to use it.
+However, authentication information is a good fit.</p><h5>Error</h5><p>HTTP status codes doesn't cover all possible error cases.
+They would only cover the some amongst all IDL servers.
+But they won't cover the errors related to a specific service.
+That's what this <code>&quot;error&quot;</code> represents.</p><h3>Next spec</h3><p>Here's the next spec, prepending <code>greeting</code> to the member list.</p><pre><code>{
   &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
   &quot;types&quot;: [
     {
@@ -153,7 +162,48 @@ The object contains where and how to communicate with the server.</p><h5>Address
     &quot;port&quot;: 8080,
     &quot;path&quot;: &quot;/&quot;
   }
-}</code></pre><p><i><sup><sub>Figure: Spec 2, Version 1.0</sub></sup></i></p><br /><pre><code>{
+}</code></pre><p><i><sup><sub>Figure: Spec 2, Version 1.0</sub></sup></i></p><p>Order is important for members.
+Not all languages treat members as elements in a dictionary or a (hash)map.
+They require an order for each of the members.
+There's not reasonable alternative.
+So it's better to be consistent about ordering.</p><p>Recall that the automated versioner diffs consecutive specs.
+We can't delete the old spec because that will destroy the API history and therefore versioning process.
+This spec needs to be completely separate file from the previous spec as to retain the history.</p><p>Because there's more than one file now, we need an organization system.
+A file hierarchy of sorts.
+The specs should be stored as separate files in the same directory and chronologically ordered using alphanumerical file names.
+The ordering of which specs to diff into the next version is decided by the names.</p><br /><h3>Handler map</h3><p>Now that we have two real specs[4].
+We need a function to combine the different service interfaces into a data structure indexed by their version.
+Below is real generated Haskell code doing exactly that.</p><pre><code>example'handlerMap ::
+  ( MonadIO m, MonadCatch m
+  , V0.Example'Service meta0 m, V1.Example'Service meta1 m)
+  =&gt; (xtra -&gt; Hooks m () meta0) -&gt; (xtra -&gt; Hooks m () meta1)
+  -&gt; xtra
+  -&gt; Map
+       Major
+       (Minor, Request -&gt; m (Either Response Response))
+example'handlerMap hooks0 hooks1 xtra = R.fromList
+    [ (0, (0, V0.example'handler hooks0 xtra))
+    , (1, (0, V1.example'handler hooks1 xtra))
+    ]</code></pre><p>I won't cover the gritty details of type signature except for the last part, the output.</p><p><code>Map Major (Minor, Request -&gt; m (Either Response Response))</code></p><p>Whenever a client sends a request, it includes a version.
+The version decides which tuple to look up respective to the major verson.
+Finally, it compares the minor version.
+Equal or less than?
+Good.
+Greater than?
+Bad and throw an error.</p><p>The second part of the tuple looks more web API-ish.</p><p><code>Request -&gt; m (Either Response Response)</code></p><p>It takes a parsed Request and returns either an runtime error'ed Response or some completed Response.
+Every Fluid handler boils down to this function.</p><p>Of course, this is all possible because of the first two arguments of <code>example'handlerMap</code>.
+They contain the different service handlers for each version.
+With the <code>Map</code> usage, different versioned services can share the same endpoint.</p><h3>Add-ons</h3><p>The existence of add-ons reduces ramp-up time.
+They also patch onto an existing API libraries easily.
+This is because the core of Fluid does not specify exactly how to send or recieve data.
+Add-ons fill the gap by generating boilerplate code between Fluid with HTTP server and client libraries.</p><p>In addition, Fluid doesn't hard code the <code>&quot;pull&quot;</code> configuration.
+The configuration is intended to be plugged into a HTTP server or client as adaptor code.</p><p>There's a couple benefits from this.</p><ol><li>Fluid's design is flexible enough where you aren't limited to which libraries to combine with.</li><li>Generated code is allowed to be used outside production environments.</li></ol><p>So the spec's address information from <code>&quot;pull&quot;</code> is a partial lie.
+The configuration generated isn't used anywhere by default.
+You can really do whatever in regards to transmitting.</p><p>But you probably don't want to do just whatever.
+You want to do what the <code>&quot;pull&quot;</code> says.
+Add-ons bridge the gap in dumb and opininated manner.
+No ambiguity.
+And if an add-on doesn't exist for a language or library, it's simple to implement.</p><h3>Rest of the specs</h3><p>For curiosity sake, here's the translations of the remaining specs.</p><pre><code>{
   &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
   &quot;types&quot;: [
     {
@@ -212,18 +262,96 @@ The object contains where and how to communicate with the server.</p><h5>Address
     &quot;port&quot;: 8080,
     &quot;path&quot;: &quot;/&quot;
   }
-}</code></pre><p><i><sup><sub>Figure: Spec 5, Version 3.0</sub></sup></i></p><p>Notice there’s no <code>&quot;version&quot;</code> key in any of the specs.
-It’s not required as the specs are automatically versioned as described in the previous section[tk].</p><h3>Handler map</h3><h3>Add-ons</h3><p>The core of Fluid does not specify exactly how to send or recieve data.
-The strongest opinion is JSON.
-The address related info in <code>&quot;pull&quot;</code> is actually a lie.
-It's intended for the client, but as a server or client you can do whatever.</p><p>You probably don't want to do whatever though.
-You want to do what the <code>&quot;pull&quot;</code> says.
-But still, Fluid isn't a HTTP server or client.
-At the its ultimate level, Fluid creates a JSON to JSON function.</p><p>The JSON to JSON function exposes a gap here.
-You actually need to send and recieve data somehow.
-Add-ons fill in that gap by generating boilerplate code between Fluid with HTTP server and client libraries.
-Fluid's design is flexible enough where you aren't limited to which libraries to combine with.</p><p>As the name implies, add-ons aren't required.
-If the add-ons are too opinionated, it's your choice to do something different with Fluid.</p><h2>What's next</h2><h3>Language support</h3><p>I want to target 40+ languages officially.
+}</code></pre><p><i><sup><sub>Figure: Spec 5, Version 3.0</sub></sup></i></p><h3>Published specs</h3><p>So earlier, I made a tiny, little-baby lie.
+Specs don't have to be separate files.
+It's just wise to do so for API owners.</p><p>For a published spec, which should be treated as a read-only file, the rules change.</p><p>A publicly exposed spec should only expose what's needed to generate client code or mock server.
+There's no reason to make that a collection of files when it can be a JSON file holding an array of specs.
+As mentioned way above, it's possible to force a version.
+Published specs force versions.
+Again, it's not a problem as a read-only file.
+No touchy.</p><p>Here are the examples as a published spec in all its glory. Recall that version <code>1.0</code> is dropped.</p><pre><code>[
+    {
+        &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+        &quot;version&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+        &quot;types&quot;: [
+            { &quot;n&quot;: &quot;Hello&quot;, &quot;m&quot;: [{&quot;target&quot;:&quot;String&quot;}], &quot;o&quot;: &quot;String&quot; }
+        ],
+        &quot;pull&quot;: {
+            &quot;name&quot;: &quot;Example&quot;,
+            &quot;meta&quot;: &quot;Unit&quot;,
+            &quot;error&quot;: &quot;Unit&quot;,
+            &quot;protocol&quot;: &quot;http&quot;,
+            &quot;host&quot;: &quot;localhost&quot;,
+            &quot;port&quot;: 8080,
+            &quot;path&quot;: &quot;/&quot;
+        }
+    },
+    {
+        &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+        &quot;version&quot;: { &quot;major&quot;: 1, &quot;minor&quot;: 1 },
+        &quot;types&quot;: [
+            {
+                &quot;n&quot;: &quot;Hello&quot;,
+                &quot;m&quot;: [{&quot;greeting&quot;:&quot;String&quot;}, {&quot;target&quot;:&quot;String&quot;}],
+                &quot;o&quot;: &quot;String&quot;
+            },
+            { &quot;n&quot;: &quot;Color&quot;, &quot;e&quot;: [&quot;Red&quot;,&quot;Green&quot;,&quot;Blue&quot;] },
+            { &quot;n&quot;: &quot;FavoriteColor&quot;, &quot;o&quot;: &quot;Color&quot; }
+        ],
+        &quot;pull&quot;: {
+            &quot;name&quot;: &quot;Example&quot;,
+            &quot;meta&quot;: &quot;Unit&quot;,
+            &quot;error&quot;: &quot;Unit&quot;,
+            &quot;protocol&quot;: &quot;http&quot;,
+            &quot;host&quot;: &quot;localhost&quot;,
+            &quot;port&quot;: 8080,
+            &quot;path&quot;: &quot;/&quot;
+        }
+    },
+    {
+        &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+        &quot;version&quot;: { &quot;major&quot;: 2, &quot;minor&quot;: 0 },
+        &quot;types&quot;: [
+            {
+                &quot;n&quot;: &quot;Hello&quot;,
+                &quot;m&quot;: [{&quot;greeting&quot;:&quot;String&quot;}, {&quot;target&quot;:&quot;String&quot;}],
+                &quot;o&quot;: &quot;String&quot;
+            },
+            { &quot;n&quot;: &quot;Color&quot;, &quot;e&quot;: [&quot;Red&quot;,&quot;Green&quot;,&quot;Blue&quot;,&quot;Yellow&quot;] },
+            { &quot;n&quot;: &quot;FavoriteColor&quot;, &quot;o&quot;: &quot;Color&quot; }
+        ],
+        &quot;pull&quot;: {
+            &quot;name&quot;: &quot;Example&quot;,
+            &quot;meta&quot;: &quot;Unit&quot;,
+            &quot;error&quot;: &quot;Unit&quot;,
+            &quot;protocol&quot;: &quot;http&quot;,
+            &quot;host&quot;: &quot;localhost&quot;,
+            &quot;port&quot;: 8080,
+            &quot;path&quot;: &quot;/&quot;
+        }
+    },
+    {
+        &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
+        &quot;version&quot;: { &quot;major&quot;: 3, &quot;minor&quot;: 0 },
+        &quot;types&quot;: [
+            {
+                &quot;n&quot;: &quot;Hello&quot;,
+                &quot;m&quot;: [{&quot;greeting&quot;:&quot;String&quot;}, {&quot;target&quot;:&quot;String&quot;}],
+                &quot;o&quot;: &quot;String&quot;
+            },
+            { &quot;n&quot;: &quot;Color&quot;, &quot;e&quot;: [&quot;Red&quot;,&quot;Green&quot;,&quot;Blue&quot;,&quot;Yellow&quot;] }
+        ],
+        &quot;pull&quot;: {
+            &quot;name&quot;: &quot;Example&quot;,
+            &quot;meta&quot;: &quot;Unit&quot;,
+            &quot;error&quot;: &quot;Unit&quot;,
+            &quot;protocol&quot;: &quot;http&quot;,
+            &quot;host&quot;: &quot;localhost&quot;,
+            &quot;port&quot;: 8080,
+            &quot;path&quot;: &quot;/&quot;
+        }
+    }
+]</code></pre><p><i><sup><sub>Figure: Published Spec, Versions 0.0, 1.1, 2.0, 3.0</sub></sup></i></p><h2>What's next</h2><h3>Language support</h3><p>I want to target 40+ languages officially.
 You can find the <a href="https://github.com/jxv/fluid/blob/master/targets.txt">full list in repo</a>.
 Currently, only a full Haskell implementation exists because it was dogfooded with a <a href="https://www.camp47.com">different project</a>.
 The implementation serves as a nice template, but that still leaves a hefty amount of porting ahead.</p><p>On the flip side, the amount doesn't matter too much.
@@ -249,7 +377,7 @@ The only requirement is that a <code>GET</code> with the playground to the Fluid
 There's plenty to do with the barrier of entry still low.
 Feel free to contact me directly through my handle, <code>jxv</code>.
 I won't bite.</p><p>Thanks for reading!</p><br />
-<br /><hr /><p><i>Note: Fluid was previously named Colorless.</i></p><p>[1] That might sound scary. I recently talked at a local meetup and received plenty of related concerns from the audience. Their concerns have since been addressed with a reasonable solution. It's no longer scary. What that looks like pends as another post.</p><p>[2] People will hate on JSON even when abstracted. Sorry, it’s not my ideal either.</p><p>[3] GraphQL does something similar with its resolver.</p><p>[4] <i>spec win everytime</i></p><p>[tk] You can cautiously add the version if you wish. Including key <code>&quot;version&quot;</code> with an object such as <code>{&quot;major&quot;: 0, &quot;minor&quot;: 0}</code> will force the API version of the spec. Be sure not to go backwards.</p></div><div id="footer"><br />
+<br /><hr /><p><i>Note: Fluid was previously named Colorless.</i></p><p>[1] That might sound scary. I recently talked at a local meetup and received plenty of related concerns from the audience. Their concerns have since been addressed with a reasonable solution. It's no longer scary. What that looks like pends as another post.</p><p>[2] People will hate on JSON even when abstracted. Sorry, it’s not my ideal either.</p><p>[3] GraphQL does something similar with its resolver.</p><p>[4] <i>spec win everytime</i></p><p>[5] Function will be used often to mean service call. But not all functions are service calls.</p></div><div id="footer"><br />
 <br />
 <br />
 <br />
