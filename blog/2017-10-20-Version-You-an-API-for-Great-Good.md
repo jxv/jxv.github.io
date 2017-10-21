@@ -614,7 +614,7 @@ _<sup><sub>Figure: Published Spec, Versions 0.0, 1.1, 2.0, 3.0</sub></sup>_
 
 I want to target 40+ languages officially.
 You can find the <a href="https://github.com/jxv/fluid/blob/master/targets.txt">full list in repo</a>.
-Currently, only a full Haskell implementation exists because it was dogfooded with a <a href="https://www.camp47.com">different project</a>.
+Currently, only a full Haskell implementation exists because it was dogfooded with a <a href="https://www.camp47.com?s=b1">different project</a>.
 The implementation serves as a nice template, but that still leaves a hefty amount of porting ahead.
 
 On the flip side, the amount doesn't matter too much.
