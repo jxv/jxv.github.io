@@ -4,7 +4,7 @@
   <tr>
     <td>
       <a href="index.html">
-        <img height="48px" width="48px" src="https://avatars3.githubusercontent.com/u/3070597?s=30&v=4" style="border-radius: 50%"/>
+        <img height="48px" width="48px" src="avatar.png" style="border-radius: 50%"/>
       </a>
     </td>
     <td>
