@@ -12,14 +12,14 @@ hr {
 
 #header {
   width: calc(62vw / 2 + 300px / 2);
-  max-width: 700px;
+  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
 }
 
 #content {
   width: calc(62vw / 2 + 300px / 2);
-  max-width: 700px;
+  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
   font-size: 1.4em;
