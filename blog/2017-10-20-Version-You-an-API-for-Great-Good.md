@@ -34,7 +34,7 @@ For starters, you don’t necessarily integrate with an API you own. Second, the
 
 ### Where to version
 
-The version can be placed somewhere as insider the header, possibly using a registered vendor MIME type. Or inside the request payload. Or even as a query parameter. Or as a subdomain. My favorite solution is simply to prefix an endpoint’s path with `/v1/` , `/v2/`, `/v3/`, etc. Nevertheless, the overall lack of consistency with placement is nothing short of ironic.
+The version can be placed somewhere inside the header, possibly using a registered vendor MIME type. Or inside the request payload. Or even as a query parameter. Or as a subdomain. My favorite solution is simply to prefix an endpoint’s path with `/v1/` , `/v2/`, `/v3/`, etc. Nevertheless, the overall lack of consistency with placement is nothing short of ironic.
 
 ### What to version
 
@@ -76,7 +76,7 @@ If you’ve ever dealt with Thrift, ProtoBuf, or another IDL, you understand thi
 
 In a typical and self-contained code base, we abstract effects through some kind of interface.
 It could be a class, a monad, or whatever.
-An IDL enforces that abstraction into language agnostic interface.
+An IDL enforces that abstraction into a language agnostic interface.
 This interface is the spec.
 With a generator, the spec creates a client side SDK and a server-side stubs.
 It doesn’t have to stop there.
@@ -187,7 +187,7 @@ How do you specify which versions to drop?
 Stating a range of the supported major versions sounds like a common approach.
 That should be easy then.
 Obviously, it also implies anything outside the range is not supported.
-You'll probably always want to support the latest version, so just mentioning the oldest supported version is enough.
+You'll likely want to support the latest version, so just mentioning the oldest supported version is enough.
 
 What about type reuse from older unsupported versions?
 Those get bumped up into new oldest version.
@@ -201,7 +201,7 @@ an automated versioner shouldn't over impose.
 There needs to be a fallback.
 
 Overriding the version inside the spec is a way out.
-It's something I don't eagerly recommend because abuse defeats the purpose of automated versioning.
+It's something I don't eagerly recommend because the abuse defeats the purpose of automated versioning.
 Yet, that option becomes a no-brainer when you need absolutely need it.
 
 ## Fluid’s Implementation
@@ -299,6 +299,7 @@ To keep things simple, they're kept separated.
 `"meta"` is akin to the HTTP usage of headers.
 There aren't rules how to use it.
 However, authentication information is a good fit.
+This spec passes a meaningless unit type.
 
 ##### Error
 
@@ -306,6 +307,7 @@ HTTP status codes doesn't cover all possible error cases.
 They would only cover the some amongst all IDL servers.
 But they won't cover the errors related to a specific service.
 That's what this `"error"` represents.
+Like `"meta"` it can be any type the creator desires.
 
 ### Next spec
 
@@ -337,7 +339,7 @@ _<sup><sub>Figure: Spec 2, Version 1.0</sub></sup>_
 Order is important for members.
 Not all languages treat members as elements in a dictionary or a (hash)map.
 They require an order for each of the members.
-There's not reasonable alternative.
+There's not a reasonable alternative unfortunately.
 So it's better to be consistent about ordering.
 
 Recall that the automated versioner diffs consecutive specs.
@@ -417,9 +419,9 @@ You can really do whatever in regards to transmitting.
 
 But you probably don't want to do just whatever.
 You want to do what the `"pull"` says.
-Add-ons bridge the gap in dumb and opininated manner.
+Add-ons bridge the gap in a dumb and opininated manner.
 No ambiguity.
-And if an add-on doesn't exist for a language or library, it's simple to implement.
+And if an add-on doesn't exist for a language or library, it's simple to implement one.
 
 ### Rest of the specs
 
@@ -628,12 +630,12 @@ So even if you downright hate IDLs, you'll never be stuck.
 Another open-ended design decision is event sourcing.
 In particular, I wanted to allow for CQRS.
 As far as the spec is concerned, functions are types that happen to have output.
-And all functions have no more than one input.
+All such functions have no more than one input.
 The inputs needing multiple arguments just use types with members.
 The inputs needing a different kind or number of arguments use enumerals.
-Then the inputs (and outputs) can be logged and stored forever with their associated versions.
+This is great because those the inputs (and outputs) can be uniformly logged and stored forever with their associated versions.
 In reality, this area hasn't been touched.
-So I only guarded for minimal architectural changes.
+So I only guarded against massive architectural changes.
 
 ### Documentation and Playground
 

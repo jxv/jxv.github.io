@@ -39,7 +39,7 @@ Instead, you write in your language of choice.</p><p>While that sounds very well
 It isn’t the main motivation as hinted in the title.</p><p>It’s the way Fluid handles versioning/evolution.
 I believe versioning is the cornerstone feature for APIs.
 It should be taken with respective importance.
-<i>Lemme explain.</i></p><h2>The Versioning Problem</h2><p>There are many ways to make a mess of RESTful APIs. Versioning is just one way. Rather than iterating through the problems inside ad hoc solutions, we’ll iterate through the general problems.</p><h3>Why version?</h3><p>For starters, you don’t necessarily integrate with an API you own. Second, these interfaces exist in different code bases. They are mutable and easy to forget. Features get added, removed, and updated. These kinds of changes should be represented somehow.</p><h3>Where to version</h3><p>The version can be placed somewhere as insider the header, possibly using a registered vendor MIME type. Or inside the request payload. Or even as a query parameter. Or as a subdomain. My favorite solution is simply to prefix an endpoint’s path with <code>/v1/</code> , <code>/v2/</code>, <code>/v3/</code>, etc. Nevertheless, the overall lack of consistency with placement is nothing short of ironic.</p><h3>What to version</h3><p>What exactly constitutes a major breaking change or minor change? Is it when a new endpoint is added? Old one removed? A type or resource is changed? Query parameters optionalized? Headers adjusted.</p><p>That line becomes horrifically blurry when optionalizing fields on JSON objects. It abuses the optional aspect to act as a means for both API introductions and deprecations. Nevermind you’d need to deal with the resulting edge cases from excessive optionalizing.</p><h3>How to version</h3><p>Hopefully, your APIs are versioned by a reproducible process.
+<i>Lemme explain.</i></p><h2>The Versioning Problem</h2><p>There are many ways to make a mess of RESTful APIs. Versioning is just one way. Rather than iterating through the problems inside ad hoc solutions, we’ll iterate through the general problems.</p><h3>Why version?</h3><p>For starters, you don’t necessarily integrate with an API you own. Second, these interfaces exist in different code bases. They are mutable and easy to forget. Features get added, removed, and updated. These kinds of changes should be represented somehow.</p><h3>Where to version</h3><p>The version can be placed somewhere inside the header, possibly using a registered vendor MIME type. Or inside the request payload. Or even as a query parameter. Or as a subdomain. My favorite solution is simply to prefix an endpoint’s path with <code>/v1/</code> , <code>/v2/</code>, <code>/v3/</code>, etc. Nevertheless, the overall lack of consistency with placement is nothing short of ironic.</p><h3>What to version</h3><p>What exactly constitutes a major breaking change or minor change? Is it when a new endpoint is added? Old one removed? A type or resource is changed? Query parameters optionalized? Headers adjusted.</p><p>That line becomes horrifically blurry when optionalizing fields on JSON objects. It abuses the optional aspect to act as a means for both API introductions and deprecations. Nevermind you’d need to deal with the resulting edge cases from excessive optionalizing.</p><h3>How to version</h3><p>Hopefully, your APIs are versioned by a reproducible process.
 It could be based on features, resources, or endpoints.
 Gut feelings or “it’s been long enough” aren’t reproducible.
 Nevertheless, it’s still a flesh-bodied someone manually bumping the versions in the end.
@@ -53,7 +53,7 @@ It may not be a major or minor change, but it’s a change nonetheless.</p><p>Th
 And they can.
 This is where IDLs come into play.</p><h3>APIs as an IDL Spec</h3><p>If you’ve ever dealt with Thrift, ProtoBuf, or another IDL, you understand this already.</p><p>In a typical and self-contained code base, we abstract effects through some kind of interface.
 It could be a class, a monad, or whatever.
-An IDL enforces that abstraction into language agnostic interface.
+An IDL enforces that abstraction into a language agnostic interface.
 This interface is the spec.
 With a generator, the spec creates a client side SDK and a server-side stubs.
 It doesn’t have to stop there.
@@ -91,13 +91,13 @@ API sunsetting needs a flexible deprecation system.</p><h3>Dropping support</h3>
 Stating a range of the supported major versions sounds like a common approach.
 That should be easy then.
 Obviously, it also implies anything outside the range is not supported.
-You'll probably always want to support the latest version, so just mentioning the oldest supported version is enough.</p><p>What about type reuse from older unsupported versions?
+You'll likely want to support the latest version, so just mentioning the oldest supported version is enough.</p><p>What about type reuse from older unsupported versions?
 Those get bumped up into new oldest version.</p><h3>Manual curation</h3><p>The real world is complicated.
 How you choose what APIs to support long term doesn't have to follow predictable guidelines.
 Whether it's support for important clients or in-house legacy tools,
 an automated versioner shouldn't over impose.
 There needs to be a fallback.</p><p>Overriding the version inside the spec is a way out.
-It's something I don't eagerly recommend because abuse defeats the purpose of automated versioning.
+It's something I don't eagerly recommend because the abuse defeats the purpose of automated versioning.
 Yet, that option becomes a no-brainer when you need absolutely need it.</p><h2>Fluid’s Implementation</h2><p>Fluid applies all the theories described above.
 In practice, there were many, snickering devils hiding in the details.
 Not suprising.
@@ -141,10 +141,12 @@ It's just RPC.
 The object contains where and how to communicate with the server.</p><h5>Address</h5><p>The address is the combined make up of: <code>&quot;protocol&quot;</code>, <code>&quot;host&quot;</code>, <code>&quot;port&quot;</code>, and <code>&quot;path&quot;</code>.
 To keep things simple, they're kept separated.</p><h5>Meta</h5><p><code>&quot;meta&quot;</code> is akin to the HTTP usage of headers.
 There aren't rules how to use it.
-However, authentication information is a good fit.</p><h5>Error</h5><p>HTTP status codes doesn't cover all possible error cases.
+However, authentication information is a good fit.
+This spec passes a meaningless unit type.</p><h5>Error</h5><p>HTTP status codes doesn't cover all possible error cases.
 They would only cover the some amongst all IDL servers.
 But they won't cover the errors related to a specific service.
-That's what this <code>&quot;error&quot;</code> represents.</p><h3>Next spec</h3><p>Here's the next spec, prepending <code>greeting</code> to the member list.</p><pre><code>{
+That's what this <code>&quot;error&quot;</code> represents.
+Like <code>&quot;meta&quot;</code> it can be any type the creator desires.</p><h3>Next spec</h3><p>Here's the next spec, prepending <code>greeting</code> to the member list.</p><pre><code>{
   &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
   &quot;types&quot;: [
     {
@@ -165,7 +167,7 @@ That's what this <code>&quot;error&quot;</code> represents.</p><h3>Next spec</h3
 }</code></pre><p><i><sup><sub>Figure: Spec 2, Version 1.0</sub></sup></i></p><p>Order is important for members.
 Not all languages treat members as elements in a dictionary or a (hash)map.
 They require an order for each of the members.
-There's not reasonable alternative.
+There's not a reasonable alternative unfortunately.
 So it's better to be consistent about ordering.</p><p>Recall that the automated versioner diffs consecutive specs.
 We can't delete the old spec because that will destroy the API history and therefore versioning process.
 This spec needs to be completely separate file from the previous spec as to retain the history.</p><p>Because there's more than one file now, we need an organization system.
@@ -201,9 +203,9 @@ The configuration is intended to be plugged into a HTTP server or client as adap
 The configuration generated isn't used anywhere by default.
 You can really do whatever in regards to transmitting.</p><p>But you probably don't want to do just whatever.
 You want to do what the <code>&quot;pull&quot;</code> says.
-Add-ons bridge the gap in dumb and opininated manner.
+Add-ons bridge the gap in a dumb and opininated manner.
 No ambiguity.
-And if an add-on doesn't exist for a language or library, it's simple to implement.</p><h3>Rest of the specs</h3><p>For curiosity sake, here's the translations of the remaining specs.</p><pre><code>{
+And if an add-on doesn't exist for a language or library, it's simple to implement one.</p><h3>Rest of the specs</h3><p>For curiosity sake, here's the translations of the remaining specs.</p><pre><code>{
   &quot;fluid&quot;: { &quot;major&quot;: 0, &quot;minor&quot;: 0 },
   &quot;types&quot;: [
     {
@@ -361,12 +363,12 @@ This was intentional for the client on the outset.
 So even if you downright hate IDLs, you'll never be stuck.</p><h3>Event sourcing</h3><p>Another open-ended design decision is event sourcing.
 In particular, I wanted to allow for CQRS.
 As far as the spec is concerned, functions are types that happen to have output.
-And all functions have no more than one input.
+All such functions have no more than one input.
 The inputs needing multiple arguments just use types with members.
 The inputs needing a different kind or number of arguments use enumerals.
-Then the inputs (and outputs) can be logged and stored forever with their associated versions.
+This is great because those the inputs (and outputs) can be uniformly logged and stored forever with their associated versions.
 In reality, this area hasn't been touched.
-So I only guarded for minimal architectural changes.</p><h3>Documentation and Playground</h3><p>Generating documentation is the clearest chasm to cross.
+So I only guarded against massive architectural changes.</p><h3>Documentation and Playground</h3><p>Generating documentation is the clearest chasm to cross.
 Having a spec format with a semantic parser is half-way there.
 The dumbest generator will instantly add value.</p><p>On the other hand, the playground will need some creative love.
 I'm imagining a generated web-client app for poking around with servers.
