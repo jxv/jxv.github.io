@@ -201,7 +201,7 @@ an automated versioner shouldn't over impose.
 There needs to be a fallback.
 
 Overriding the version inside the spec is a way out.
-It's something I don't eagerly reccommend because abuse defeats the purpose of automated versioning.
+It's something I don't eagerly recommend because abuse defeats the purpose of automated versioning.
 Yet, that option becomes a no-brainer when you need absolutely need it.
 
 ## Fluid’s Implementation
