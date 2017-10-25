@@ -512,7 +512,7 @@ So earlier, I made a tiny, little-baby lie.
 Specs don't have to be separate files.
 It's just wise to do so for API owners.
 
-For a published spec, which should be treated as a read-only file, the rules change.
+For a published spec, which should be treated as read-only, the rules change.
 
 A publicly exposed spec should only expose what's needed to generate client code or mock server.
 There's no reason to make that a collection of files when it can be a JSON file holding an array of specs.
