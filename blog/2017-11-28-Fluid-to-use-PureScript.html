@@ -1,0 +1,91 @@
+<!DOCTYPE HTML><html><head><title> Fluid to use PureScript</title><link href="style.css" type="text/css" rel="stylesheet"><link href="../favicon.png" type="image/png" rel="icon"></head><body><div id="wrapper"><div id="header"><br />
+<br />
+<table>
+  <tr>
+    <td>
+      <a href="index.html">
+        <img height="48px" width="48px" src="avatar.png" style="border-radius:50%" />
+      </a>
+    </td>
+    <td>
+       
+       
+    </td>
+    <td>
+      <div>
+        <a href="index.html" style="text-decoration:none">
+          <span style="font-weight:bold;font-family:'Open Sans', sans-serif;color:#000">Joe Vargas</span>
+        </a>
+      </div>
+      <div>
+        <a href="http://jxv.io">jxv.io</a>
+         
+        <a href="https://github.com/jxv"><img src="github.png" height="16px" width="16px" /></a>
+         
+        <a href="https://twitter.com/jxv_io"><img src="twitter.png" height="16px" width="16px" /></a>
+      </div>
+    </td>
+  </tr>
+</table>
+<br /></div><div id="content"><h1>Fluid to use PureScript</h1><p>As of last night, I decided to port <a href="https://www.fluid-idl.org">Fluid</a>'s code generator from JavaScript to <a href="http://www.purescript.org">PureScript</a>.
+Yay!
+But it's working fine in JavaScript.
+Why switch?
+What happened?</p><h2>Code generator constraints</h2><p>While Fluid has noblier ambitions by targeting support of 40+ languages, the generator can only be written in one.
+So I can afford to be picky about which one.
+In fact, I should be.
+It's the glue that holds everything together.
+It needs to be strong.</p><h3>Target language representation</h3><p>Early in Fluid's prototyping phase, I flipped between using Haskell and JavaScript a few times.
+Haskell excels at representing data.
+JavaScript doesn't compare.
+That makes sense because Haskell is commonly used to write compilers and other language ventures.
+And I'll admit that's not what attracted me to the language because I'm not a PLT enthusiast.
+I don't eagerly reach for or keep up with the latest language features.
+I just wanted to write good code.
+Simple, boring, and approachable.
+That's enough for me.
+And despite dragging my heels and feeling a few years behind, writing Haskell has been a pleasurable detour.
+I'd <a href="https://github.com/bitemyapp/learnhaskell#how-to-learn-haskell">recommend it</a> for its own sake.</p><h4>PureScript vs Haskell</h4><p>Because PureScript is deeply inspired by Haskell, it has many of the same core features.
+And with this project, PureScript's goals happens to be more aligned than with Haskell's.
+I'm not dropping Haskell.
+However, it's been a refreshing change not dealing with historical quirks.</p><h3>Contribution and language barrier</h3><p>40+ languages is <i>a lot</i>.
+I can't confidently say I could learn all those including ecosystems within a reasonable time.
+Keeping the barrier low for contributors is then the obvious choice.
+JavaScript, being the modern &quot;lingua franca&quot; of software, has the edge by a wide margin compared to every language.</p><p>PureScript is niche, being even smaller than Haskell's community.
+Warranted or not, Haskell has been notoriously difficult to learn.
+While the barriers are lowering with Haskell and PureScript, I don't expect anyone using another language to jump in.</p><p>At the same time, this could be moot.
+Most OSS projects don't have many contributors.</p><h3>Can support a web app</h3><p>I'd like to have a playground web app.
+One which generates a test client on the fly.</p><p>Both JavaScript and PureScript are created for the web.
+Generally, JavaScript has an advantage because its vast and different amount of existing libraries.
+But on the otherhand, Fluid just reads JSON and generates strings.
+It's simple and doesn't really <i>need</i> anything past that.</p><h3>IO</h3><p>Minimally, Fluid reads the JSON spec, creates a directory, and writes files.
+While I like PureScript's Effectful system with Monads because of how powerful they can be, the IO needs are basic.
+And both work fine—for now.</p><h3>Distribute as a binary</h3><p>Both can be distributed, but it's not that simple.
+Writing &quot;Isomorphic&quot; JavaScript has been more difficult than I have hoped.
+It needs to be transpiled with roundabout programs.</p><p>A major design goal of PureScript is transpilation.
+Although originally intended to target just JavaScript, there are already other backend targets working in development.
+For example, C++ and Erlang.
+This makes me more excited for PureScript.
+Like Lux, it's positioned itself as a language to be transpiled from.
+It'd be interesting where that leads.</p><h3>Maintainability</h3><p>All code will eventually be deleted, forgotten, or legacy code.
+One day, I hope Fluid will become honorable legacy code.</p><p>As a personal principle, I prefer static type systems languages for projects that are going to stick around.
+I'm dumb and forget things easily.
+Along with functional purity, Haskell had given me a solid crutch to lean on.
+PureScript will do the same.
+Athough writing Haskell felt unnecessarily constrained at times, it's normally been worth it.
+I can understand my years old code and another person's old code (more important) very quickly.
+I don't feel anywhere near as anxious when making large refactors or adding incremental features.
+<i>I don't feel same with JavaScript.</i>
+Definitely not feeling it right now.</p><h2>Conclusion</h2><p>Overall, PureScript feels as though it's been on the upswing.
+I'm happy to jump in and create.</p></div><div id="footer"><br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /></div></div></body></html>
