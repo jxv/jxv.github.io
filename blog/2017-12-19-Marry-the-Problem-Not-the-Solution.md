@@ -1,7 +1,7 @@
 # Marry the Problem; Not the Solution
 
 There is a growing sense of guilt that awaits while undoing what was believed to be valuable work.
-Being held back by pride is a good first indicator.
+Being held back by pride is a good first indicator to push more.
 
 People excel at ignoring the surrounding irrelevant to their problems.
 This idea was demonstrated years ago when the moon walking bear video went viral.
