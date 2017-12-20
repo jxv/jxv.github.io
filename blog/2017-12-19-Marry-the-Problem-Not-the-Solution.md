@@ -5,9 +5,9 @@
 There is a growing sense of guilt that awaits while undoing what was believed to be valuable work.
 Being held back by pride is a good first indicator to push more.
 
-People excel at ignoring the surrounding irrelevant to their problems.
+People excel at ignoring the irrelevant surroundings to their problems.
 This idea was demonstrated years ago when the moon walking bear video went viral.
-To count all the passes requires being focused.
+Counting all the passes in said video requires attention to detail of many moving parts.
 Focusing over a long period of time is need to achieve the flow state.
 It's a powerful investment to know how to dip into it at will.
 It's also addictive.
@@ -22,7 +22,7 @@ Doesn’t matter if changing is the “right” thing to do.
 
 It’s important to remember that the core problem rarely changes; the context and the understanding definitely will change.
 Frustratedly, understanding is half the process.
-It's to not be overlooked or discounted as a cost.
+It's to not be overlooked or discounted as a minor cost.
 Also, context doesn’t exist in isolation.
 It violently changes more than the problem itself.
 
@@ -38,4 +38,4 @@ With whatever creative endeavor taken up, it's just a reminder.
 
 The long haul of the solution is its process.
 The process is showing up consistently with clarity of vision, uninterrupted time blocks, focused calmness, and expressive energy.
-Protect it obsequiously.
+Protect it.
