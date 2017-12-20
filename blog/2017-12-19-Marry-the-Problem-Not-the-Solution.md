@@ -7,19 +7,22 @@ Being held back by pride is a good first indicator to push more.
 
 People excel at ignoring the surrounding irrelevant to their problems.
 This idea was demonstrated years ago when the moon walking bear video went viral.
-A good problem solver is focused, which spends some emotional energy.
+To count all the passes requires being focused.
+Focusing over a long period of time is need to achieve the flow state.
+It's a powerful investment to know how to dip into it at will.
+It's also addictive.
 
-This kind of investment is a double edge sword.
+But, this kind of investment is a double edge sword.
 First, it’s a requirement because a high level of emotional engagement is needed to create quality work.
 
-Second, it's risky when the investing in the solution becomes more important than the solving process.
-Though it’s understandable.
+Second, it's a risk because this state is about the solution in the moment.
+Understandably, that's how blinders form.
 Sunk cost fallacy — having something that already kind of works is difficult to let go.
 Doesn’t matter if changing is the “right” thing to do.
 
 It’s important to remember that the core problem rarely changes; the context and the understanding definitely will change.
 Frustratedly, understanding is half the process.
-It's to be not discounted as a cost.
+It's to not be overlooked or discounted as a cost.
 Also, context doesn’t exist in isolation.
 It violently changes more than the problem itself.
 
