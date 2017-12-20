@@ -1,5 +1,7 @@
 # Fluid to use PureScript
 
+**November 28th, 2017**
+
 As of last night, I decided to port [Fluid](https://www.fluid-idl.org)'s code generator from JavaScript to [PureScript](http://www.purescript.org).
 Yay!
 But it's working fine in JavaScript.
