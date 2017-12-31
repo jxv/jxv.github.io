@@ -1,4 +1,4 @@
-# Marry the Problem; Not the Solution
+# Marry the Problem -- Not the Solution
 
 **December 19th, 2017**
 

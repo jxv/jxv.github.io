@@ -652,7 +652,7 @@ The only requirement is that a `GET` with the playground to the Fluid endpoint s
 
 ### Contributions
 
-If you wish contribute in a big or small way, <a href="https://join.slack.com/t/fluid-idl/shared_invite/enQtMjU4NDA2NzM4MDM5LTc0NmM1NWE4M2Q5N2U4NDBjOTNmOTAzYTdmYzIyY2RhYTkxOTRjYjRiMjliOGNmOGQyN2ZmOWMwZTZiOTU0OTQ%22">join the slack</a>.
+If you wish contribute in a big or small way, <a href="http://httpapis.herokuapp.com">join the slack</a> channel #fluid.
 There's plenty to do with the barrier of entry still low.
 Feel free to contact me directly through my handle, `jxv`.
 I'm also available through other slacks with the same handle.
