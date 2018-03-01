@@ -1,4 +1,4 @@
-<!DOCTYPE HTML><html><head><title>A Game in Haskell</title><link href="style.css" type="text/css" rel="stylesheet"><link href="../favicon.png" type="image/png" rel="icon"></head><body><div id="wrapper"><div id="header"><br />
+<!DOCTYPE HTML><html><head><title>A Game in Haskell - Dino Rush</title><link href="style.css" type="text/css" rel="stylesheet"><link href="../favicon.png" type="image/png" rel="icon"></head><body><div id="wrapper"><div id="header"><br />
 <br />
 <table>
   <tr>
@@ -29,7 +29,7 @@
     </td>
   </tr>
 </table>
-<br /></div><div id="content"><h1>A Game in Haskell</h1><p><b>Feburary 28th, 2018</b></p><center>
+<br /></div><div id="content"><h1>A Game in Haskell - Dino Rush</h1><p><b>Feburary 28th, 2018</b></p><center>
   <img alt="Dino Rush Title screen" src="dino-rush-title.png" width="640" height="360" /><p>  <a href="https://github.com/jxv/dino-rush">GitHub Repo</a></p></center><h2>Motivation</h2><p>Writing a game in Haskell appears to be an elusive, white-whale task.
 And with an existing handful of small and citable games, I wish more existed with documentation to ease the barrier of entry.
 It's disappointing because writing a game can be a challenging and fun way to explore a language.
@@ -278,7 +278,7 @@ adjustCamera' cam = do
   moveCamera renderer cam</code></pre><h3>Managers versus Effects</h3><p>Or Managers <i>and</i> Effects.
 I debated whether or not to split these into separate categories.
 A case could be made to keep them merge into a single directory called <code>Class</code> or something similar.
-But if game dev is art, and art is about intention, then these lines should drawn like God intended.</p><h2>Config (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Config.hs">code</a>)</h2><p><code>Config</code> is the environment data inside the <code>ReaderT</code> transformer.
+But if game dev is art, and art is about intention, then these lines should be drawn like God intended.</p><h2>Config (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Config.hs">code</a>)</h2><p><code>Config</code> is the environment data inside the <code>ReaderT</code> transformer.
 It's a basic use for a transformer, including with <b>mtl style</b>.
 The data is always read-only while running a transformer stack.
 However, there are exceptions with  <code>IORef</code>, <code>MVar</code>, and <code>TVar</code> which reference values.

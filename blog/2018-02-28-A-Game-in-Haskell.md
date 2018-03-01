@@ -1,4 +1,4 @@
-#A Game in Haskell
+#A Game in Haskell - Dino Rush
 
 **Feburary 28th, 2018**
 
@@ -502,7 +502,7 @@ adjustCamera' cam = do
 Or Managers _and_ Effects.
 I debated whether or not to split these into separate categories.
 A case could be made to keep them merge into a single directory called `Class` or something similar.
-But if game dev is art, and art is about intention, then these lines should drawn like God intended.
+But if game dev is art, and art is about intention, then these lines should be drawn like God intended.
 
 ## Config ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Config.hs))
 
