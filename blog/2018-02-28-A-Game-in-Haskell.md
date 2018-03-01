@@ -18,7 +18,7 @@ And Haskell could be a great language for creating small-medium sized games.
 Anything larger sounds like a [bad idea](https://np.reddit.com/r/rust/comments/78bowa/hey_this_is_kyren_from_chucklefish_we_make_and/doslvsb/).
 Yet I haven't written a game with graphics in recent years.
 Instead, I dug out increasingly larger chunks of programming knowledge with Haskell.
-And that has given back more better than originally expected.
+And that has given back more than originally expected.
 It's been enough now, whereas I can take decent shot at a game and not be completely appalled by the code later.
 
 Before embarking on a short and starry-eyed journey, it seemed easy to imagine such a codebase -- flaws included.
