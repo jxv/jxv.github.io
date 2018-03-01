@@ -89,7 +89,7 @@ As a personal principle, I prefer static type systems languages for projects tha
 I'm dumb and forget things easily.
 Along with functional purity, Haskell had given me a solid crutch to lean on.
 PureScript will do the same.
-Athough writing Haskell felt unnecessarily constrained at times, it's normally been worth it.
+Although writing Haskell felt unnecessarily constrained at times, it's normally been worth it.
 I can understand my years old code and another person's old code (more important) very quickly.
 I don't feel anywhere near as anxious when making large refactors or adding incremental features.
 _I don't feel same with JavaScript._
