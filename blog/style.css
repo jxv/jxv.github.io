@@ -77,4 +77,5 @@ pre {
   background: #def;
   font-weight: bold;
   font-size: 0.8em;
+  overflow: auto
 }
