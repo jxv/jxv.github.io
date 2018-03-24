@@ -788,3 +788,13 @@ Fluid is techinically an IDL (Interface Description Language).
 Generating server code is just half the equation.
 Generating client code is the other half.
 We'll explore how to do that next time.
+
+
+<br />
+<br />
+<br />
+<br />
+
+[/r/haskell](https://www.reddit.com/r/haskell/comments/86pk4m/generate_typesafe_apis_with_fluid_pt1/)
+
+[/r/programming](https://www.reddit.com/r/programming/comments/86pkgh/generate_typesafe_apis_with_fluid_pt1/)
