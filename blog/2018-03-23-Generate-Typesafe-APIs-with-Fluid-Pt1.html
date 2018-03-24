@@ -1,0 +1,474 @@
+<!DOCTYPE HTML><html><head><title> Generate Typesafe APIs with Fluid Pt.1</title><link href="style.css" type="text/css" rel="stylesheet"><link href="../favicon.png" type="image/png" rel="icon"></head><body><div id="wrapper"><div id="header"><br />
+<br />
+<table>
+  <tr>
+    <td>
+      <a href="index.html">
+        <img height="48px" width="48px" src="avatar.png" style="border-radius:50%" />
+      </a>
+    </td>
+    <td>
+       
+       
+    </td>
+    <td>
+      <div>
+        <a href="index.html" style="text-decoration:none">
+          <span style="font-weight:bold;font-family:'Open Sans', sans-serif;color:#000">Joe Vargas</span>
+        </a>
+         <span style="font-style:italic">Available for Hire!</span>
+      </div>
+      <div>
+        <a href="http://jxv.io">jxv.io</a>
+         
+    <a href="mailto:msg@jxv.io"><img alt="email" src="email.png" height="16px" width="16px" /></a>
+         
+        <a href="https://github.com/jxv"><img alt="github" src="github.png" height="16px" width="16px" /></a>
+         
+        <a href="https://twitter.com/jxv_io"><img alt="twitter" src="twitter.png" height="16px" width="16px" /></a>
+         
+    <a href="https://www.youtube.com/channel/UCQvQt_zS0ghZbVPLP01vhgg"><img alt="youtube" src="youtube.png" height="16px" width="16px" /></a>
+      </div>
+    </td>
+  </tr>
+</table>
+<br /></div><div id="content"><h1>Generate Typesafe APIs with Fluid Pt.1</h1><p><b>March 23th, 2018</b></p><p><a href="https://github.com/jxv/fluid">Fluid</a> is a web API generator.
+It offers far more than type safety, and its goals aren't limited to Haskell.
+First, let's dive into a Hello World and see how it works.</p><h2>Download the API generator</h2><p>Go to the <a href="https://www.fluid-idl.org">website</a> and download the executable.
+If you're on Linux or OSX, rename the exectuable to <code>fluid</code> and save it in your path.
+And if you're on Windows, I don't know. Do what you normally do. (Please tell me how you get it working!)</p><h2>Hello World Server</h2><h3>Project Setup</h3><p>The repo for this post is <a href="https://github.com/jxv/hello-world-fluid-haskell-server">here</a> with commits for each version.
+But you can follow along for future reference.</p><p>Create an empty project with stack and the <code>haskeleton</code> template.</p><pre><code class="shell">stack new hello-world haskeleton
+cd hello-world</code></pre><p>Create directories for the specs.</p><pre><code>mkdir api
+mkdir api-json</code></pre><h3>Initial Spec and Script</h3><p>On the page of <a href="https://www.fluid-idl.org/spec">Fluid's spec documentation</a>,
+there's two snippets needed to start with.</p><ol><li>The spec for a Hello World API. Copy and paste that into a file.</li><li>A script for converting the specs from YAML to JSON. Fluid reads only JSON.</li></ol><p>File: <code>api/000_init.yaml</code></p><pre><code class="yaml">fluid:
+  major: 0
+  minor: 0
+pull:
+  protocol: http
+  name: HelloWorld
+  host: localhost
+  path: /
+  port: 8080
+  meta: Unit
+  error: Unit
+schema:
+  Hello:
+    m: [who: String]
+    o: String</code></pre><p>File: <code>api.sh</code></p><pre><code class="shell">#! /usr/bin/env sh
+
+yaml2json () {
+  ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load($stdin.read))'
+}
+
+rm api-json/*
+for yaml in api/*.yaml; do
+    [ -f &quot;$yaml&quot; ] || break
+    echo $yaml
+    json=`basename $yaml .yaml`
+    yaml2json &lt; $yaml &gt; &quot;api-json/$json.json&quot;
+done</code></pre><p>Then append the CLI command to generate.</p><pre><code class="shell">fluid -l haskell -s api -m Api -n Api -d ./library -e server -a scotty</code></pre><ul><li><code>-l</code> is the language</li><li><code>-s</code> is the specs directory (or file)</li><li><code>-m</code> is the module name (eg. <code>This.Is.A.Module</code> is valid)</li><li><code>-n</code> is the name of the API directory to generate</li><li><code>-d</code> is the path of the API directory to generate</li><li><code>-e</code> is the side of code to generate -- <code>server</code> versus <code>client</code>.</li><li><code>-a</code> is optional and for all the add-ons (Just <code>scotty</code> in this case)</li></ul><h3>Renaming and Dependencies</h3><p>The <code>haskeleton</code> generated template project needs some trivial changes for a server.</p><p>Very quickly,</p><ol><li><p>Move <code>library/Example.hs</code> to <code>library/HelloWorld.hs</code>.</p></li><li><p>In <code>executable/Main.hs</code> and <code>library/HelloWorld.hs</code>, replace instances of <code>Example</code> with <code>HelloWorld</code>.</p></li><li><p>Add these to <code>stack.yaml</code>'s <code>extra-deps</code>:</p><ul><li><code>fluid-idl-0.0.5</code></li><li><code>fluid-idl-scotty-0.0.0</code></li></ul></li><li><p>Add these <code>library</code>'s <code>dependencies</code> in <code>package.yaml</code>:</p><ul><li><code>fluid-idl</code></li><li><code>fluid-idl-scotty</code></li><li><code>mtl</code></li><li><code>scotty</code></li><li><code>text</code></li></ul></li><li><p>Lastly, add these to the <code>library</code>'s <code>default-extensions</code> in <code>package.yaml</code>:</p><ul><li><code>NamedFieldPuns</code></li><li><code>MultiParamTypeClasses</code></li><li><code>GeneralizedNewtypeDeriving</code></li><li><code>OverloadedStrings</code></li></ul></li></ol><p>See if you're all set by compiling.</p><pre><code class="shell">stack build</code></pre><h3>Generate the API code</h3><p>We just need to run the API script, whenever an addition or change to the specs is made.</p><pre><code class="shell">./api.sh</code></pre><p>With a single spec, just the two files, <code>library/Api/Server.hs</code> and <code>library/Api/Major0.hs</code>, are created.</p><ul><li><p><code>library/Api/Server.hs</code></p></li></ul><p>This is the high level module of the API.
+It exports the latest types, functions, services (monadic type class of functions), dispatch handlers, specs.
+It also has the <code>scotty</code> add-ons for quick integration.</p><ul><li><p><code>library/Api/Major0.hs</code></p></li></ul><p>This is first version (0.x) of the API.
+This <code>Major</code> module exports the API's types, service (monadic type class of functions), a handler, and a spec.
+With more specs to generate, there <i>could be</i> more <code>Major</code> modules.
+The author of the spec doesn't decide the version.
+It's automatically decided and generated.
+See <a href="https://www.fluid-idl.org/evolution">here</a> for more detail.</p><p>You should be able to compile again.</p><pre><code class="shell">stack build</code></pre><h3>Integrate and Implement</h3><p>Fluid generates the services to accommodate <code>mtl-style</code> architecture, as it's a widely adopted and maintainable pattern.</p><p>Below is a large rewrite of <code>library/HelloWorld.hs</code> with a functional server.
+<code>App</code> is the newtype'd monad, where in a more complicated program would wrap environment and state data.
+We just need an instance of <code>V0.HelloWorld'Service</code> over <code>App</code> to dispatch to the <code>Hello</code> function described in the spec.</p><p>File: <code>library/HelloWorld.hs</code></p><pre><code class="haskell">module HelloWorld (main) where
+
+import qualified Data.Text.Lazy as TL
+import Data.Text (Text)
+import Control.Monad.IO.Class
+import Fluid.Types
+import Fluid.Server.Scotty
+import Fluid.Server
+
+import Api.Server
+import qualified Api.Major0 as V0
+
+newtype App a = App { unApp :: IO a }
+  deriving (Functor, Applicative, Monad, MonadIO, MonadCatch, MonadThrow)
+
+instance ServiceThrower App
+instance V0.HelloWorld'Thrower App
+
+instance V0.HelloWorld'Service () App where
+  helloWorld'Hello () = hello
+
+hello :: Monad m =&gt; V0.Hello -&gt; m Text
+hello V0.Hello{helloWho} = return $ &quot;Hello &quot; `mappend` helloWho `mappend` &quot;!&quot;
+
+main :: IO ()
+main = runServer helloWorld'pull unApp routes
+
+routes :: ScottyT TL.Text App ()
+routes = do
+  helloWorld'Scotty'Post helloWorld'pull (const defHooks)
+  helloWorld'Scotty'Get helloWorld'pull</code></pre><p><code>V0.HelloWorld'Service</code> is a monadic type class, which contains all the functions defined in the schema.
+The spec-to-code pattern follows from <code>FunctionName</code> to <code>serviceName'FunctionName</code> to avoid name collisions.
+Something similar follows for types like <code>Hello</code>.
+Its member <code>who</code> is prefixed with <code>hello</code>.
+So it's <code>helloWho</code> in code.</p><p><code>runServer</code> comes from <code>Fluid.Server.Scotty</code> as it runs the <code>ScottyT</code> transformer with the generated routes.</p><p>These lines are needed to pass error throws through Scotty into App.</p><pre><code class="haskell">instance ServiceThrower App
+instance V0.HelloWorld'Thrower App</code></pre><p>Next, integrate the endpoints into a Scotty transformer.
+The seconds argument of <code>helloWorld'Scotty'Post</code> contains callbacks for the API.
+The type is called <code>Hooks</code>, and <code>defHooks</code> does the bare minimum satisfy that.
+<code>const</code> ignores the HTTP headers passed from Scotty.</p><pre><code class="haskell">routes :: ScottyT TL.Text App ()
+routes = do
+  helloWorld'Scotty'Post helloWorld'pull (const defHooks)
+  helloWorld'Scotty'Get helloWorld'pull</code></pre><p>Compile and run!</p><pre><code class="shell">stack build &amp;&amp; stack exec hello-world</code></pre><h4>cURL'ing the API</h4><p>A proper Fluid endpoint uses the same path for GET and POST.
+GET is the discovery for the API. It returns the spec.
+POST is where to target interaction with the API.</p><p>The absolute address for the API is <code>http://localhost:8080/</code>, as described in the (latest) spec.</p><p>Let's see what is the spec according to the server.</p><p>Request (in terminal):</p><pre><code class="shell">curl http://localhost:8080/</code></pre><p>Response:</p><pre><code class="json">[
+  {
+    &quot;fluid&quot;:{&quot;minor&quot;:0,&quot;major&quot;:0},
+    &quot;schema&quot;:{&quot;Hello&quot;:{&quot;m&quot;:[{&quot;who&quot;:&quot;String&quot;}],&quot;o&quot;:&quot;String&quot;}},
+    &quot;version&quot;:{&quot;minor&quot;:0,&quot;major&quot;:0},
+    &quot;pull&quot;:{&quot;path&quot;:&quot;/&quot;,&quot;error&quot;:&quot;Unit&quot;,&quot;protocol&quot;:&quot;http&quot;,&quot;name&quot;:&quot;HelloWorld&quot;,&quot;meta&quot;:&quot;Unit&quot;,&quot;host&quot;:&quot;localhost&quot;,&quot;port&quot;:8080}
+  }
+]</code></pre><p>Two things are different about the response compared to the original JSON spec, <code>api-json/000_init.json</code>.</p><ol><li>The response is a JSON Array where each element is a represented spec.
+With more specs, the major versions are concatenated into one array.</li><li>A each element now has a <code>&quot;version&quot;</code> tag.
+The version was decided by Fluid.</li></ol><p>Alright.</p><p>Now, let's call the service function, <code>Hello</code>.</p><p>Request:</p><pre><code class="shell">curl \
+  -XPOST \
+  -H 'application/json' \
+  -d '{
+    &quot;fluid&quot;:{&quot;major&quot;:0,&quot;minor&quot;:0},
+    &quot;version&quot;:{&quot;major&quot;:0,&quot;minor&quot;:0},
+    &quot;meta&quot;:null,
+    &quot;query&quot;:{&quot;n&quot;:&quot;Hello&quot;,&quot;m&quot;:{&quot;who&quot;:&quot;Joe&quot;}}
+  }' \
+  http://localhost:8080</code></pre><p>Response:</p><pre><code class="json">{
+  &quot;tag&quot;:&quot;Success&quot;,
+  &quot;success&quot;:&quot;Hello Joe!&quot;,
+  &quot;limits&quot;:{&quot;serviceCalls&quot;:50,&quot;variables&quot;:50,&quot;expressions&quot;:100,&quot;lambdas&quot;:10}
+}</code></pre><p>It's a success.</p><pre><code class="json">&quot;Hello Joe!&quot;</code></pre><h4>Hooks</h4><p>Going back to the <code>Hooks</code> type,
+they contain callbacks for transforming the <code>meta</code> type and limiting the sandboxed runtime.
+<code>Hooks</code> are defined in <code>Fluid.Types</code> along with its default definition:</p><p><code>Fluid.Types</code></p><pre><code class="haskell">data Hooks m meta meta' = Hooks
+ { metaMiddleware :: meta -&gt; m meta'
+ , sandboxLimits :: meta' -&gt; m Limits
+ }
+
+defHooks :: Monad m =&gt; Hooks m meta meta
+defHooks = Hooks
+ { metaMiddleware = return
+ , sandboxLimits = \_ -&gt; return defLimits
+ }</code></pre><p>With <code>defHooks</code>,
+the <code>metaMiddleware</code> definition is an identity, and <code>sandboxLimits</code> is its default.</p><p>Notice the limits default are values in the previous POST response.</p><p><code>Fluid.Types</code></p><pre><code>data Limits = Limits
+  { variables :: Maybe Int
+  , serviceCalls :: Maybe Int
+  , lambdas :: Maybe Int
+  , expressions :: Maybe Int
+  } deriving (Show, Eq, Generic)
+
+defLimits :: Limits
+defLimits = Limits
+  { variables = Just 50
+  , serviceCalls = Just 50
+  , lambdas = Just 10
+  , expressions = Just 100
+  }</code></pre><h3>Adding a <code>Goodbye</code> function</h3><p>The API users can say &quot;Hello&quot; now.
+But! Nobody is allowed to leave because they can't say &quot;Goodbye&quot;.
+We should fix that and with another function in the API.
+And it's easy to do.</p><p>Copy <code>api/000_init.yaml</code> and name it <code>api/001_goodbye.yaml</code>.</p><p>Append this function to the new schema.</p><pre><code class="yaml">  Goodbye:
+    m: [who: String]
+    o: String</code></pre><p>File: <code>api/001_goodbye.yaml</code></p><pre><code class="yaml">fluid:
+  major: 0
+  minor: 0
+pull:
+  protocol: http
+  name: HelloWorld
+  host: localhost
+  path: /
+  port: 8080
+  meta: Unit
+  error: Unit
+schema:
+  Hello:
+    m: [who: String]
+    o: String
+  Goodbye:
+    m: [who: String]
+    o: String</code></pre><p>Generate the new API code.</p><pre><code class="shell">./api.sh</code></pre><p>Peek into <code>library/Api/Major0.hs</code> and see that its version had a minor change to <code>0.1</code>.</p><p>The Service's instance needs a definition for <code>Goodbye</code> function.</p><pre><code class="haskell">goodbye :: Monad m =&gt; V0.Goodbye -&gt; m Text
+goodbye V0.Goodbye{goodbyeWho} = return $ &quot;Goodbye &quot; `mappend` goodbyeWho `mappend` &quot;!&quot;</code></pre><p>File: <code>library/HelloWorld.hs</code></p><pre><code class="haskell">module HelloWorld (main) where
+
+import qualified Data.Text.Lazy as TL
+import Data.Text (Text)
+import Control.Monad.IO.Class
+import Fluid.Types
+import Fluid.Server.Scotty
+import Fluid.Server
+
+import Api.Server
+import qualified Api.Major0 as V0
+
+newtype App a = App { unApp :: IO a }
+  deriving (Functor, Applicative, Monad, MonadIO, MonadCatch, MonadThrow)
+
+instance ServiceThrower App
+instance V0.HelloWorld'Thrower App
+
+instance V0.HelloWorld'Service () App where
+  helloWorld'Hello () = hello
+  helloWorld'Goodbye () = goodbye
+
+hello :: Monad m =&gt; V0.Hello -&gt; m Text
+hello V0.Hello{helloWho} = return $ &quot;Hello &quot; `mappend` helloWho `mappend` &quot;!&quot;
+
+goodbye :: Monad m =&gt; V0.Goodbye -&gt; m Text
+goodbye V0.Goodbye{goodbyeWho} = return $ &quot;Goodbye &quot; `mappend` goodbyeWho `mappend` &quot;!&quot;
+
+main :: IO ()
+main = runServer helloWorld'pull unApp routes
+
+routes :: ScottyT TL.Text App ()
+routes = do
+  helloWorld'Scotty'Post helloWorld'pull (const defHooks)
+  helloWorld'Scotty'Get helloWorld'pull</code></pre><p>Request:</p><pre><code class="shell">curl \
+  -XPOST \
+  -H 'application/json' \
+  -d '{
+    &quot;fluid&quot;:{&quot;major&quot;:0,&quot;minor&quot;:0},
+    &quot;version&quot;:{&quot;major&quot;:0,&quot;minor&quot;:1},
+    &quot;meta&quot;:null,
+    &quot;query&quot;:{&quot;n&quot;:&quot;Goodbye&quot;,&quot;m&quot;:{&quot;who&quot;:&quot;Joe&quot;}}
+  }' \
+  http://localhost:8080</code></pre><p>Response:</p><pre><code class="json">{
+  &quot;tag&quot;:&quot;Success&quot;,
+  &quot;success&quot;:&quot;Goodbye, Joe!&quot;,
+  &quot;limits&quot;:{&quot;serviceCalls&quot;:50,&quot;variables&quot;:50,&quot;expressions&quot;:100,&quot;lambdas&quot;:10}
+}</code></pre><h2>Add <code>Lang</code> to <code>Hello</code></h2><p>The world is a bigger place outside English speakers.
+Let's add a couple more language greetings, Spanish and French, to <code>Hello</code>.
+Modifying <code>Hello</code> will be a major version change.</p><pre><code class="yaml">  Lang: [English, Spanish, French]
+  Hello:
+    m: [lang: Lang, who: String]
+    o: String</code></pre><p>File: <code>api/002_langs.yaml</code></p><pre><code class="yaml">fluid:
+  major: 0
+  minor: 0
+pull:
+  protocol: http
+  name: HelloWorld
+  host: localhost
+  path: /
+  port: 8080
+  meta: Unit
+  error: Unit
+schema:
+  Lang: [English, Spanish, French]
+  Hello:
+    m: [lang: Lang, who: String]
+    o: String
+  Goodbye:
+    m: [who: String]
+    o: String</code></pre><p>Generate again.</p><pre><code class="shell">./api.sh</code></pre><p>This is the first major version change to <code>1.0</code>.
+A few more things need to be added like a second definition for <code>Hello</code>.
+That doesn't mean to delete the original <code>Hello</code> definition.</p><pre><code class="haskell">hello' :: Monad m =&gt; V1.Hello -&gt; m Text
+hello' req = case V1.helloLang req of
+  V1.Lang'English -&gt; return $ &quot;Hello &quot; `mappend` (V1.helloWho req) `mappend` &quot;!&quot;
+  V1.Lang'Spanish -&gt; return $ &quot;Hola &quot; `mappend` (V1.helloWho req) `mappend` &quot;!&quot;
+  V1.Lang'French -&gt; return $ &quot;Bonjour &quot; `mappend` (V1.helloWho req) `mappend` &quot;!&quot;</code></pre><p>Again, an instance for catching throws.</p><pre><code class="haskell">instance V1.HelloWorld'Thrower App</code></pre><p>The previous <code>Goodbye</code> definition can be reused as the type signature doesn't change.</p><pre><code class="haskell">instance V1.HelloWorld'Service () App where
+  helloWorld'Hello () = hello'
+  helloWorld'Goodbye () = goodbye</code></pre><p>Add another <code>Hooks</code> for verison <code>1.x</code> with another <code>(const defHooks)</code>.</p><pre><code class="haskell">routes :: ScottyT TL.Text App ()
+routes = do
+  helloWorld'Scotty'Post helloWorld'pull (const defHooks) (const defHooks)
+  helloWorld'Scotty'Get helloWorld'pull</code></pre><p>File: <code>library/HelloWorld.hs</code></p><pre><code class="haskell">module HelloWorld (main) where
+
+import qualified Data.Text.Lazy as TL
+import Data.Text (Text)
+import Control.Monad.IO.Class
+import Fluid.Types
+import Fluid.Server.Scotty
+import Fluid.Server
+
+import Api.Server
+import qualified Api.Major0 as V0
+import qualified Api.Major1 as V1
+
+newtype App a = App { unApp :: IO a }
+  deriving (Functor, Applicative, Monad, MonadIO, MonadCatch, MonadThrow)
+
+instance ServiceThrower App
+instance V0.HelloWorld'Thrower App
+instance V1.HelloWorld'Thrower App
+
+instance V0.HelloWorld'Service () App where
+  helloWorld'Hello () = hello
+  helloWorld'Goodbye () = goodbye
+
+instance V1.HelloWorld'Service () App where
+  helloWorld'Hello () = hello'
+  helloWorld'Goodbye () = goodbye
+
+hello :: Monad m =&gt; V0.Hello -&gt; m Text
+hello req = return $ &quot;Hello &quot; `mappend` (V0.helloWho req) `mappend` &quot;!&quot;
+
+hello' :: Monad m =&gt; V1.Hello -&gt; m Text
+hello' req = case V1.helloLang req of
+  V1.Lang'English -&gt; return $ &quot;Hello &quot; `mappend` (V1.helloWho req) `mappend` &quot;!&quot;
+  V1.Lang'Spanish -&gt; return $ &quot;Hola &quot; `mappend` (V1.helloWho req) `mappend` &quot;!&quot;
+  V1.Lang'French -&gt; return $ &quot;Bonjour &quot; `mappend` (V1.helloWho req) `mappend` &quot;!&quot;
+
+goodbye :: Monad m =&gt; V0.Goodbye -&gt; m Text
+goodbye req = return $ &quot;Goodbye &quot; `mappend` (V0.goodbyeWho req) `mappend` &quot;!&quot;
+
+main :: IO ()
+main = runServer helloWorld'pull unApp routes
+
+routes :: ScottyT TL.Text App ()
+routes = do
+  helloWorld'Scotty'Post helloWorld'pull (const defHooks) (const defHooks)
+  helloWorld'Scotty'Get helloWorld'pull</code></pre><p>Request:</p><pre><code class="shell">curl \
+  -XPOST \
+  -H 'application/json' \
+  -d '{
+    &quot;fluid&quot;:{&quot;major&quot;:0,&quot;minor&quot;:0},
+    &quot;version&quot;:{&quot;major&quot;:1,&quot;minor&quot;:0},
+    &quot;meta&quot;:null,
+    &quot;query&quot;:{&quot;n&quot;:&quot;Hello&quot;,&quot;m&quot;:{&quot;lang&quot;:{&quot;tag&quot;:&quot;Spanish&quot;},&quot;who&quot;:&quot;Joe&quot;}}
+  }' \
+  http://localhost:8080</code></pre><p>Response:</p><pre><code class="json">{
+  &quot;tag&quot;:&quot;Success&quot;,
+  &quot;success&quot;:&quot;Hola Joe!&quot;,
+  &quot;limits&quot;:{&quot;serviceCalls&quot;:50,&quot;variables&quot;:50,&quot;expressions&quot;:100,&quot;lambdas&quot;:10}
+}</code></pre><h2>Add <code>Lang</code> to <code>Goodbye</code></h2><p>Let's release a new public API by adding Spanish and French greetings to <code>Goodbye</code> as well.
+Modifying <code>Goodbye</code> will be another major version.</p><p>File: <code>api/003_goodbye_lang.yaml</code></p><pre><code class="yaml">fluid:
+  major: 0
+  minor: 0
+pull:
+  protocol: http
+  name: HelloWorld
+  host: localhost
+  path: /
+  port: 8080
+  meta: Unit
+  error: Unit
+schema:
+  Lang: [English, Spanish, French]
+  Hello:
+    m: [lang: Lang, who: String]
+    o: String
+  Goodbye:
+    m: [lang: Lang, who: String]
+    o: String</code></pre><p>Generate.</p><pre><code>./api.sh</code></pre><p>The new <code>Goodbye</code> definition:</p><pre><code class="haskell">goodbye' :: Monad m =&gt; V2.Goodbye -&gt; m Text
+goodbye' req = case V2.goodbyeLang req of
+  V2.Lang'English -&gt; return $ &quot;Goodbye &quot; `mappend` (V2.goodbyeWho req) `mappend` &quot;!&quot;
+  V2.Lang'Spanish -&gt; return $ &quot;Adios &quot; `mappend` (V2.goodbyeWho req) `mappend` &quot;!&quot;
+  V2.Lang'French -&gt; return $ &quot;Adieu &quot; `mappend` (V2.goodbyeWho req) `mappend` &quot;!&quot;</code></pre><p>File: <code>library/HelloWorld.hs</code></p><pre><code class="haskell">module HelloWorld (main) where
+
+import qualified Data.Text.Lazy as TL
+import Data.Text (Text)
+import Control.Monad.IO.Class
+import Fluid.Types
+import Fluid.Server.Scotty
+import Fluid.Server
+
+import Api.Server
+import qualified Api.Major0 as V0
+import qualified Api.Major1 as V1
+import qualified Api.Major2 as V2
+
+newtype App a = App { unApp :: IO a }
+  deriving (Functor, Applicative, Monad, MonadIO, MonadCatch, MonadThrow)
+
+instance ServiceThrower App
+instance V0.HelloWorld'Thrower App
+instance V1.HelloWorld'Thrower App
+instance V2.HelloWorld'Thrower App
+
+instance V0.HelloWorld'Service () App where
+  helloWorld'Hello () = hello
+  helloWorld'Goodbye () = goodbye
+
+instance V1.HelloWorld'Service () App where
+  helloWorld'Hello () = hello'
+  helloWorld'Goodbye () = goodbye
+
+instance V2.HelloWorld'Service () App where
+  helloWorld'Hello () = hello'
+  helloWorld'Goodbye () = goodbye'
+
+hello :: Monad m =&gt; V0.Hello -&gt; m Text
+hello req = return $ &quot;Hello &quot; `mappend` (V0.helloWho req) `mappend` &quot;!&quot;
+
+hello' :: Monad m =&gt; V1.Hello -&gt; m Text
+hello' req = case V1.helloLang req of
+  V1.Lang'English -&gt; return $ &quot;Hello &quot; `mappend` (V1.helloWho req) `mappend` &quot;!&quot;
+  V1.Lang'Spanish -&gt; return $ &quot;Hola &quot; `mappend` (V1.helloWho req) `mappend` &quot;!&quot;
+  V1.Lang'French -&gt; return $ &quot;Bonjour &quot; `mappend` (V1.helloWho req) `mappend` &quot;!&quot;
+
+goodbye :: Monad m =&gt; V0.Goodbye -&gt; m Text
+goodbye req = return $ &quot;Goodbye &quot; `mappend` (V0.goodbyeWho req) `mappend` &quot;!&quot;
+
+goodbye' :: Monad m =&gt; V2.Goodbye -&gt; m Text
+goodbye' req = case V2.goodbyeLang req of
+  V2.Lang'English -&gt; return $ &quot;Goodbye &quot; `mappend` (V2.goodbyeWho req) `mappend` &quot;!&quot;
+  V2.Lang'Spanish -&gt; return $ &quot;Adios &quot; `mappend` (V2.goodbyeWho req) `mappend` &quot;!&quot;
+  V2.Lang'French -&gt; return $ &quot;Adieu &quot; `mappend` (V2.goodbyeWho req) `mappend` &quot;!&quot;
+
+main :: IO ()
+main = runServer helloWorld'pull unApp routes
+
+routes :: ScottyT TL.Text App ()
+routes = do
+  helloWorld'Scotty'Post helloWorld'pull (const defHooks) (const defHooks) (const defHooks)
+  helloWorld'Scotty'Get helloWorld'pull</code></pre><p>Request:</p><pre><code class="shell">curl \
+  -XPOST \
+  -H 'application/json' \
+  -d '{
+    &quot;fluid&quot;:{&quot;major&quot;:0,&quot;minor&quot;:0},
+    &quot;version&quot;:{&quot;major&quot;:2,&quot;minor&quot;:0},
+    &quot;meta&quot;:null,
+    &quot;query&quot;:{&quot;n&quot;:&quot;Goodbye&quot;,&quot;m&quot;:{&quot;lang&quot;:{&quot;tag&quot;:&quot;French&quot;},&quot;who&quot;:&quot;Joe&quot;}}
+  }' \
+  http://localhost:8080</code></pre><p>Response:</p><pre><code class="json">{
+  &quot;tag&quot;:&quot;Success&quot;,
+  &quot;success&quot;:&quot;Adieu Joe!&quot;,
+  &quot;limits&quot;:{&quot;serviceCalls&quot;:50,&quot;variables&quot;:50,&quot;expressions&quot;:100,&quot;lambdas&quot;:10}
+}</code></pre><h2>Meta middleware, again</h2><p>It's worth covering the meta middleware again.
+It didn't get a fair explanation above.
+Primarly, it wasn't used.
+The headers were ignored and the spec did not hold a meaingful <code>meta</code> type as <code>Unit</code>.</p><p>The middleware can be useful for injecting authentication information from either the header or meta value.
+Authentication is common in  many requests, and this is the middleware to do it.
+If nothing else, you can think of <code>meta</code> and the middleware use cases similar to HTTP headers and HTTP middlewares.</p><h2>Protocol: Pros and Cons</h2><p>One of Fluid's beauties is that it doesn't dictate how data is transferred.
+It's protocol agnostic.
+It's on a layer above protocols.
+It will run on any protocol as long as JSON can be sent.
+And if you want to stick with HTTP but not Scotty, you can use Servant or Yesod too.
+Fluid will run ontop of them.</p><p>Why move away from a protocol?
+Aside from being cleaner as an abstraction,
+there's an inglorious amount of trivial and manual work to create and maintain growing a HTTP RESTful API.
+Fluid wants to do away with that but without burning the house down.
+Fortunatley, REST principles can still be applied to the schema, HTTP can be still used as a transport, and JSON tools are still relevant.</p><p>Abstracting on HTTP, it comes at the cost.
+Being protocol agnostic loses the benefit of cached HTTP responses.
+The problem exists elsewhere with GraphQL.
+GraphQL has a query language too, and caching can be resolved it by storing data on the client side too.
+But in many and most cases, that's not important.
+Discern if you're likely to serve large amounts of static data where proxy or protocol benefits are essential.
+On the otherhand, if the data in responses are ever changing by nature and it's essential, caching will make no difference.</p><p>But given how easy and fast it is to use Fluid, trivialities for optimization doesn't make a lot of sense.
+Additionally, neither approach limits one from the other.
+That's the important factor to consider in the long term.
+A mixed approach may be valid.
+It's a tradeoff.</p><h2>What's next? (Part 2)</h2><p>Fluid is techinically an IDL (Interface Description Language).
+Generating server code is just half the equation.
+Generating client code is the other half.
+We'll explore how to do that next time.</p></div><div id="footer"><br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<div style="color:#111;margin:auto;width:100%;text-align:center;font-family:monospace">
+  <a href="atom.xml" style="color:#111">atom</a>
+  <a href="feed.json" style="color:#111">json</a>
+  <a href="rss.xml" style="color:#111">rss</a>
+  <br />
+  <br />
+  built with <a href="https://github.com/jxv/stagen" style="color:#111">stagen</a>
+</div>
+<br />
+<br />
+<br /></div></div></body></html>
