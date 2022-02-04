@@ -1,8 +1,8 @@
 #A Game in Haskell - Dino Rush
-##### Joe Vargas / February 28th, 2018
+#####  February 28, 2018
 
 <center>
-  <img alt="Dino Rush Title screen" src="dino-rush-title.png" width="640" height="360" />
+  <img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="640" height="360" />
 
   [GitHub Repo](https://github.com/jxv/dino-rush)
 </center>
@@ -52,7 +52,7 @@ But it's fairly simple from a player perspective.
 That's important for keeping scope.
 
 <center>
-  <img alt="" src="dino-rush-chrome-game.gif" width="680" height="254" />
+  <img alt="" src="2018-02-28-A-Game-in-Haskell/dino-rush-chrome-game.gif" width="680" height="254" />
 </center>
 
 Of course, it wasn't as straight forward from a programmer perspective.
@@ -61,7 +61,7 @@ Again, scope.
 Plenty of time was spent getting the "foundation" to be functional before writing any gameplay.
 
 <center>
-  <img alt="Dino Rush Title screen" src="dino-rush-gameplay.gif" />
+  <img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-gameplay.gif" />
 </center>
 
 Not surprisingly, the polishing and forming a coherent architecture took the most time.
@@ -81,7 +81,7 @@ Even Dino Rush doesn't adhere 100%, and that's okay.
 It's awfully similar enough to demonstrate utility.
 
 <center>
-  <img alt="Architecture" src="dino-rush-architecture.png" width="424" height="530" />
+  <img alt="Architecture" src="2018-02-28-A-Game-in-Haskell/dino-rush-architecture.png" width="424" height="530" />
 </center>
 
 As you can see, all the arrows flow upwards.
@@ -309,7 +309,7 @@ mainLoop = do
 And visually represented.
 
 <center>
-  <img alt="scenes" src="dino-rush-scenes.png" width="320" height="173" />
+  <img alt="scenes" src="2018-02-28-A-Game-in-Haskell/dino-rush-scenes.png" width="320" height="173" />
 </center>
 
 ## Scenes ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Scene))
@@ -443,7 +443,7 @@ drawNumbers int (x,y) = mapM_
 Writing the code that controls the camera was actually pretty fun.
 
 <center>
-  <img alt="zoom cam" src="dino-rush-zoom.gif" width="640" height="360"/>
+  <img alt="zoom cam" src="2018-02-28-A-Game-in-Haskell/dino-rush-zoom.gif" width="640" height="360"/>
 </center>
 
 _Zoom, zoom._
@@ -785,7 +785,7 @@ It's really something that was done correctly.
 ### Physics & Collision Detection
 
 <center>
-  <img alt="collision" src="dino-rush-collision.gif" width="640" height="360" />
+  <img alt="collision" src="2018-02-28-A-Game-in-Haskell/dino-rush-collision.gif" width="640" height="360" />
 </center>
 
 The collision detection is pretty simple.
@@ -907,7 +907,7 @@ Thanks for reading!
 
 <br/>
 
-P.S. My high score is [227](dino-rush-hiscore.png).
+P.S. My high score is [227](2018-02-28-A-Game-in-Haskell/dino-rush-hiscore.png).
 
 <br/>
 

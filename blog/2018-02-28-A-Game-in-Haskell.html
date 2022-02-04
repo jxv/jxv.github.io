@@ -1,5 +1,5 @@
-<!DOCTYPE HTML><html><head><title>A Game in Haskell - Dino Rush</title><link href="style.css" type="text/css" rel="stylesheet"><link href="../favicon.png" type="image/png" rel="icon"></head><body><div id="wrapper"><div id="header"></div><div id="content"><h1>A Game in Haskell - Dino Rush</h1><h5>Joe Vargas / February 28th, 2018</h5><center>
-  <img alt="Dino Rush Title screen" src="dino-rush-title.png" width="640" height="360" /><p>  <a href="https://github.com/jxv/dino-rush">GitHub Repo</a></p></center><h2>Motivation</h2><p>Writing a game in Haskell appears to be an elusive, white-whale task.
+<!DOCTYPE HTML><html><head><title>A Game in Haskell - Dino Rush</title><link href="style.css" type="text/css" rel="stylesheet"><link href="../favicon.png" type="image/png" rel="icon"></head><body><div id="wrapper"><div id="header"></div><div id="content"><h1>A Game in Haskell - Dino Rush</h1><h5>February 28, 2018</h5><center>
+  <img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="640" height="360" /><p>  <a href="https://github.com/jxv/dino-rush">GitHub Repo</a></p></center><h2>Motivation</h2><p>Writing a game in Haskell appears to be an elusive, white-whale task.
 And with an existing handful of small and citable games, I wish more existed with documentation to ease the barrier of entry.
 It&#39;s disappointing because writing a game can be a challenging and fun way to explore a language.
 And Haskell could be a great language for creating small-medium sized games.
@@ -29,12 +29,12 @@ And without a doubt, it&#39;s a Skinner box game.
 It&#39;s <del>shamelessly stolen from</del> <i>inspired by</i> a certain, offline game.
 But it&#39;s fairly simple from a player perspective.
 That&#39;s important for keeping scope.</p><center>
-  <img alt src="dino-rush-chrome-game.gif" width="680" height="254" />
+  <img alt src="2018-02-28-A-Game-in-Haskell/dino-rush-chrome-game.gif" width="680" height="254" />
 </center><p>Of course, it wasn&#39;t as straight forward from a programmer perspective.
 That makes smartest decision overall was to pick a silly game.
 Again, scope.
 Plenty of time was spent getting the &quot;foundation&quot; to be functional before writing any gameplay.</p><center>
-  <img alt="Dino Rush Title screen" src="dino-rush-gameplay.gif" />
+  <img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-gameplay.gif" />
 </center><p>Not surprisingly, the polishing and forming a coherent architecture took the most time.
 Ha!
 But they were both worthy causes.
@@ -46,7 +46,7 @@ It&#39;s a reusable model for many more games.
 But it&#39;s just that -- a model.
 Even Dino Rush doesn&#39;t adhere 100%, and that&#39;s okay.
 It&#39;s awfully similar enough to demonstrate utility.</p><center>
-  <img alt="Architecture" src="dino-rush-architecture.png" width="424" height="530" />
+  <img alt="Architecture" src="2018-02-28-A-Game-in-Haskell/dino-rush-architecture.png" width="424" height="530" />
 </center><p>As you can see, all the arrows flow upwards.
 A higher-level box gets pointed by lower-level boxes it depends on.
 (There was likely an unconscious inspiration from a <a href="http://alistair.cockburn.us/Hexagonal+architecture">Hexagon architecture</a> and previous games.
@@ -152,7 +152,7 @@ The <code>Runner</code> knows all of the scenes, and let it handle the transitio
        Scene&#39;GameOver -&gt; return ()
        Scene&#39;Quit -&gt; return ()
      modify (\v -&gt; v { vScene = nextScene })</code></pre></li></ol><p>And visually represented.</p><center>
-  <img alt="scenes" src="dino-rush-scenes.png" width="320" height="173" />
+  <img alt="scenes" src="2018-02-28-A-Game-in-Haskell/dino-rush-scenes.png" width="320" height="173" />
 </center><h2>Scenes (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Scene">code</a>)</h2><p>Remember that the next <code>Scene</code> is decided in the current <code>Scene</code>&#39;s step.
 It doesn&#39;t happen at the level of the <code>Runner</code>, which deals with the transitions as a result.</p><ul><li><b>Title</b> - Waiting area before starting a game in <code>Play</code></li><li><b>Play</b> - Scene for game play -- it encompasses the most code and the complexity to match</li><li><b>Pause</b> - Lower music and pause all gameplay and sprite animations</li><li><b>Death</b> - Wait until the dinosaur drops off the screen</li><li><b>GameOver</b> - Fade out to black and wait for a user input to return to the <code>Title</code> scene</li><li><b>Quit</b> - Exit</li></ul><p><code>Pause</code>, <code>Death</code>, and <code>GameOver</code> all access the same <code>Play</code> state, <code>PlayVars</code>.
 Although they treat it as read-only access for drawing, that <i>breaks</i> the mold of the proposed architecture.
@@ -218,7 +218,7 @@ drawNumbers :: Renderer m =&gt; Integer -&gt; (Int, Int) -&gt; m ()
 drawNumbers int (x,y) = mapM_
   (\(i, n) -&gt; drawNumber n (x - i * 16, y))
   (zip [0..] (toNumberReverse int))</code></pre><p>Writing the code that controls the camera was actually pretty fun.</p><center>
-  <img alt="zoom cam" src="dino-rush-zoom.gif" width="640" height="360" />
+  <img alt="zoom cam" src="2018-02-28-A-Game-in-Haskell/dino-rush-zoom.gif" width="640" height="360" />
 </center><p><i>Zoom, zoom.</i></p><pre><code>class Monad m =&gt; CameraControl m where
   adjustCamera :: Camera -&gt; m ()
   disableZoom :: m ()
@@ -389,7 +389,7 @@ And every part of the game depends on it.
 It&#39;s the center of what is.
 Things in here are pure.
 It&#39;s really something that was done correctly.</p><h3>Physics &amp; Collision Detection</h3><center>
-  <img alt="collision" src="dino-rush-collision.gif" width="640" height="360" />
+  <img alt="collision" src="2018-02-28-A-Game-in-Haskell/dino-rush-collision.gif" width="640" height="360" />
 </center><p>The collision detection is pretty simple.
 It&#39;s just checking for an intersection between AABB types.
 Things don&#39;t bounce off each other and fly away.
@@ -445,7 +445,7 @@ But for the sake of clarity, it&#39;s worth it.</p><p>Overall, I&#39;m actually 
 It&#39;s a Haskell game that plays on my small laptop.
 The game generates enough sense of urgency to be &quot;fun.&quot;
 I watched a few people played it, and they seem to enjoy it.
-That was very cool.</p><p>Thanks for reading!</p><br /><p>P.S. My high score is <a href="dino-rush-hiscore.png">227</a>.</p><br /><p><a href="https://www.reddit.com/r/haskell/comments/813yik/a_game_in_haskell_dino_rush/">/r/haskell</a></p><p><a href="https://www.reddit.com/r/gamedev/comments/8140hj/a_game_in_haskell_dino_rush/">/r/gamedev</a></p><br /><hr><h2>Acknowledgements</h2><ul><li>Various contributors for the Haskell bindings of SDL libraries<ul><li><a href="https://github.com/haskell-game/sdl2/graphs/contributors">SDL2 bindings</a> - Just looking at the commits, years of work have been put into the bindings. Dino Rush wouldn&#39;t exist without it. <a href="https://github.com/polarina">Gabríel Arthúr Pétursson</a> and <a href="https://github.com/ocharles">Oliver Charles</a> are especially noteworthy.</li><li><a href="https://github.com/sbidin/sdl2-mixer/graphs/contributors">SDL2 mixer bindings</a> - by <a href="https://github.com/tempname11">Vladimir Semyonov</a> and <a href="https://github.com/sbidin">Siniša Biđin</a>, who fixed recent compiling issues.</li><li><a href="https://github.com/haskell-game/sdl2-ttf/graphs/contributors">SDL2 ttf bindings</a> - Commits show that <a href="https://github.com/sbidin">Siniša Biđin</a> was killing it again.</li></ul></li><li><a href="https://www.draw.io">draw.io</a> - It&#39;s the simple diagramming software I always wanted. And it&#39;s free!</li><li>Game assets were plucked from or created by various sources on the internet<ul><li>Music<ul><li>Goodie (Crack Intro) by Quartex (Oberheim)</li></ul></li><li><p>Sound effects were generated by <a href="https://www.bfxr.net/">bfxr</a></p></li><li>Fonts<ul><li><a href="https://fontlibrary.org/en/font/computer-speak#Computer%20Speak%20v0.3-Regular">Computer Speak</a> by Shaan Sawrup</li></ul></li><li>Sprites<ul><li>Dinosaur by <a href="https://twitter.com/ScissorMarks">ScissorMarks</a></li><li><a href="https://opengameart.org/content/basic-map-32x32-by-silver-iv">Water, ground, and rocks</a> by <a href="https://opengameart.org/users/silver-iv">Ivan VOIROL</a></li><li><a href="https://opengameart.org/content/lpc-terrain-repack">Lava</a> by <a href="http://williamthompsonj.blogspot.de/">William Thompson</a></li><li><a href="https://opengameart.org/content/jungle-tree-pack">Trees</a> by <a href="https://opengameart.org/users/knoblepersona">KnoblePersona</a></li><li><a href="https://opengameart.org/content/owl-and-raven-sprites">Raven</a> by <a href="https://revangale.wordpress.com/">Revangle</a></li></ul></li></ul></li></ul></div><div id="footer"><br />
+That was very cool.</p><p>Thanks for reading!</p><br /><p>P.S. My high score is <a href="2018-02-28-A-Game-in-Haskell/dino-rush-hiscore.png">227</a>.</p><br /><p><a href="https://www.reddit.com/r/haskell/comments/813yik/a_game_in_haskell_dino_rush/">/r/haskell</a></p><p><a href="https://www.reddit.com/r/gamedev/comments/8140hj/a_game_in_haskell_dino_rush/">/r/gamedev</a></p><br /><hr><h2>Acknowledgements</h2><ul><li>Various contributors for the Haskell bindings of SDL libraries<ul><li><a href="https://github.com/haskell-game/sdl2/graphs/contributors">SDL2 bindings</a> - Just looking at the commits, years of work have been put into the bindings. Dino Rush wouldn&#39;t exist without it. <a href="https://github.com/polarina">Gabríel Arthúr Pétursson</a> and <a href="https://github.com/ocharles">Oliver Charles</a> are especially noteworthy.</li><li><a href="https://github.com/sbidin/sdl2-mixer/graphs/contributors">SDL2 mixer bindings</a> - by <a href="https://github.com/tempname11">Vladimir Semyonov</a> and <a href="https://github.com/sbidin">Siniša Biđin</a>, who fixed recent compiling issues.</li><li><a href="https://github.com/haskell-game/sdl2-ttf/graphs/contributors">SDL2 ttf bindings</a> - Commits show that <a href="https://github.com/sbidin">Siniša Biđin</a> was killing it again.</li></ul></li><li><a href="https://www.draw.io">draw.io</a> - It&#39;s the simple diagramming software I always wanted. And it&#39;s free!</li><li>Game assets were plucked from or created by various sources on the internet<ul><li>Music<ul><li>Goodie (Crack Intro) by Quartex (Oberheim)</li></ul></li><li><p>Sound effects were generated by <a href="https://www.bfxr.net/">bfxr</a></p></li><li>Fonts<ul><li><a href="https://fontlibrary.org/en/font/computer-speak#Computer%20Speak%20v0.3-Regular">Computer Speak</a> by Shaan Sawrup</li></ul></li><li>Sprites<ul><li>Dinosaur by <a href="https://twitter.com/ScissorMarks">ScissorMarks</a></li><li><a href="https://opengameart.org/content/basic-map-32x32-by-silver-iv">Water, ground, and rocks</a> by <a href="https://opengameart.org/users/silver-iv">Ivan VOIROL</a></li><li><a href="https://opengameart.org/content/lpc-terrain-repack">Lava</a> by <a href="http://williamthompsonj.blogspot.de/">William Thompson</a></li><li><a href="https://opengameart.org/content/jungle-tree-pack">Trees</a> by <a href="https://opengameart.org/users/knoblepersona">KnoblePersona</a></li><li><a href="https://opengameart.org/content/owl-and-raven-sprites">Raven</a> by <a href="https://revangale.wordpress.com/">Revangle</a></li></ul></li></ul></li></ul></div><div id="footer"><br />
 <br />
 <br />
 <br />
@@ -464,4 +464,5 @@ That was very cool.</p><p>Thanks for reading!</p><br /><p>P.S. My high score is 
 </div>
 <br />
 <br />
-<br /></div></div></body></html>
+<br />
+<div class="footer" style="font-size:x-small">Joe Vargas <span class="copy"></span> 2022<br /><br /></div></div></div></body></html>

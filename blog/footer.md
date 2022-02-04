@@ -18,3 +18,4 @@
 <br />
 <br />
 <br />
+<div class="footer" style="font-size: x-small">Joe Vargas <span class="copy"></span> 2022<br/><br/></div>
