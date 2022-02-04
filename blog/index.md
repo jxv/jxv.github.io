@@ -1,1 +1,1 @@
-# Thoughts
+# Blog

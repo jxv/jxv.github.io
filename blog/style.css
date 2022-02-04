@@ -45,10 +45,12 @@ h1, h2, h3, h4, h5 {
 }
 
 #content h1 {
- font-family: 'Roboto', sans-serif;
- font-size: 1.7em;
- letter-spacing: -0.02em;
- font-weight: 700;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.7em;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  text-transform: uppercase;
+  word-spacing: 0.25em;
 }
 
 #content h2, h3, h4, h5 {
