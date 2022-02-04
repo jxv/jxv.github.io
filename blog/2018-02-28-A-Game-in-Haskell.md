@@ -1,6 +1,5 @@
 #A Game in Haskell - Dino Rush
-
-**Feburary 28th, 2018**
+##### Joe Vargas / February 28th, 2018
 
 <center>
   <img alt="Dino Rush Title screen" src="dino-rush-title.png" width="640" height="360" />
@@ -907,21 +906,15 @@ That was very cool.
 Thanks for reading!
 
 <br/>
-<br/>
-<br/>
 
 P.S. My high score is [227](dino-rush-hiscore.png).
 
-<br/>
-<br/>
 <br/>
 
 [/r/haskell](https://www.reddit.com/r/haskell/comments/813yik/a_game_in_haskell_dino_rush/)
 
 [/r/gamedev](https://www.reddit.com/r/gamedev/comments/8140hj/a_game_in_haskell_dino_rush/)
 
-<br/>
-<br/>
 <br/>
 
 ---

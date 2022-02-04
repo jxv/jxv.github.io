@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans|Crimson+Text|News+Cycle:700');
+@import url('https://fonts.googleapis.com/css?family=Roboto+100+700|Space+Mono');
+
+* {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
+}
 
 hr {
   width: 100%;
@@ -22,29 +27,31 @@ hr {
   max-width: 750px;
   margin-left: auto;
   margin-right: auto;
-  font-size: 1.4em;
-  font-family: 'Crimson Text', serif;
+  font-size: 1.2em;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;]
 }
 
 #content p {
-  font-family: 'Crimson Text', serif;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
   color: #222;
   line-height: 1.4em;
 }
 
 h1, h2, h3, h4, h5 {
   color: #222;
+   font-weight: 500;
 }
 
 #content h1 {
- font-family: 'Open Sans', sans-serif;
+ font-family: 'Roboto', sans-serif;
  font-size: 1.7em;
  letter-spacing: -0.02em;
- 
 }
 
 #content h2, h3, h4, h5 {
- font-family: 'News Cycle', sans-serif;
+ font-family: 'Roboto', sans-serif;
 }
 
 #content h2 {
@@ -63,13 +70,13 @@ a #title {
   font-weight: bold;
   font-size: 0.9em;
   text-decoration: none;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
   padding-left: 10px;
 }
 
 code {
-  font-size: 0.85em;
-  font-weight: bold;
+  font-size: 0.75em;
+  font-family: 'Space Mono', monospace;
 }
 
 pre {
