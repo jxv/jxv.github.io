@@ -27,16 +27,36 @@ hr {
   max-width: 750px;
   margin-left: auto;
   margin-right: auto;
-  font-size: 1.2em;
+  font-size: 1.1em;
   font-family: 'Roboto', sans-serif;
   font-weight: 100;]
+}
+
+#content li p {
+  line-height: 1.8em;
+}
+
+ol > li::marker {
+  font-weight: 500;
+}
+
+ul > li::marker {
+  font-weight: 500;
+}
+
+li {
+  margin-top: 1.8em;
+}
+
+li:last-child {
+  margin-bottom: 1.8em;
 }
 
 #content p {
   font-family: 'Roboto', sans-serif;
   font-weight: 100;
   color: #222;
-  line-height: 1.4em;
+  line-height: 1.8em;
 }
 
 h1, h2, h3, h4, h5 {
@@ -78,20 +98,19 @@ a #title {
 }
 
 code {
-
+  font-size: 0.70em;
   border-radius: 0.2em;
-  font-size: 0.75em;
   background: #e7e7e7;
   padding-left: 0.2em;
   padding-right: 0.2em;
   font-family: 'Space Mono', monospace;
+  line-height: 1em;
 }
 
 pre {
   padding: 10px;
   background: #e7e7e7;
   font-weight: bold;
-  font-size: 0.85em;
   overflow: auto
 }
 
