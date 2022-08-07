@@ -30,11 +30,13 @@ It&#39;s <del>shamelessly stolen from</del> <i>inspired by</i> a certain, offlin
 But it&#39;s fairly simple from a player perspective.
 That&#39;s important for keeping scope.</p><center>
   <img alt src="2018-02-28-A-Game-in-Haskell/dino-rush-chrome-game.gif" width="680" height="254" />
+  <figcaption>Chrome Dino Game</figcaption>
 </center><p>Of course, it wasn&#39;t as straight forward from a programmer perspective.
 That makes smartest decision overall was to pick a silly game.
 Again, scope.
 Plenty of time was spent getting the &quot;foundation&quot; to be functional before writing any gameplay.</p><center>
   <img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-gameplay.gif" />
+  <figcaption>Dino Rush gameplay</figcaption>
 </center><p>Not surprisingly, the polishing and forming a coherent architecture took the most time.
 Ha!
 But they were both worthy causes.
@@ -47,6 +49,7 @@ But it&#39;s just that -- a model.
 Even Dino Rush doesn&#39;t adhere 100%, and that&#39;s okay.
 It&#39;s awfully similar enough to demonstrate utility.</p><center>
   <img alt="Architecture" src="2018-02-28-A-Game-in-Haskell/dino-rush-architecture.png" width="424" height="530" />
+  <figcaption>Software Architecture</figcaption>
 </center><p>As you can see, all the arrows flow upwards.
 A higher-level box gets pointed by lower-level boxes it depends on.
 (There was likely an unconscious inspiration from a <a href="http://alistair.cockburn.us/Hexagonal+architecture">Hexagon architecture</a> and previous games.
@@ -153,6 +156,7 @@ The <code>Runner</code> knows all of the scenes, and let it handle the transitio
        Scene&#39;Quit -&gt; return ()
      modify (\v -&gt; v { vScene = nextScene })</code></pre></li></ol><p>And visually represented.</p><center>
   <img alt="scenes" src="2018-02-28-A-Game-in-Haskell/dino-rush-scenes.png" width="320" height="173" />
+  <figcaption>Scene flowchart</figcaption>
 </center><h2>Scenes (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Scene">code</a>)</h2><p>Remember that the next <code>Scene</code> is decided in the current <code>Scene</code>&#39;s step.
 It doesn&#39;t happen at the level of the <code>Runner</code>, which deals with the transitions as a result.</p><ul><li><b>Title</b> - Waiting area before starting a game in <code>Play</code></li><li><b>Play</b> - Scene for game play -- it encompasses the most code and the complexity to match</li><li><b>Pause</b> - Lower music and pause all gameplay and sprite animations</li><li><b>Death</b> - Wait until the dinosaur drops off the screen</li><li><b>GameOver</b> - Fade out to black and wait for a user input to return to the <code>Title</code> scene</li><li><b>Quit</b> - Exit</li></ul><p><code>Pause</code>, <code>Death</code>, and <code>GameOver</code> all access the same <code>Play</code> state, <code>PlayVars</code>.
 Although they treat it as read-only access for drawing, that <i>breaks</i> the mold of the proposed architecture.
@@ -219,6 +223,7 @@ drawNumbers int (x,y) = mapM_
   (\(i, n) -&gt; drawNumber n (x - i * 16, y))
   (zip [0..] (toNumberReverse int))</code></pre><p>Writing the code that controls the camera was actually pretty fun.</p><center>
   <img alt="zoom cam" src="2018-02-28-A-Game-in-Haskell/dino-rush-zoom.gif" width="640" height="360" />
+  <figcaption>Zoom mechanic</figcaption>
 </center><p><i>Zoom, zoom.</i></p><pre><code>class Monad m =&gt; CameraControl m where
   adjustCamera :: Camera -&gt; m ()
   disableZoom :: m ()
@@ -304,7 +309,10 @@ It&#39;s also in the same module for loading those images, sounds, and fonts.
 Draw and configure textures.</p><p><code>Resources</code> was appropriately extracted from the <code>Config</code> type and its module.
 The resources required unique set of detailed instructions for loading and freeing.
 The details became quite messy for <code>Config</code> in the same vein that <code>Main</code> should be concise.
-<code>Config</code> is concerned about all read-only at a higher level.</p><h3>Sprites &amp; Animations</h3><p>With 2D games, a sprite system can save a lot of repetitive work.</p><img alt="dino.png" src="https://github.com/jxv/dino-rush/raw/master/resource/dino.png" width="577" height="24" /><p>To load sprite sheets and manage animations, I used my <a href="https://hackage.haskell.org/package/animate">animate</a> library.
+<code>Config</code> is concerned about all read-only at a higher level.</p><h3>Sprites &amp; Animations</h3><p>With 2D games, a sprite system can save a lot of repetitive work.</p><center>
+  <img alt="dino.png" src="https://github.com/jxv/dino-rush/raw/master/resource/dino.png" width="577" height="24" />
+  <figcaption>Dino spritesheet</figcaption>
+</center><p>To load sprite sheets and manage animations, I used my <a href="https://hackage.haskell.org/package/animate">animate</a> library.
 The majority of sprites aren&#39;t super complicated and can be described along a pattern.
 Using with a helpful JSON loader, the process of writing sprite loaders and editing can be done trivially.</p><pre><code>Animate.readSpriteSheetJSON loadTexture &quot;resource/dino.json&quot; :: IO (Animate.SpriteSheet DinoKey SDL.Texture Seconds)</code></pre><p>Because <b>animate</b> doesn&#39;t know about <b>SDL</b>, <code>loadTexture</code> is passed in as callback function which needs to load a <code>SDL.Texture</code>.
 Most of instructions for forming the animated sprite are in the JSON file.</p><pre><code>{
@@ -390,6 +398,7 @@ It&#39;s the center of what is.
 Things in here are pure.
 It&#39;s really something that was done correctly.</p><h3>Physics &amp; Collision Detection</h3><center>
   <img alt="collision" src="2018-02-28-A-Game-in-Haskell/dino-rush-collision.gif" width="640" height="360" />
+  <figcaption>Collision boxes</figcaption>
 </center><p>The collision detection is pretty simple.
 It&#39;s just checking for an intersection between AABB types.
 Things don&#39;t bounce off each other and fly away.

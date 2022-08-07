@@ -53,6 +53,7 @@ That's important for keeping scope.
 
 <center>
   <img alt="" src="2018-02-28-A-Game-in-Haskell/dino-rush-chrome-game.gif" width="680" height="254" />
+  <figcaption>Chrome Dino Game</figcaption>
 </center>
 
 Of course, it wasn't as straight forward from a programmer perspective.
@@ -62,6 +63,7 @@ Plenty of time was spent getting the "foundation" to be functional before writin
 
 <center>
   <img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-gameplay.gif" />
+  <figcaption>Dino Rush gameplay</figcaption>
 </center>
 
 Not surprisingly, the polishing and forming a coherent architecture took the most time.
@@ -82,6 +84,7 @@ It's awfully similar enough to demonstrate utility.
 
 <center>
   <img alt="Architecture" src="2018-02-28-A-Game-in-Haskell/dino-rush-architecture.png" width="424" height="530" />
+  <figcaption>Software Architecture</figcaption>
 </center>
 
 As you can see, all the arrows flow upwards.
@@ -310,6 +313,7 @@ And visually represented.
 
 <center>
   <img alt="scenes" src="2018-02-28-A-Game-in-Haskell/dino-rush-scenes.png" width="320" height="173" />
+  <figcaption>Scene flowchart</figcaption>
 </center>
 
 ## Scenes ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Scene))
@@ -444,6 +448,7 @@ Writing the code that controls the camera was actually pretty fun.
 
 <center>
   <img alt="zoom cam" src="2018-02-28-A-Game-in-Haskell/dino-rush-zoom.gif" width="640" height="360"/>
+  <figcaption>Zoom mechanic</figcaption>
 </center>
 
 _Zoom, zoom._
@@ -620,7 +625,10 @@ The details became quite messy for `Config` in the same vein that `Main` should 
 
 With 2D games, a sprite system can save a lot of repetitive work.
 
-<img alt="dino.png" src="https://github.com/jxv/dino-rush/raw/master/resource/dino.png" width="577" height="24" />
+<center>
+  <img alt="dino.png" src="https://github.com/jxv/dino-rush/raw/master/resource/dino.png" width="577" height="24" />
+  <figcaption>Dino spritesheet</figcaption>
+</center>
 
 To load sprite sheets and manage animations, I used my [animate](https://hackage.haskell.org/package/animate) library.
 The majority of sprites aren't super complicated and can be described along a pattern.
@@ -786,6 +794,7 @@ It's really something that was done correctly.
 
 <center>
   <img alt="collision" src="2018-02-28-A-Game-in-Haskell/dino-rush-collision.gif" width="640" height="360" />
+  <figcaption>Collision boxes</figcaption>
 </center>
 
 The collision detection is pretty simple.
