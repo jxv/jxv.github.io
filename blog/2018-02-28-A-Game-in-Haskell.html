@@ -1,37 +1,39 @@
-<!DOCTYPE HTML><html><head><title>A Game in Haskell - Dino Rush</title><link href="style.css" type="text/css" rel="stylesheet"><link href="../favicon.png" type="image/png" rel="icon"></head><body><div id="wrapper"><div id="header"></div><div id="content"><h1>A Game in Haskell - Dino Rush</h1><h5>February 28, 2018</h5><center>
-  <img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="640" height="360" /><p>  <a href="https://github.com/jxv/dino-rush">GitHub Repo</a></p></center><h2>Motivation</h2><p>Writing a game in Haskell appears to be an elusive, white-whale task.
+<!DOCTYPE HTML><html><head><title>A Game in Haskell - Dino Rush</title><link rel="stylesheet" type="text/css" href="style.css"><link rel="stylesheet" type="text/css" href="../dark-mode.css"><script src="../dark-mode.js"></script><link rel="icon" type="image/png" href="../favicon.png"></head><body><div class="container" id="container"><div class="header" id="header"><div class="dark-mode-position"><form autocomplete="off"><label class="dark-mode-switch"><input id="dark-mode-checkbox" type="checkbox" onclick="onToggleDarkMode()"><span class="dark-mode-slider round"></span></label></form></div>
+</div><div class="content" id="content"><h1>A Game in Haskell - Dino Rush</h1><h5>2018-02-28</h5><div><a href="https://github.com/jxv/dino-rush">Source code</a></div>
+<br />
+<img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="640" height="360" /><h2>Motivation</h2><p>Writing a game in Haskell appears to be an elusive, white-whale task.
 And with an existing handful of small and citable games, I wish more existed with documentation to ease the barrier of entry.
-It&#39;s disappointing because writing a game can be a challenging and fun way to explore a language.
+It's disappointing because writing a game can be a challenging and fun way to explore a language.
 And Haskell could be a great language for creating small-medium sized games.
 Anything larger sounds like a <a href="https://np.reddit.com/r/rust/comments/78bowa/hey_this_is_kyren_from_chucklefish_we_make_and/doslvsb/">bad idea</a>.
-Yet I haven&#39;t written a game with graphics in recent years.
+Yet I haven't written a game with graphics in recent years.
 Instead, I dug out increasingly larger chunks of programming knowledge with Haskell.
 And that has given back more than originally expected.
-It&#39;s been enough now, whereas I can take decent shot at a game and not be completely appalled by the code later.</p><p>Before embarking on a short and starry-eyed journey, it seemed easy to imagine such a codebase -- flaws included.
+It's been enough now, whereas I can take decent shot at a game and not be completely appalled by the code later.</p><p>Before embarking on a short and starry-eyed journey, it seemed easy to imagine such a codebase -- flaws included.
 &quot;Flaws.&quot;
 I decidedly choose not to use FRP for example.
 Nothing against FRP.
-It&#39;s an interesting and high level way to operate with UIs, and perhaps I&#39;ll come back to it someday.
-I don&#39;t know.
+It's an interesting and high level way to operate with UIs, and perhaps I'll come back to it someday.
+I don't know.
 But for this project, it felt unwise to get caught up or side-tracked with explaining another concept.
 This plate already holds a complete meal.</p><p>When imagining how to organize the big to small things, the flaws mentally accrue more than I can manage.
 They can be only understood by doing it.
-It definitely wasn&#39;t going to be perfect, and facing the imperfections would be a process.</p><p>At the very least, I wanted to create something exhaustive that I would have appreciated a couple years ago.
+It definitely wasn't going to be perfect, and facing the imperfections would be a process.</p><p>At the very least, I wanted to create something exhaustive that I would have appreciated a couple years ago.
 And the game must work at all costs.
 The direction meant to satisfy these mindsets.
-It&#39;s not the only way to write a game in Haskell.
+It's not the only way to write a game in Haskell.
 There will always be more to learn and apply on this cliff that never seems to stop growing.
 Without glancing at the latest extensions and most advanced libraries, Haskell still has plenty to offer.
 Yeah.
-Let&#39;s stick with that.</p><h2>The Game (<a href="https://youtu.be/as4sKGoA7XI">video</a>)</h2><p>The game is called Dino Rush because the objective is for a dinosaur -- stay with me on this -- to rush past obstacles.
-Sure, it&#39;s not very interesting from a design perspective.
-And without a doubt, it&#39;s a Skinner box game.
-It&#39;s <del>shamelessly stolen from</del> <i>inspired by</i> a certain, offline game.
-But it&#39;s fairly simple from a player perspective.
-That&#39;s important for keeping scope.</p><center>
+Let's stick with that.</p><h2>The Game</h2><p>-- <a href="https://youtu.be/as4sKGoA7XI">Video of gameplay</a></p><p>The game is called Dino Rush because the objective is for a dinosaur -- stay with me on this -- to rush past obstacles.
+Sure, it's not very interesting from a design perspective.
+And without a doubt, it's a Skinner box game.
+It's <del>shamelessly stolen from</del> <i>inspired by</i> a certain, offline game.
+But it's fairly simple from a player perspective.
+That's important for keeping scope.</p><center>
   <img alt src="2018-02-28-A-Game-in-Haskell/dino-rush-chrome-game.gif" width="680" height="254" />
   <figcaption>Chrome Dino Game</figcaption>
-</center><p>Of course, it wasn&#39;t as straight forward from a programmer perspective.
+</center><p>Of course, it wasn't as straight forward from a programmer perspective.
 That makes smartest decision overall was to pick a silly game.
 Again, scope.
 Plenty of time was spent getting the &quot;foundation&quot; to be functional before writing any gameplay.</p><center>
@@ -42,22 +44,22 @@ Ha!
 But they were both worthy causes.
 The level of polish need to exist somewhere and somehow.
 And the architecture must allow such things to be clear and easily expandable.
-That&#39;s the point of a good architecture.</p><h2>Architecture</h2><p>The architecture was extracted throughout the course of the development.
+That's the point of a good architecture.</p><h2>Architecture</h2><p>The architecture was extracted throughout the course of the development.
 At a super high-level, the boxes below represent all the modules and types of modules that fit together.
-It&#39;s a reusable model for many more games.
-But it&#39;s just that -- a model.
-Even Dino Rush doesn&#39;t adhere 100%, and that&#39;s okay.
-It&#39;s awfully similar enough to demonstrate utility.</p><center>
+It's a reusable model for many more games.
+But it's just that -- a model.
+Even Dino Rush doesn't adhere 100%, and that's okay.
+It's awfully similar enough to demonstrate utility.</p><center>
   <img alt="Architecture" src="2018-02-28-A-Game-in-Haskell/dino-rush-architecture.png" width="424" height="530" />
   <figcaption>Software Architecture</figcaption>
 </center><p>As you can see, all the arrows flow upwards.
 A higher-level box gets pointed by lower-level boxes it depends on.
 (There was likely an unconscious inspiration from a <a href="http://alistair.cockburn.us/Hexagonal+architecture">Hexagon architecture</a> and previous games.
-It&#39;s hard to know at this point.)</p><ul><li><b>Main</b> - Do all the things!</li><li><b>Runner</b> - Main loop and scene state machine.</li><li><b>Scenes</b> - Represent pieces of a coherent story. Lots of glue code.</li><li><b>Effects</b> - Eventually IO actions. Impure.</li><li><b>Managers</b> - For state machines. Leans toward deterministic and likely pure.</li><li><b>Config</b> - Loaded read-only or referenced values. Mixed purity.</li><li><b>State</b> - Global stitching of all types in state. All pure.</li><li><b>Resources</b> - Types and functions for loading and freeing. (eg. textures, music)</li><li><b>Engine</b> - Most code. Game logic, physics, entities, commands. All pure!</li><li><b>Wrappers</b> - A place to wrap IO code which could use a cleaner API</li><li><b>Third Party Libraries</b> - All the dependencies (eg. <code>sdl2</code>, <code>linear</code>, <code>animate</code>)</li></ul><h2>Main (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush.hs">code</a>)</h2><p>Let&#39;s take it from the top.
+It's hard to know at this point.)</p><ul><li><b>Main</b> - Do all the things!</li><li><b>Runner</b> - Main loop and scene state machine.</li><li><b>Scenes</b> - Represent pieces of a coherent story. Lots of glue code.</li><li><b>Effects</b> - Eventually IO actions. Impure.</li><li><b>Managers</b> - For state machines. Leans toward deterministic and likely pure.</li><li><b>Config</b> - Loaded read-only or referenced values. Mixed purity.</li><li><b>State</b> - Global stitching of all types in state. All pure.</li><li><b>Resources</b> - Types and functions for loading and freeing. (eg. textures, music)</li><li><b>Engine</b> - Most code. Game logic, physics, entities, commands. All pure!</li><li><b>Wrappers</b> - A place to wrap IO code which could use a cleaner API</li><li><b>Third Party Libraries</b> - All the dependencies (eg. <code>sdl2</code>, <code>linear</code>, <code>animate</code>)</li></ul><h2>Main</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush.hs">DinoRush.hs</a></p><p>Let's take it from the top.
 At the <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush.hs#L39"><code>main</code></a> function.
-In general, it&#39;s important to keep the <code>main</code> function concise as possible.
+In general, it's important to keep the <code>main</code> function concise as possible.
 When jumping into any codebase, not having clear indication where to dig into next feels pretty obnoxious.
-Event if it&#39;s not intentional, and it&#39;s probably not.
+Event if it's not intentional, and it's probably not.
 It happens when intertwining setup, configuration, and miscellaneous IO actions.
 Be sparse for kindness.</p><pre><code>main :: IO ()
 main = do
@@ -79,34 +81,34 @@ main = do
   Mixer.closeAudio
   Mixer.quit
   Font.quit
-  SDL.quit</code></pre><p>Good.</p><p>The function has 5 essential parts:</p><ul><li>Initialize the media libraries</li><li>Load resources (Fonts, images, and sounds)</li><li>Run the main loop</li><li>Free the resources</li><li>Uninitialize the media libraries and clean up shop</li></ul><p>Because this isn&#39;t a large and memory intensive game, frequently loading and unloading resources at runtime isn&#39;t needed.
-If it was, there&#39;s a place for that somewhere in the architecture -- either Effects or Managers.</p><h3>MTL Style and Lenses</h3><p>Dino Rush&#39;s usage of <b>mtl style</b>, a pattern named after the <a href="https://hackage.haskell.org/package/mtl">mtl</a> library, is the most technically complex part of the code.
-If you&#39;re unfamiliar with this pattern, I highly suggest you stop here and go learn about it.
-It&#39;s a game changer to be aware of and much bigger topic than this post.
-And commonly aligned with <b>mtl style</b>, Dino Rush follows a (basic) use of lenses.</p><p>These links are more than exhaustive (eg. Free Monad isn&#39;t relevant):</p><ul><li><a href="http://dev.stephendiehl.com/hask/#mtl-transformers">What I Wish I Knew When Learning Haskell 2.3 ( Stephen Diehl )</a></li><li><a href="https://www.reddit.com/r/haskell/comments/3a2sse/next_level_mtl_with_classy_optics_by_george/">&quot;Next Level mtl with Classy Optics&quot; by George Wilson at BFPG</a></li><li><a href="https://www.reddit.com/r/haskell/comments/4v42mj/edward_kmett_monad_transformer_lenses/">Edward Kmett- Monad Transformer Lenses</a></li><li><a href="https://ocharles.org.uk/blog/posts/2016-01-26-transformers-free-monads-mtl-laws.html">Monad transformers, free monads, mtl, laws and a new approach</a></li><li><a href="https://lexi-lambda.github.io/blog/2017/06/29/unit-testing-effectful-haskell-with-monad-mock/">Unit testing effectful Haskell with monad-mock</a></li></ul><p>Hey! Did you just skip all of those links? Alright. Fine. Here&#39;s the skinny.</p><p>In order to have side-effects and still carry data around, <b>Monad Transformers</b> are the way to go.
+  SDL.quit</code></pre><p>Good.</p><p>The function has 5 essential parts:</p><ul><li>Initialize the media libraries</li><li>Load resources (Fonts, images, and sounds)</li><li>Run the main loop</li><li>Free the resources</li><li>Uninitialize the media libraries and clean up shop</li></ul><p>Because this isn't a large and memory intensive game, frequently loading and unloading resources at runtime isn't needed.
+If it was, there's a place for that somewhere in the architecture -- either Effects or Managers.</p><h3>MTL Style and Lenses</h3><p>Dino Rush's usage of <b>mtl style</b>, a pattern named after the <a href="https://hackage.haskell.org/package/mtl">mtl</a> library, is the most technically complex part of the code.
+If you're unfamiliar with this pattern, I highly suggest you stop here and go learn about it.
+It's a game changer to be aware of and much bigger topic than this post.
+And commonly aligned with <b>mtl style</b>, Dino Rush follows a (basic) use of lenses.</p><p>These links are more than exhaustive (eg. Free Monad isn't relevant):</p><ul><li><a href="http://dev.stephendiehl.com/hask/#mtl-transformers">What I Wish I Knew When Learning Haskell 2.3 ( Stephen Diehl )</a></li><li><a href="https://www.reddit.com/r/haskell/comments/3a2sse/next_level_mtl_with_classy_optics_by_george/">&quot;Next Level mtl with Classy Optics&quot; by George Wilson at BFPG</a></li><li><a href="https://www.reddit.com/r/haskell/comments/4v42mj/edward_kmett_monad_transformer_lenses/">Edward Kmett- Monad Transformer Lenses</a></li><li><a href="https://ocharles.org.uk/blog/posts/2016-01-26-transformers-free-monads-mtl-laws.html">Monad transformers, free monads, mtl, laws and a new approach</a></li><li><a href="https://lexi-lambda.github.io/blog/2017/06/29/unit-testing-effectful-haskell-with-monad-mock/">Unit testing effectful Haskell with monad-mock</a></li></ul><p>Hey! Did you just skip all of those links? Alright. Fine. Here's the skinny.</p><p>In order to have side-effects and still carry data around, <b>Monad Transformers</b> are the way to go.
 They compose useful monads like <code>StateT</code> and <code>ReaderT</code>, which carry the data around.</p><p>By wrapping the monad transformers in a newtype, the advantages of the transformers are retained by with the help of a language extension, <code>GeneralizedNewtypeDeriving</code>.
 In reality, the typeclass instances are kept separated from <code>ReaderT</code>, <code>StateT</code>, and <code>IO</code>.</p><pre><code>newtype DinoRush a = DinoRush (ReaderT Config (StateT Vars IO) a)
-  deriving (Functor, Applicative, Monad, MonadReader Config, MonadState Vars, MonadIO, MonadThrow, MonadCatch)</code></pre><p>Plus, it&#39;s a cleaner looking signature.</p><pre><code>exampleSignature :: Int -&gt; DinoRush ()</code></pre><p>That&#39;s a lot easier to read and write than the underlying transformer stack.</p><p>The <code>DinoRush</code> monad can do <code>IO</code>, modify <code>Vars</code>, and access the <code>Config</code>.
+  deriving (Functor, Applicative, Monad, MonadReader Config, MonadState Vars, MonadIO, MonadThrow, MonadCatch)</code></pre><p>Plus, it's a cleaner looking signature.</p><pre><code>exampleSignature :: Int -&gt; DinoRush ()</code></pre><p>That's a lot easier to read and write than the underlying transformer stack.</p><p>The <code>DinoRush</code> monad can do <code>IO</code>, modify <code>Vars</code>, and access the <code>Config</code>.
 Now, combine that with a function to run the transformer.</p><pre><code>runDinoRush :: Config -&gt; Vars -&gt; DinoRush a -&gt; IO a
-runDinoRush config v (DinoRush m) = evalStateT (runReaderT m config) v</code></pre><p>Bam!</p><p>The <code>DinoRush</code> monad can run in IO as if it wasn&#39;t wrapped.</p><p>But there&#39;s a problem here.
+runDinoRush config v (DinoRush m) = evalStateT (runReaderT m config) v</code></pre><p>Bam!</p><p>The <code>DinoRush</code> monad can run in IO as if it wasn't wrapped.</p><p>But there's a problem here.
 This is especially true if you care about isolating side-effects or testing.
-Because <code>DinoRush</code> nests an <code>IO</code> underneath, there&#39;s no guarantee that any function has known side-effects.
-And there&#39;s another problem.
+Because <code>DinoRush</code> nests an <code>IO</code> underneath, there's no guarantee that any function has known side-effects.
+And there's another problem.
 Accessing the <code>Vars</code> state in <code>StateT</code> underneath <code>DinoRush</code> is nearly synonymous with managing global state.
 As a program becomes larger, that can be an overwhelming rat nest.
-It&#39;s everyone&#39;s favorite software problem.</p><p>Imagine if you can restrict which data accessed by the use of a type signature.
-Because that&#39;s possible.
-Like this:</p><pre><code>updateDino :: (MonadState s m, HasPlayVars s, Renderer m, AudioSfx m) =&gt; Step DinoAction -&gt; m ()</code></pre><p><code>updateDino</code> doesn&#39;t need to know or care that <code>s</code> is an amalgamation of other state.
+It's everyone's favorite software problem.</p><p>Imagine if you can restrict which data accessed by the use of a type signature.
+Because that's possible.
+Like this:</p><pre><code>updateDino :: (MonadState s m, HasPlayVars s, Renderer m, AudioSfx m) =&gt; Step DinoAction -&gt; m ()</code></pre><p><code>updateDino</code> doesn't need to know or care that <code>s</code> is an amalgamation of other state.
 It just knows what it cares about; it can access <code>PlayVars</code>.
 This what the wonderful <code>mtl</code> and <code>lens</code> libraries allow.</p><p>The last thing to do is instance <code>HasPlayVars</code> on <code>Vars</code> and instance <code>Renderer</code> and <code>AudioSfx</code> on <code>DinoRush</code>.
-The code achieves high cohesion with loose coupling. Great!</p><h2>Runner (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Runner.hs">code</a>)</h2><p>The <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Runner.hs"><code>Runner</code></a> is the module holds the main loop.
+The code achieves high cohesion with loose coupling. Great!</p><h2>Runner</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Runner.hs">DinoRush/Runner.hs</a></p><p>The <code>Runner</code> is the module holds the main loop.
 It provides 3 distinct purposes.
 First, it steps the current <code>Scene</code>.
 Second, it manages and effects the transitions between <code>Scene</code>s.
 Last and just as important, it does the common functions that happen every frame -- polling input, drawing to the screen, and delaying the frame.
-All of this runs inside the main loop.</p><p>I&#39;ll freely admit that <code>Runner</code> isn&#39;t the best name.
-It&#39;s an overloaded term.
-But I couldn&#39;t think of a better one!</p><pre><code>mainLoop = do
+All of this runs inside the main loop.</p><p>I'll freely admit that <code>Runner</code> isn't the best name.
+It's an overloaded term.
+But I couldn't think of a better one!</p><pre><code>mainLoop = do
   updateInput -- 1
   input &lt;- getInput
   clearScreen -- 2
@@ -119,66 +121,66 @@ But I couldn&#39;t think of a better one!</p><pre><code>mainLoop = do
   delayMilliseconds frameDeltaMilliseconds
   nextScene &lt;- gets vNextScene
   stepScene scene nextScene -- 7
-  let quit = nextScene == Scene&#39;Quit || iQuit input || ksStatus (iEscape input) == KeyStatus&#39;Pressed
-  unless quit mainLoop</code></pre><ol><li><p>Poll and store the input</p></li><li><p>Clear out the screen for drawing</p></li><li><p>Clear out the list of sound effects to play. There&#39;s a type <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine/Sfx.hs"><code>Sfx</code></a> that represents each sound effect.</p></li><li><p>Updates the state for an earthquake every 30 seconds.
-It&#39;s a convenient exception to the architecture model.
-This kind of detail wouldn&#39;t be here if different kind of scenes were added.</p></li><li><p>Behind the <code>step</code> function steps the current <code>Scene</code>.
+  let quit = nextScene == Scene'Quit || iQuit input || ksStatus (iEscape input) == KeyStatus'Pressed
+  unless quit mainLoop</code></pre><ol><li><p>Poll and store the input</p></li><li><p>Clear out the screen for drawing</p></li><li><p>Clear out the list of sound effects to play. There's a type <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine/Sfx.hs"><code>Sfx</code></a> that represents each sound effect.</p></li><li><p>Updates the state for an earthquake every 30 seconds.
+It's a convenient exception to the architecture model.
+This kind of detail wouldn't be here if different kind of scenes were added.</p></li><li><p>Behind the <code>step</code> function steps the current <code>Scene</code>.
 Each <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine/Scene.hs"><code>Scene</code></a> has its own logic, sound, drawing, and dreams.
 Those are intentionally opaque.</p><pre><code> where
    step scene = do
      case scene of
-       Scene&#39;Title -&gt; titleStep
-       Scene&#39;Play -&gt; playStep
-       Scene&#39;Pause -&gt; pauseStep
-       Scene&#39;Death -&gt; deathStep
-       Scene&#39;GameOver -&gt; gameOverStep
-       Scene&#39;Quit -&gt; return ()</code></pre></li><li><p>Once the scene step finishes, play sound effects on the list and redraw the screen.</p></li><li><p>This is an interesting bit.
-Because a scene needs to declare the next scene, there&#39;s a temptation to let the scenes form direct dependencies on each other.
+       Scene'Title -&gt; titleStep
+       Scene'Play -&gt; playStep
+       Scene'Pause -&gt; pauseStep
+       Scene'Death -&gt; deathStep
+       Scene'GameOver -&gt; gameOverStep
+       Scene'Quit -&gt; return ()</code></pre></li><li><p>Once the scene step finishes, play sound effects on the list and redraw the screen.</p></li><li><p>This is an interesting bit.
+Because a scene needs to declare the next scene, there's a temptation to let the scenes form direct dependencies on each other.
 Scenes can be maintain flatness with indirection.
-They really shouldn&#39;t know much about each other in any case.
+They really shouldn't know much about each other in any case.
 So, there needs to be an intermediate step for transitions and one that ensures low complexity.
-That&#39;s done by forcing the transitions up into the <code>Runner</code>.
+That's done by forcing the transitions up into the <code>Runner</code>.
 The <code>Runner</code> knows all of the scenes, and let it handle the transitions.</p><pre><code> stepScene scene nextScene = do
    when (nextScene /= scene) $ do
      case nextScene of
-       Scene&#39;Title -&gt; titleTransition
-       Scene&#39;Play -&gt; case scene of
-         Scene&#39;Title -&gt; playTransition
-         Scene&#39;Pause -&gt; pauseToPlay
+       Scene'Title -&gt; titleTransition
+       Scene'Play -&gt; case scene of
+         Scene'Title -&gt; playTransition
+         Scene'Pause -&gt; pauseToPlay
          _ -&gt; return ()
-       Scene&#39;Death -&gt; case scene of
-         Scene&#39;Play -&gt; deathTransition
+       Scene'Death -&gt; case scene of
+         Scene'Play -&gt; deathTransition
          _ -&gt; return ()
-       Scene&#39;Pause -&gt; case scene of
-         Scene&#39;Play -&gt; playToPause
+       Scene'Pause -&gt; case scene of
+         Scene'Play -&gt; playToPause
          _ -&gt; return ()
-       Scene&#39;GameOver -&gt; return ()
-       Scene&#39;Quit -&gt; return ()
+       Scene'GameOver -&gt; return ()
+       Scene'Quit -&gt; return ()
      modify (\v -&gt; v { vScene = nextScene })</code></pre></li></ol><p>And visually represented.</p><center>
   <img alt="scenes" src="2018-02-28-A-Game-in-Haskell/dino-rush-scenes.png" width="320" height="173" />
   <figcaption>Scene flowchart</figcaption>
-</center><h2>Scenes (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Scene">code</a>)</h2><p>Remember that the next <code>Scene</code> is decided in the current <code>Scene</code>&#39;s step.
-It doesn&#39;t happen at the level of the <code>Runner</code>, which deals with the transitions as a result.</p><ul><li><b>Title</b> - Waiting area before starting a game in <code>Play</code></li><li><b>Play</b> - Scene for game play -- it encompasses the most code and the complexity to match</li><li><b>Pause</b> - Lower music and pause all gameplay and sprite animations</li><li><b>Death</b> - Wait until the dinosaur drops off the screen</li><li><b>GameOver</b> - Fade out to black and wait for a user input to return to the <code>Title</code> scene</li><li><b>Quit</b> - Exit</li></ul><p><code>Pause</code>, <code>Death</code>, and <code>GameOver</code> all access the same <code>Play</code> state, <code>PlayVars</code>.
+</center><h2>Scenes</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Scene">DinoRush/Scene/</a></p><p>Remember that the next <code>Scene</code> is decided in the current <code>Scene</code>'s step.
+It doesn't happen at the level of the <code>Runner</code>, which deals with the transitions as a result.</p><ul><li><b>Title</b> - Waiting area before starting a game in <code>Play</code></li><li><b>Play</b> - Scene for game play -- it encompasses the most code and the complexity to match</li><li><b>Pause</b> - Lower music and pause all gameplay and sprite animations</li><li><b>Death</b> - Wait until the dinosaur drops off the screen</li><li><b>GameOver</b> - Fade out to black and wait for a user input to return to the <code>Title</code> scene</li><li><b>Quit</b> - Exit</li></ul><p><code>Pause</code>, <code>Death</code>, and <code>GameOver</code> all access the same <code>Play</code> state, <code>PlayVars</code>.
 Although they treat it as read-only access for drawing, that <i>breaks</i> the mold of the proposed architecture.
 It was an intentionally cut corner.
 It was to avoid excessively data mapping as described in the <code>State</code> section below.</p><p>If there was another state-machine, representing sub-scenes within the <code>Play</code> scene, it would justify it.
 The sub-scenes could share read-only access of each other.
-It&#39;s hard to say, but I think that&#39;s where it was growing.</p><h2>Managers (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Manager">code</a>)</h2><p>In the realm of <b>mtl style</b>, a Manager is a monadic type class representing an interface to hidden state.
+It's hard to say, but I think that's where it was growing.</p><h2>Managers</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Manager">DinoRush/Manager/</a></p><p>In the realm of <b>mtl style</b>, a Manager is a monadic type class representing an interface to hidden state.
 Whatever touches that data is not responsible for how it manages it self.
 Just stick with the interface.
-They&#39;re abstract data types as derived by the CLU language.</p><p>Dino Rush has two -- <code>SceneManager</code>, the interface for the scene state machine, and <code>HasInput</code>, the interface for updating and accessing game input.
+They're abstract data types as derived by the CLU language.</p><p>Dino Rush has two -- <code>SceneManager</code>, the interface for the scene state machine, and <code>HasInput</code>, the interface for updating and accessing game input.
 Each interface is capable of being mocked with pure types.</p><p>Each <code>Scene</code> imports the <code>SceneManager</code> in order to set the next scene.</p><pre><code>class Monad m =&gt; SceneManager m where
   toScene :: Scene -&gt; m ()</code></pre><p><code>HasInput</code> is a bit of state machine that accesses IO.
-It&#39;s not really deterministic.
-However, it&#39;s not outwardly effectful.
-It&#39;s just reading of input and storage of input.
+It's not really deterministic.
+However, it's not outwardly effectful.
+It's just reading of input and storage of input.
 The interface is dumb.</p><pre><code>class Monad m =&gt; HasInput m where
   updateInput :: m ()
   setInput :: Input -&gt; m ()
   getInput :: m Input</code></pre><p>Like sprite animation, detecting changes between key presses has been a pet peeve in other games.
-I made the <a href="https://hackage.haskell.org/package/key-state"><code>key-state</code></a> library to generalize the same set of types and functions.</p><p>In the case of <code>updateInput</code>, SDL events are polled then adapted into the Dino Rush&#39;s idea of an input.
-It&#39;s unique to the <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine/Input.hs">Dino Rush domain</a> as it&#39;s used through the <code>Engine</code>, <code>Scene</code>, and <code>Runner</code>.</p><pre><code>updateInput&#39; :: (HasInput m, SDLInput m) =&gt; m ()
-updateInput&#39; = do
+I made the <a href="https://hackage.haskell.org/package/key-state"><code>key-state</code></a> library to generalize the same set of types and functions.</p><p>In the case of <code>updateInput</code>, SDL events are polled then adapted into the Dino Rush's idea of an input.
+It's unique to the <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine/Input.hs">Dino Rush domain</a> as it's used through the <code>Engine</code>, <code>Scene</code>, and <code>Runner</code>.</p><pre><code>updateInput' :: (HasInput m, SDLInput m) =&gt; m ()
+updateInput' = do
   input &lt;- getInput
   events &lt;- pollEventPayloads
   setInput (stepControl events input)</code></pre><p>The adaption happens inside <code>stepControl</code>.
@@ -196,7 +198,7 @@ stepControl events Input{iSpace,iUp,iDown,iEscape} = Input
       | or $ map released keycodes = releasedKeyState
       | otherwise = maintainKeyState count keystate
     released keycode = or $ map (keycodeReleased keycode) events
-    pressed keycode = or $ map (keycodePressed keycode) events</code></pre><h2>Effects (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Effect">code</a>)</h2><p>An <code>Effect</code> is also a monadic type class.
+    pressed keycode = or $ map (keycodePressed keycode) events</code></pre><h2>Effects</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Effect">DinoRush/Effect/</a></p><p>An <code>Effect</code> is also a monadic type class.
 Unlike a <code>Manager</code>, whether they act as a state machine is irrelevant.
 The purpose is to represent side-effects.</p><p>The <code>Renderer</code> type has side-effects.
 It clears the screen, draws the screen, draws sprites, and draws numbers.</p><pre><code>class Monad m =&gt; Renderer m where
@@ -206,14 +208,14 @@ It clears the screen, draws the screen, draws sprites, and draws numbers.</p><pr
   ...
   drawDino :: DrawSprite DinoKey m
   ...
-  drawNumber :: Number -&gt; (Int, Int) -&gt; m ()</code></pre><p>It&#39;s a low-level <code>Effect</code> where some funcitons should be used to form clearer intentions.
+  drawNumber :: Number -&gt; (Int, Int) -&gt; m ()</code></pre><p>It's a low-level <code>Effect</code> where some functions should be used to form clearer intentions.
 Another <code>Effect</code>, <code>HUD</code>, does that by depending on <code>Renderer</code> in its implementation.</p><pre><code>class Monad m =&gt; HUD m where
   drawHiscore :: m ()
   drawScore :: m ()
   drawControls :: m ()
 
-drawHiscore&#39; :: (Renderer m, MonadState s m, HasCommonVars s) =&gt; m ()
-drawHiscore&#39; = do
+drawHiscore' :: (Renderer m, MonadState s m, HasCommonVars s) =&gt; m ()
+drawHiscore' = do
   cv &lt;- gets (view commonVars)
   drawHiscoreText (1150, 16)
   drawNumbers (fromIntegral $ cvHiscore cv) (1234, 50)
@@ -233,37 +235,37 @@ moveCamera renderer Camera{camZoom, camOrigin} = do
   SDL.rendererScale renderer $= (fmap realToFrac camZoom)
   let dim = fmap truncate $ screenV2
   SDL.rendererViewport renderer $= (Just $ SDL.Rectangle (SDL.P $ (fmap truncate $ moveOrigin camOrigin)) dim)
-  SDL.rendererClipRect renderer $= (Just $ SDL.Rectangle (SDL.P $ V2 0 0) dim)</code></pre><p>Although, moving the camera isn&#39;t enough.
-The HUD can&#39;t have zoomed viewport.
+  SDL.rendererClipRect renderer $= (Just $ SDL.Rectangle (SDL.P $ V2 0 0) dim)</code></pre><p>Although, moving the camera isn't enough.
+The HUD can't have zoomed viewport.
 The images will scale off and around the screen.
-Using a stored <code>Camera</code> value, zooming could be toggled.</p><pre><code>disableZoom&#39; :: (MonadIO m, MonadReader Config m) =&gt; m ()
-disableZoom&#39; = do
+Using a stored <code>Camera</code> value, zooming could be toggled.</p><pre><code>disableZoom' :: (MonadIO m, MonadReader Config m) =&gt; m ()
+disableZoom' = do
   renderer &lt;- asks cRenderer
   moveCamera renderer initCamera
 
-enableZoom&#39; :: (MonadIO m, MonadReader Config m, MonadState Vars m) =&gt; m ()
-enableZoom&#39; = do
+enableZoom' :: (MonadIO m, MonadReader Config m, MonadState Vars m) =&gt; m ()
+enableZoom' = do
   renderer &lt;- asks cRenderer
   cam &lt;- gets vCamera
-  moveCamera renderer cam</code></pre><p>When re-enabling a zoom, the camera resumes from the stored <code>Camera</code>.</p><pre><code>adjustCamera&#39; :: (MonadIO m, MonadReader Config m, MonadState Vars m) =&gt; Camera -&gt; m ()
-adjustCamera&#39; cam = do
+  moveCamera renderer cam</code></pre><p>When re-enabling a zoom, the camera resumes from the stored <code>Camera</code>.</p><pre><code>adjustCamera' :: (MonadIO m, MonadReader Config m, MonadState Vars m) =&gt; Camera -&gt; m ()
+adjustCamera' cam = do
   modify $ \v -&gt; v { vCamera = cam }
   renderer &lt;- asks cRenderer
   moveCamera renderer cam</code></pre><h3>Managers versus Effects</h3><p>Or Managers <i>and</i> Effects.
 I debated whether or not to split these into separate categories.
 A case could be made to keep them merge into a single directory called <code>Class</code> or something similar.
-But if game dev is art, and art is about intention, then these lines should be drawn like God intended.</p><h2>Config (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Config.hs">code</a>)</h2><p><code>Config</code> is the environment data inside the <code>ReaderT</code> transformer.
-It&#39;s a basic use for a transformer, including with <b>mtl style</b>.
+But if game dev is art, and art is about intention, then these lines should be drawn like God intended.</p><h2>Config</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Config.hs">DinoRush/Config.hs</a></p><p><code>Config</code> is the environment data inside the <code>ReaderT</code> transformer.
+It's a basic use for a transformer, including with <b>mtl style</b>.
 The data is always read-only while running a transformer stack.
 However, there are exceptions with  <code>IORef</code>, <code>MVar</code>, and <code>TVar</code> which reference values.
-They&#39;re need needed for performance and multi-threaded programs.</p><pre><code>data Config = Config
+They're need needed for performance and multi-threaded programs.</p><pre><code>data Config = Config
   { cWindow :: SDL.Window
   , cRenderer :: SDL.Renderer
   , cResources :: Resources
-  }</code></pre><p>There&#39;s not much going on here, and that&#39;s good.
+  }</code></pre><p>There's not much going on here, and that's good.
 Just the SDL window, renderer, and various loaded resources.
 It would also hold command-line related arguments if they were needed.
-But they&#39;re not.</p><h2>State (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/State.hs">code</a>)</h2><p>The global stitched state is the <code>Vars</code> type.
+But they're not.</p><h2>State</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/State.hs">DinoRush/State.hs</a></p><p>The global stitched state is the <code>Vars</code> type.
 Similar to appearance of scene transitions, they look opaque from this perspective.</p><pre><code>data Vars = Vars
   { vCommon :: CommonVars
   , vScene :: Scene
@@ -273,30 +275,30 @@ Similar to appearance of scene transitions, they look opaque from this perspecti
   , vGameOver :: GameOverVars
   , vInput :: Input
   , vCamera :: Camera
-  } deriving (Show, Eq)</code></pre><h3>To Duplicate or Not to Duplicate</h3><p>Deciding whether or not to duplicate reused data was a careful balance.</p><p>It&#39;s clear that different scenes creates intentional boundaries between the updating of state.
+  } deriving (Show, Eq)</code></pre><h3>To Duplicate or Not to Duplicate</h3><p>Deciding whether or not to duplicate reused data was a careful balance.</p><p>It's clear that different scenes creates intentional boundaries between the updating of state.
 But an issue arises is when a scene does the same stateful updates or reads the same state.
 Should the scene only have access to its own state or a shared state?</p><p>An individualistic person would believe the &quot;right&quot; way feels that duplication is right. <i>So mind your business.</i></p><p>An group-oriented person would disagree. <i>Sharing is caring.</i></p><p>I kid with the stretched analogy, but the debate still remains the same.
 Each scene represents a kind of &quot;domain&quot;, and data originating outside that domain should be projected into it during transition.
 The benefit is that each scene can evolve (or die) independently of another.
-It&#39;s a solid lego block, but with an obvious cost.
+It's a solid lego block, but with an obvious cost.
 The scalability requires significantly more data mapping between scenes.
-It&#39;s trivial, boring, and time-consuming.</p><p>The counter argument is that the lego block goes against the DRY principle.
-(I&#39;m fairly hesitant to argue for that point anyways.)
+It's trivial, boring, and time-consuming.</p><p>The counter argument is that the lego block goes against the DRY principle.
+(I'm fairly hesitant to argue for that point anyways.)
 I may be convinced that &quot;a single source of truth&quot; is valid.
-This game isn&#39;t running over a network.
+This game isn't running over a network.
 So why immediately complicate that?
 And if problems arise, it could be refactored if need be -- YAGNI.
-You&#39;ll need to be on the look out.</p><p>There&#39;s really two ways to do this.
+You'll need to be on the look out.</p><p>There's really two ways to do this.
 The first, place the state behind a <code>Manager</code>.
-It&#39;s likely overkill as <b>mtl style</b> with <code>MonadState</code> is already the chosen route.
-&quot;Like I don&#39;t need any more type classes in my life.&quot;
-It&#39;s an option though.</p><p>The second, which sounds more reasonable for simple getting and setting, is to be more fined grain with state.
+It's likely overkill as <b>mtl style</b> with <code>MonadState</code> is already the chosen route.
+&quot;Like I don't need any more type classes in my life.&quot;
+It's an option though.</p><p>The second, which sounds more reasonable for simple getting and setting, is to be more fined grain with state.
 This approach takes advantage of <b>mtl style</b>.
 There is a single source of truth.
-And it&#39;s a half-way compromise to the scene-based approach.</p><p>I&#39;m not convinced there&#39;s a &quot;right&quot; way.
+And it's a half-way compromise to the scene-based approach.</p><p>I'm not convinced there's a &quot;right&quot; way.
 Using best judgement feels like the way to go right now.
-And I know that I&#39;d be satisfy with a plan or an idea how it could be refactored between each approach.
-That&#39;s really the best principle.</p><h3>Common</h3><p>Late in the development, I caved into creating explicit set of common state.
+And I know that I'd be satisfy with a plan or an idea how it could be refactored between each approach.
+That's really the best principle.</p><h3>Common</h3><p>Late in the development, I caved into creating explicit set of common state.
 When every scene accessed these types, it could be an exception.</p><pre><code>data CommonVars = CommonVars
   { cvHiscore :: Score
   , cvQuake :: Quake
@@ -304,8 +306,8 @@ When every scene accessed these types, it could be an exception.</p><pre><code>d
   } deriving (Show, Eq)</code></pre><p><code>cvQuake</code> and <code>cvSfx</code> is modified in the mainLoop, and <code>cvHiscore</code> is drawn on every frame.
 It still felt like betrayal in a functional language.
 <i>Common state is the junk drawer.</i></p><p>In retrospect, <code>cvSfx</code> as common was valid but approached poorly.
-It has a resemblance of <code>vInput</code>, and it should have used a similar <code>Manager</code> <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Manager/Input.hs"><code>type class</code></a>.</p><h2>Resources (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Resource.hs">code</a>)</h2><p>The <code>Resources</code> type holds all the necessary images, sound effects, and music.
-It&#39;s also in the same module for loading those images, sounds, and fonts.
+It has a resemblance of <code>vInput</code>, and it should have used a similar <code>Manager</code> <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Manager/Input.hs"><code>type class</code></a>.</p><h2>Resources</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Resource.hs">DinoRush/Resource.hs</a></p><p>The <code>Resources</code> type holds all the necessary images, sound effects, and music.
+It's also in the same module for loading those images, sounds, and fonts.
 Draw and configure textures.</p><p><code>Resources</code> was appropriately extracted from the <code>Config</code> type and its module.
 The resources required unique set of detailed instructions for loading and freeing.
 The details became quite messy for <code>Config</code> in the same vein that <code>Main</code> should be concise.
@@ -313,8 +315,9 @@ The details became quite messy for <code>Config</code> in the same vein that <co
   <img alt="dino.png" src="https://github.com/jxv/dino-rush/raw/master/resource/dino.png" width="577" height="24" />
   <figcaption>Dino spritesheet</figcaption>
 </center><p>To load sprite sheets and manage animations, I used my <a href="https://hackage.haskell.org/package/animate">animate</a> library.
-The majority of sprites aren&#39;t super complicated and can be described along a pattern.
-Using with a helpful JSON loader, the process of writing sprite loaders and editing can be done trivially.</p><pre><code>Animate.readSpriteSheetJSON loadTexture &quot;resource/dino.json&quot; :: IO (Animate.SpriteSheet DinoKey SDL.Texture Seconds)</code></pre><p>Because <b>animate</b> doesn&#39;t know about <b>SDL</b>, <code>loadTexture</code> is passed in as callback function which needs to load a <code>SDL.Texture</code>.
+The majority of sprites aren't super complicated and can be described along a pattern.
+Using with a helpful JSON loader, the process of writing sprite loaders and editing can be done trivially.</p><pre><code>Animate.readSpriteSheetJSON loadTexture &quot;resource/dino.json&quot;
+  :: IO (Animate.SpriteSheet DinoKey SDL.Texture Seconds)</code></pre><p>Because <b>animate</b> doesn't know about <b>SDL</b>, <code>loadTexture</code> is passed in as callback function which needs to load a <code>SDL.Texture</code>.
 Most of instructions for forming the animated sprite are in the JSON file.</p><pre><code>{
   &quot;image&quot;: &quot;resource/dino.png&quot;,
   &quot;alpha&quot;: [255,0,255],
@@ -354,21 +357,21 @@ Most of instructions for forming the animated sprite are in the JSON file.</p><p
 }</code></pre><ul><li><code>image</code> is the file path of the sheet</li><li><code>alpha</code> is an optional tuple for color key representing transparency</li><li><code>clip</code> is an array of tuples [x,y,w,h] representing a clipped rectangle on the sheet</li><li><code>animations</code>, which is keyed by the animation key, holds lists of frames of the clip index and value for delaying (seconds in this case).</li></ul><p>The animation key is one cool Haskell-ly thing about the <b>animate</b> library.
 The key is left opened as type parameter for user defined algebraic data types.
 <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine/Dino.hs#L31"><code>DinoKey</code></a> is one used here.</p><pre><code>data DinoKey
-  = DinoKey&#39;Idle
-  | DinoKey&#39;Move
-  | DinoKey&#39;Kick
-  | DinoKey&#39;Hurt
-  | DinoKey&#39;Sneak
+  = DinoKey'Idle
+  | DinoKey'Move
+  | DinoKey'Kick
+  | DinoKey'Hurt
+  | DinoKey'Sneak
   deriving (Show, Eq, Ord, Bounded, Enum)</code></pre><p>Each of the keys needs to map over to text in order to satisfy <code>KeyName</code> type class.</p><pre><code>instance Animate.KeyName DinoKey where
-  keyName = dinoKey&#39;keyName
+  keyName = dinoKey'keyName
 
-dinoKey&#39;keyName :: DinoKey -&gt; Text
-dinoKey&#39;keyName = \case
-  DinoKey&#39;Idle -&gt; &quot;Idle&quot;
-  DinoKey&#39;Move -&gt; &quot;Move&quot;
-  DinoKey&#39;Kick -&gt; &quot;Kick&quot;
-  DinoKey&#39;Hurt -&gt; &quot;Hurt&quot;
-  DinoKey&#39;Sneak -&gt; &quot;Sneak&quot;</code></pre><h3>Music &amp; SFX</h3><p>The <code>Mixer.load</code> function has a neat interface from the <code>Mixer.Loadable</code> type class.</p><pre><code>class Loadable a where
+dinoKey'keyName :: DinoKey -&gt; Text
+dinoKey'keyName = \case
+  DinoKey'Idle -&gt; &quot;Idle&quot;
+  DinoKey'Move -&gt; &quot;Move&quot;
+  DinoKey'Kick -&gt; &quot;Kick&quot;
+  DinoKey'Hurt -&gt; &quot;Hurt&quot;
+  DinoKey'Sneak -&gt; &quot;Sneak&quot;</code></pre><h3>Music &amp; SFX</h3><p>The <code>Mixer.load</code> function has a neat interface from the <code>Mixer.Loadable</code> type class.</p><pre><code>class Loadable a where
   decode :: MonadIO m =&gt; ByteString -&gt; m a
   load :: MonadIO m =&gt; FilePath -&gt; m a
   free :: MonadIO m =&gt; a -&gt; m ()</code></pre><p><code>Loadable</code> is used for both the <code>Music</code> type and the <code>Chunk</code> type, the sound effect type.
@@ -376,85 +379,85 @@ So while the statements look the same, the types are inferred differently.</p><p
   jumpSfx &lt;- Mixer.load &quot;resource/jump.wav&quot;</code></pre><h3>Surface &amp; Texture</h3><p>Moving from SDL to SDL 2, the concept of <code>Texture</code> was introduced.
 Previously, only a <code>Surface</code> type was used for rendering onto a buffer.
 <code>Texture</code> is the result of hardware acceleration from GPU based libraries (OpenGL) are widely standardized and supported.
-When SDL was first released, that wasn&#39;t true.</p><p>With SDL 2, render with <code>Texture</code>.
-However, you&#39;re still stuck with loading image file as a <code>Surface</code>,</p><pre><code>loadSurface :: FilePath -&gt; Maybe Animate.Color -&gt; IO SDL.Surface
+When SDL was first released, that wasn't true.</p><p>With SDL 2, render with <code>Texture</code>.
+However, you're still stuck with loading image file as a <code>Surface</code>,</p><pre><code>loadSurface :: FilePath -&gt; Maybe Animate.Color -&gt; IO SDL.Surface
 loadSurface path alpha = do
   surface &lt;- Image.load path
   case alpha of
     Just (r,g,b) -&gt; SDL.surfaceColorKey surface $= (Just $ V4 r g b 0x00)
     Nothing -&gt; return ()
-  return surface</code></pre><p>With a quick wrapper function, they&#39;ll convert into <code>Texture</code>s.</p><pre><code>    loadTexture path c = SDL.createTextureFromSurface renderer =&lt;&lt; loadSurface path c</code></pre><h3>Fonts</h3><p>When drawing text onto a screen, it&#39;s a 2-step preparation process.</p><ol><li>Load the font with the SDL ttf library and define the font size by pixel height.</li><li>Draw a string of text creating a <code>Surface</code> and convert the <code>Surface</code> into a <code>Texture</code>.</li></ol><p>Drawing the <code>Texture</code> is no different than drawing any other <code>Texture</code>s at runtime.
+  return surface</code></pre><p>With a quick wrapper function, they'll convert into <code>Texture</code>s.</p><pre><code>    loadTexture path c = SDL.createTextureFromSurface renderer =&lt;&lt; loadSurface path c</code></pre><h3>Fonts</h3><p>When drawing text onto a screen, it's a 2-step preparation process.</p><ol><li>Load the font with the SDL ttf library and define the font size by pixel height.</li><li>Draw a string of text creating a <code>Surface</code> and convert the <code>Surface</code> into a <code>Texture</code>.</li></ol><p>Drawing the <code>Texture</code> is no different than drawing any other <code>Texture</code>s at runtime.
 Just render it.</p><p>To be honest, it felt awkward and wasteful to create an entirely new texture for a string of text.
 The given interface encourages that.</p><p>Surely the reasons err on memory constraints.
-I&#39;m not a fan, but I haven&#39;t dug much into an alternative.
+I'm not a fan, but I haven't dug much into an alternative.
 <i>Boo me.</i>
-From previous knowledge, I&#39;m aware of font maps, but there was a readily available and elegant way to draw text dynamically at runtime.
-One which doesn&#39;t care or know the font size at startup and resizes as needed.
-I&#39;d assume that clever caching is involved.</p><h2>Engine (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine">code</a>)</h2><p>If there&#39;s something where Haskell really shines, it&#39;s doing data transformations.
+From previous knowledge, I'm aware of font maps, but there was a readily available and elegant way to draw text dynamically at runtime.
+One which doesn't care or know the font size at startup and resizes as needed.
+I'd assume that clever caching is involved.</p><h2>Engine</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine">DinoRush/Engine/</a></p><p>If there's something where Haskell really shines, it's doing data transformations.
 And <code>Engine</code> is the place all about data transformations.
-Fortunately, it&#39;s where most of the intricate code exists.
+Fortunately, it's where most of the intricate code exists.
 And every part of the game depends on it.
-It&#39;s the center of what is.
+It's the center of what is.
 Things in here are pure.
-It&#39;s really something that was done correctly.</p><h3>Physics &amp; Collision Detection</h3><center>
+It's really something that was done correctly.</p><h3>Physics &amp; Collision Detection</h3><center>
   <img alt="collision" src="2018-02-28-A-Game-in-Haskell/dino-rush-collision.gif" width="640" height="360" />
   <figcaption>Collision boxes</figcaption>
 </center><p>The collision detection is pretty simple.
-It&#39;s just checking for an intersection between AABB types.
-Things don&#39;t bounce off each other and fly away.
+It's just checking for an intersection between AABB types.
+Things don't bounce off each other and fly away.
 Anything more advanced than a quick test is completely unnecessary.
-Plus, I attempted two separate mediocre physics engines (<a href="https://github.com/jxv/platformer">1</a> &amp; <a href="https://github.com/jxv/merus">2</a>) years ago, but this time around there wasn&#39;t obvious value to it.
+Plus, I attempted two separate mediocre physics engines (<a href="https://github.com/jxv/platformer">1</a> &amp; <a href="https://github.com/jxv/merus">2</a>) years ago, but this time around there wasn't obvious value to it.
 So I kept it easy.</p><h3>Entities</h3><p>Most games have a concept of an Entity.
 Perhaps they have an entire framework or library for dealing with entities.
 Entity Component System is the term.
-Or ECS for short.</p><p>I intentionally did not go that route.</p><p>For one reason, they&#39;re known to be difficult in Haskell.
-Haskell doesn&#39;t inherit the same way as the other languages where is a ECS normal.
-Advanced type wrangling needs to be done to be almost comparable.</p><p>For another reason, I&#39;m not quite sold on the idea.
+Or ECS for short.</p><p>I intentionally did not go that route.</p><p>For one reason, they're known to be difficult in Haskell.
+Haskell doesn't inherit the same way as the other languages where is a ECS normal.
+Advanced type wrangling needs to be done to be almost comparable.</p><p>For another reason, I'm not quite sold on the idea.
 I understand it saves time by allowing things to be <i>super</i> flexible and dynamic.
 But I like the predictability and clarity of sum types or explicitly different types.</p><p>And worst case <a href="https://en.wikibooks.org/wiki/Haskell/GADT">GADTs</a> can come to the rescue when sum types need more flexibility.</p><h3>Adapters &amp; Commands</h3><p>As mentioned before, the <code>Input</code> type is a type only pertains to Dino Rush.
-It&#39;s a projection from the SDL event types.
-This isn&#39;t a unique situation where that pattern occurs.</p><p>The <code>Sfx</code> type follows the same idea but outwards.
+It's a projection from the SDL event types.
+This isn't a unique situation where that pattern occurs.</p><p>The <code>Sfx</code> type follows the same idea but outwards.
 Rather than passing around a <code>Mixer.Chunk</code>, a <code>Sfx</code> is passed around.
-Eventually, the appropriate mapping from the <code>Sfx</code> type to playing the chunk occurs in an <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Effect/Sfx.hs">incredibly dull fashion</a>.</p><pre><code>playSfx&#39; :: (Audio m, HasCommonVars s, MonadState s m) =&gt; m ()
-playSfx&#39; = do
+Eventually, the appropriate mapping from the <code>Sfx</code> type to playing the chunk occurs in an <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Effect/Sfx.hs">incredibly dull fashion</a>.</p><pre><code>playSfx' :: (Audio m, HasCommonVars s, MonadState s m) =&gt; m ()
+playSfx' = do
   CommonVars{cvSfx} &lt;- gets (view commonVars)
   forM_ cvSfx $ \sfx -&gt; case sfx of
-    Sfx&#39;Jump -&gt; playJumpSfx
-    Sfx&#39;Duck -&gt; playDuckSfx
-    Sfx&#39;Point -&gt; playPointSfx
-    Sfx&#39;Bird -&gt; playBirdSfx
-    Sfx&#39;Hurt -&gt; playHurtSfx
-    Sfx&#39;Lava -&gt; playLavaSfx
-    Sfx&#39;Quake -&gt; playQuakeSfx
-    Sfx&#39;Rock -&gt; playRockSfx
-    Sfx&#39;Recover -&gt; playRecoverSfx
-    Sfx&#39;Stock -&gt; playStockSfx</code></pre><h3>Laziness</h3><p>Sometimes, laziness can be awesome.
-The obstacles and their placements are randomly generated into a list, which is a stream because it&#39;s freaking lazy!</p><pre><code>streamOfObstacles :: RandomGen g =&gt; g -&gt; [(Int, ObstacleTag)]
+    Sfx'Jump -&gt; playJumpSfx
+    Sfx'Duck -&gt; playDuckSfx
+    Sfx'Point -&gt; playPointSfx
+    Sfx'Bird -&gt; playBirdSfx
+    Sfx'Hurt -&gt; playHurtSfx
+    Sfx'Lava -&gt; playLavaSfx
+    Sfx'Quake -&gt; playQuakeSfx
+    Sfx'Rock -&gt; playRockSfx
+    Sfx'Recover -&gt; playRecoverSfx
+    Sfx'Stock -&gt; playStockSfx</code></pre><h3>Laziness</h3><p>Sometimes, laziness can be awesome.
+The obstacles and their placements are randomly generated into a list, which is a stream because it's freaking lazy!</p><pre><code>streamOfObstacles :: RandomGen g =&gt; g -&gt; [(Int, ObstacleTag)]
 streamOfObstacles g = zip (map (\dist -&gt; dist `mod` 18 + 3) $ randoms g) (randoms g)</code></pre><p>Watch your step.
-I may just generate a Fibonacci sequence to celebrate.</p><p><i>1, 1, 2, 3, 5, 8, ...</i></p><h2>Wrappers (<a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Wrapper">code</a>)</h2><p>Occasionally, I&#39;ll come across a piece of irreducibly complex IO code.
-They can&#39;t be mocked or tested in another way easily.
-Usually, there&#39;s an under-exported newtype involved with smart constructors.</p><p>It&#39;s often not worth exposing that kind of <a href="https://www.reddit.com/r/haskell/comments/7gfw3v/how_to_unit_test_code_that_uses_polymorphic/">trouble</a> through out the rest of the codebase.
+I may just generate a Fibonacci sequence to celebrate.</p><p><i>1, 1, 2, 3, 5, 8, ...</i></p><h2>Wrappers</h2><p>-- <a href="https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Wrapper">DinoRush/Wrapper/</a></p><p>Occasionally, I'll come across a piece of irreducibly complex IO code.
+They can't be mocked or tested in another way easily.
+Usually, there's an under-exported newtype involved with smart constructors.</p><p>It's often not worth exposing that kind of <a href="https://www.reddit.com/r/haskell/comments/7gfw3v/how_to_unit_test_code_that_uses_polymorphic/">trouble</a> through out the rest of the codebase.
 So try to keep those troublemakers isolated in <code>Wrappers</code>, <code>Resources</code>, or <code>Main</code>.</p><p>Other times, the provided API could use a little adjustment for my usage.</p><pre><code>class Monad m =&gt; SDLInput m where
   pollEventPayloads :: m [SDL.EventPayload]
 
-pollEventPayloads&#39; :: MonadIO m =&gt; m [SDL.EventPayload]
-pollEventPayloads&#39; = liftIO $ map SDL.eventPayload &lt;$&gt; SDL.pollEvents</code></pre><p>I&#39;m not picking on <code>sdl2</code> package.
-There&#39;s just nor much else in the <code>Wrapper</code>s.
-The bindings&#39; API are obviously well thought out as they integrate nicely with existing libraries like <code>linear</code>, <code>vector</code>, and <code>lens</code>.
+pollEventPayloads' :: MonadIO m =&gt; m [SDL.EventPayload]
+pollEventPayloads' = liftIO $ map SDL.eventPayload &lt;$&gt; SDL.pollEvents</code></pre><p>I'm not picking on <code>sdl2</code> package.
+There's just nor much else in the <code>Wrapper</code>s.
+The bindings' API are obviously well thought out as they integrate nicely with existing libraries like <code>linear</code>, <code>vector</code>, and <code>lens</code>.
 Big Kudos!</p><h2>Conclusion</h2><p>This was a small learning experience which I felt pushed.
-Yet there&#39;s a couple things, which I could have done differently, during development without needing hindsight.
+Yet there's a couple things, which I could have done differently, during development without needing hindsight.
 Both are related to discipline.</p><p>Once the <code>Scene</code> idea became real,
 I should have been more strict with keeping the <code>Scene</code> modules focused on its purpose.
 The purpose is to compose functions from the other modules -- <code>Engine</code>, <code>Manager</code>, and <code>Effect</code> -- which forms a concise and coherent interaction of widely originating components.
-Frequently, I&#39;d extract something to be pure.
+Frequently, I'd extract something to be pure.
 And more functions were created related to that function.
-Next thing you know it, there&#39;s several potentially pure functions which should be in <code>Engine</code>.</p><p>Another thing is that I should have been more eager to create an <code>Effect</code>.
+Next thing you know it, there's several potentially pure functions which should be in <code>Engine</code>.</p><p>Another thing is that I should have been more eager to create an <code>Effect</code>.
 It can feel expensive to create another type class or module.
-But for the sake of clarity, it&#39;s worth it.</p><p>Overall, I&#39;m actually happy with the result as it achieves its main goal.
-It&#39;s a Haskell game that plays on my small laptop.
+But for the sake of clarity, it's worth it.</p><p>Overall, I'm actually happy with the result as it achieves its main goal.
+It's a Haskell game that plays on my small laptop.
 The game generates enough sense of urgency to be &quot;fun.&quot;
 I watched a few people played it, and they seem to enjoy it.
-That was very cool.</p><p>Thanks for reading!</p><br /><p>P.S. My high score is <a href="2018-02-28-A-Game-in-Haskell/dino-rush-hiscore.png">227</a>.</p><br /><p><a href="https://www.reddit.com/r/haskell/comments/813yik/a_game_in_haskell_dino_rush/">/r/haskell</a></p><p><a href="https://www.reddit.com/r/gamedev/comments/8140hj/a_game_in_haskell_dino_rush/">/r/gamedev</a></p><br /><hr><h2>Acknowledgements</h2><ul><li>Various contributors for the Haskell bindings of SDL libraries<ul><li><a href="https://github.com/haskell-game/sdl2/graphs/contributors">SDL2 bindings</a> - Just looking at the commits, years of work have been put into the bindings. Dino Rush wouldn&#39;t exist without it. <a href="https://github.com/polarina">Gabríel Arthúr Pétursson</a> and <a href="https://github.com/ocharles">Oliver Charles</a> are especially noteworthy.</li><li><a href="https://github.com/sbidin/sdl2-mixer/graphs/contributors">SDL2 mixer bindings</a> - by <a href="https://github.com/tempname11">Vladimir Semyonov</a> and <a href="https://github.com/sbidin">Siniša Biđin</a>, who fixed recent compiling issues.</li><li><a href="https://github.com/haskell-game/sdl2-ttf/graphs/contributors">SDL2 ttf bindings</a> - Commits show that <a href="https://github.com/sbidin">Siniša Biđin</a> was killing it again.</li></ul></li><li><a href="https://www.draw.io">draw.io</a> - It&#39;s the simple diagramming software I always wanted. And it&#39;s free!</li><li>Game assets were plucked from or created by various sources on the internet<ul><li>Music<ul><li>Goodie (Crack Intro) by Quartex (Oberheim)</li></ul></li><li><p>Sound effects were generated by <a href="https://www.bfxr.net/">bfxr</a></p></li><li>Fonts<ul><li><a href="https://fontlibrary.org/en/font/computer-speak#Computer%20Speak%20v0.3-Regular">Computer Speak</a> by Shaan Sawrup</li></ul></li><li>Sprites<ul><li>Dinosaur by <a href="https://twitter.com/ScissorMarks">ScissorMarks</a></li><li><a href="https://opengameart.org/content/basic-map-32x32-by-silver-iv">Water, ground, and rocks</a> by <a href="https://opengameart.org/users/silver-iv">Ivan VOIROL</a></li><li><a href="https://opengameart.org/content/lpc-terrain-repack">Lava</a> by <a href="http://williamthompsonj.blogspot.de/">William Thompson</a></li><li><a href="https://opengameart.org/content/jungle-tree-pack">Trees</a> by <a href="https://opengameart.org/users/knoblepersona">KnoblePersona</a></li><li><a href="https://opengameart.org/content/owl-and-raven-sprites">Raven</a> by <a href="https://revangale.wordpress.com/">Revangle</a></li></ul></li></ul></li></ul></div><div id="footer"><br />
+That was very cool.</p><p>Thanks for reading!</p><br /><p>P.S. My high score is <a href="2018-02-28-A-Game-in-Haskell/dino-rush-hiscore.png">227</a>.</p><br /><p><a href="https://www.reddit.com/r/haskell/comments/813yik/a_game_in_haskell_dino_rush/">/r/haskell</a></p><p><a href="https://www.reddit.com/r/gamedev/comments/8140hj/a_game_in_haskell_dino_rush/">/r/gamedev</a></p><br /><hr><h2>Acknowledgements</h2><ul><li>Various contributors for the Haskell bindings of SDL libraries<ul><li><a href="https://github.com/haskell-game/sdl2/graphs/contributors">SDL2 bindings</a> - Just looking at the commits, years of work have been put into the bindings. Dino Rush wouldn't exist without it. <a href="https://github.com/polarina">Gabríel Arthúr Pétursson</a> and <a href="https://github.com/ocharles">Oliver Charles</a> are especially noteworthy.</li><li><a href="https://github.com/sbidin/sdl2-mixer/graphs/contributors">SDL2 mixer bindings</a> - by <a href="https://github.com/tempname11">Vladimir Semyonov</a> and <a href="https://github.com/sbidin">Siniša Biđin</a>, who fixed recent compiling issues.</li><li><a href="https://github.com/haskell-game/sdl2-ttf/graphs/contributors">SDL2 ttf bindings</a> - Commits show that <a href="https://github.com/sbidin">Siniša Biđin</a> was killing it again.</li></ul></li><li><a href="https://www.draw.io">draw.io</a> - It's the simple diagramming software I always wanted. And it's free!</li><li>Game assets were plucked from or created by various sources on the internet<ul><li>Music<ul><li>Goodie (Crack Intro) by Quartex (Oberheim)</li></ul></li><li><p>Sound effects were generated by <a href="https://www.bfxr.net/">bfxr</a></p></li><li>Fonts<ul><li><a href="https://fontlibrary.org/en/font/computer-speak#Computer%20Speak%20v0.3-Regular">Computer Speak</a> by Shaan Sawrup</li></ul></li><li>Sprites<ul><li>Dinosaur by <a href="https://twitter.com/ScissorMarks">ScissorMarks</a></li><li><a href="https://opengameart.org/content/basic-map-32x32-by-silver-iv">Water, ground, and rocks</a> by <a href="https://opengameart.org/users/silver-iv">Ivan VOIROL</a></li><li><a href="https://opengameart.org/content/lpc-terrain-repack">Lava</a> by <a href="http://williamthompsonj.blogspot.de/">William Thompson</a></li><li><a href="https://opengameart.org/content/jungle-tree-pack">Trees</a> by <a href="https://opengameart.org/users/knoblepersona">KnoblePersona</a></li><li><a href="https://opengameart.org/content/owl-and-raven-sprites">Raven</a> by <a href="https://revangale.wordpress.com/">Revangle</a></li></ul></li></ul></li></ul></div><div class="footer" id="footer"><br />
 <br />
 <br />
 <br />
@@ -466,18 +469,18 @@ That was very cool.</p><p>Thanks for reading!</p><br /><p>P.S. My high score is 
 <br />
 <br />
 <br />
-<div style="color:#111;margin:auto;width:100%;text-align:center;font-family:&#39;Helvetica&#39;">
-  <a href="atom.xml" style="color:#111;font-size:smaller">atom</a>
-   
-  <a href="index.html" style="color:#111;font-size:smaller">blog</a>
-   
-  <a href="https://github.com/jxv" style="color:#111;font-size:smaller">github</a>
-   
-  <a href="feed.json" style="color:#111;font-size:smaller">json</a>
-   
-  <a href="rss.xml" style="color:#111;font-size:smaller">rss</a>
+<div style="margin:auto;width:100%;text-align:center;font-family:'Helvetica'">
+  <a href="atom.xml" style="font-size:smaller">atom</a>
+  &nbsp;
+  <a href="index.html" style="font-size:smaller">blog</a>
+  &nbsp;
+  <a href="https://github.com/jxv" style="font-size:smaller">github</a>
+  &nbsp;
+  <a href="feed.json" style="font-size:smaller">json</a>
+  &nbsp;
+  <a href="rss.xml" style="font-size:smaller">rss</a>
 </div>
 <br />
 <br />
 <br />
-<div class="footer" style="font-size:x-small">Joe Vargas <span class="copy"></span> 2023<br /><br /></div></div></div></body></html>
+<div class="footer" style="font-size:x-small">Joe Vargas <span class="copy"></span> 2024<br /><br /></div></div></div></body></html>

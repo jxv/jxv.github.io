@@ -1,11 +1,9 @@
 #A Game in Haskell - Dino Rush
-#####  February 28, 2018
+#####  2018-02-28
+<div><a href="https://github.com/jxv/dino-rush">Source code</a></div>
+<br />
+<img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="640" height="360" />
 
-<center>
-  <img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="640" height="360" />
-
-  [GitHub Repo](https://github.com/jxv/dino-rush)
-</center>
 
 
 ## Motivation
@@ -42,7 +40,9 @@ Without glancing at the latest extensions and most advanced libraries, Haskell s
 Yeah.
 Let's stick with that.
 
-## The Game ([video](https://youtu.be/as4sKGoA7XI))
+## The Game
+
+-- [Video of gameplay](https://youtu.be/as4sKGoA7XI)
 
 The game is called Dino Rush because the objective is for a dinosaur -- stay with me on this -- to rush past obstacles.
 Sure, it's not very interesting from a design perspective.
@@ -104,7 +104,9 @@ It's hard to know at this point.)
 * **Wrappers** - A place to wrap IO code which could use a cleaner API
 * **Third Party Libraries** - All the dependencies (eg. `sdl2`, `linear`, `animate`)
 
-## Main ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush.hs))
+## Main 
+
+-- [DinoRush.hs](https://github.com/jxv/dino-rush/blob/master/library/DinoRush.hs)
 
 Let's take it from the top.
 At the [`main`](https://github.com/jxv/dino-rush/blob/master/library/DinoRush.hs#L39) function.
@@ -222,9 +224,11 @@ This what the wonderful `mtl` and `lens` libraries allow.
 The last thing to do is instance `HasPlayVars` on `Vars` and instance `Renderer` and `AudioSfx` on `DinoRush`.
 The code achieves high cohesion with loose coupling. Great!
 
-## Runner ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Runner.hs))
+## Runner 
 
-The [`Runner`](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Runner.hs) is the module holds the main loop.
+-- [DinoRush/Runner.hs](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Runner.hs)
+
+The `Runner` is the module holds the main loop.
 It provides 3 distinct purposes.
 First, it steps the current `Scene`.
 Second, it manages and effects the transitions between `Scene`s.
@@ -316,7 +320,9 @@ And visually represented.
   <figcaption>Scene flowchart</figcaption>
 </center>
 
-## Scenes ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Scene))
+## Scenes
+
+-- [DinoRush/Scene/](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Scene)
 
 Remember that the next `Scene` is decided in the current `Scene`'s step.
 It doesn't happen at the level of the `Runner`, which deals with the transitions as a result.
@@ -337,7 +343,9 @@ If there was another state-machine, representing sub-scenes within the `Play` sc
 The sub-scenes could share read-only access of each other.
 It's hard to say, but I think that's where it was growing.
 
-## Managers ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Manager))
+## Managers
+
+-- [DinoRush/Manager/](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Manager)
 
 In the realm of __mtl style__, a Manager is a monadic type class representing an interface to hidden state.
 Whatever touches that data is not responsible for how it manages it self.
@@ -403,7 +411,9 @@ stepControl events Input{iSpace,iUp,iDown,iEscape} = Input
     pressed keycode = or $ map (keycodePressed keycode) events
 ```
 
-## Effects ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Effect))
+## Effects
+
+-- [DinoRush/Effect/](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Effect)
 
 An `Effect` is also a monadic type class.
 Unlike a `Manager`, whether they act as a state machine is irrelevant.
@@ -423,7 +433,7 @@ class Monad m => Renderer m where
   drawNumber :: Number -> (Int, Int) -> m ()
 ```
 
-It's a low-level `Effect` where some funcitons should be used to form clearer intentions.
+It's a low-level `Effect` where some functions should be used to form clearer intentions.
 Another `Effect`, `HUD`, does that by depending on `Renderer` in its implementation.
 
 ```
@@ -508,7 +518,9 @@ I debated whether or not to split these into separate categories.
 A case could be made to keep them merge into a single directory called `Class` or something similar.
 But if game dev is art, and art is about intention, then these lines should be drawn like God intended.
 
-## Config ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Config.hs))
+## Config
+
+-- [DinoRush/Config.hs](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Config.hs)
 
 `Config` is the environment data inside the `ReaderT` transformer.
 It's a basic use for a transformer, including with __mtl style__.
@@ -529,7 +541,9 @@ Just the SDL window, renderer, and various loaded resources.
 It would also hold command-line related arguments if they were needed.
 But they're not.
 
-## State ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/State.hs))
+## State
+
+-- [DinoRush/State.hs](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/State.hs)
 
 The global stitched state is the `Vars` type.
 Similar to appearance of scene transitions, they look opaque from this perspective.
@@ -610,7 +624,9 @@ _Common state is the junk drawer._
 In retrospect, `cvSfx` as common was valid but approached poorly.
 It has a resemblance of `vInput`, and it should have used a similar `Manager` [`type class`](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Manager/Input.hs).
 
-## Resources ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Resource.hs))
+## Resources
+
+-- [DinoRush/Resource.hs](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Resource.hs)
 
 The `Resources` type holds all the necessary images, sound effects, and music.
 It's also in the same module for loading those images, sounds, and fonts.
@@ -635,7 +651,8 @@ The majority of sprites aren't super complicated and can be described along a pa
 Using with a helpful JSON loader, the process of writing sprite loaders and editing can be done trivially.
 
 ```
-Animate.readSpriteSheetJSON loadTexture "resource/dino.json" :: IO (Animate.SpriteSheet DinoKey SDL.Texture Seconds)
+Animate.readSpriteSheetJSON loadTexture "resource/dino.json"
+  :: IO (Animate.SpriteSheet DinoKey SDL.Texture Seconds)
 ```
 
 Because __animate__ doesn't know about __SDL__, `loadTexture` is passed in as callback function which needs to load a `SDL.Texture`.
@@ -780,7 +797,9 @@ From previous knowledge, I'm aware of font maps, but there was a readily availab
 One which doesn't care or know the font size at startup and resizes as needed.
 I'd assume that clever caching is involved.
 
-## Engine ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine))
+## Engine
+
+-- [DinoRush/Engine/](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Engine)
 
 If there's something where Haskell really shines, it's doing data transformations.
 And `Engine` is the place all about data transformations.
@@ -865,7 +884,9 @@ I may just generate a Fibonacci sequence to celebrate.
 
 _1, 1, 2, 3, 5, 8, ..._
 
-## Wrappers ([code](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Wrapper))
+## Wrappers 
+
+-- [DinoRush/Wrapper/](https://github.com/jxv/dino-rush/blob/master/library/DinoRush/Wrapper)
 
 Occasionally, I'll come across a piece of irreducibly complex IO code.
 They can't be mocked or tested in another way easily.
