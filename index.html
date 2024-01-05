@@ -27,7 +27,7 @@
 
 a {
   color: inherit;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .vertical-center {
@@ -52,7 +52,36 @@ a {
   width: 485px;
   height: 300px;
   color: #777;
+  animation: rectanimate 60s infinite;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  transition-timing-function: ease-in-out;
 }
+
+@keyframes rectanimate {
+  25% {
+    border-top-left-radius: 50px;
+    border-top-right-radius: 100px;
+    border-bottom-left-radius: 70px;
+    border-bottom-right-radius: 30px;
+  }
+  50% {
+    border-top-left-radius: 100px;
+    border-top-right-radius: 90px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 80px;
+  }
+  75% {
+    border-top-left-radius: 60px;
+    border-top-right-radius: 40px;
+    border-bottom-left-radius: 90px;
+    border-bottom-right-radius: 40px;
+  }
+  
+}
+
 
 .white-rect {      
   background-color: #ffffff;
@@ -86,6 +115,19 @@ function onToggleDarkModeCallback() {
       <br />
     </div>
   </div>
-  <div class="footer" style="font-size: x-small">Joe Vargas &copy; 2024<br/><br/></div>
+  <div class="footer">
+    <div style="margin: auto; width: 100%; text-align: center; font-family: 'Helvetica'; font-size: smaller">
+      <a href="index.html">home</a>
+      &nbsp;
+      <a href="blog/index.html">blog</a>
+      &nbsp;
+      <a href="https://github.com/jxv">github</a>
+    </div>
+    <br/><br/>
+    <span style="font-size: x-small">
+      Joe Vargas &copy; 2024
+    </span>
+    <br/><br/>
+  </div>
 </body>
 </html>
