@@ -5,6 +5,10 @@ body {
   transition: 2s ease;
 }
 
+h1, h2, h3, h4, h5, figcaption {
+  font-family: 'Helvectica', sans-serif;
+}
+
 hr {
   width: 100%;
   display: block;
@@ -29,28 +33,37 @@ hr {
   margin-right: auto;
   font-size: 1em;
   font-weight: 300;
+  font-family: 'Palatino', serif;
+}
+
+p {
+  font-family: 'Palatino', serif;
 }
 
 .content p {
-  line-height: 1.5em;
+  line-height: 1.85em;
   text-indent: 2em;
+  text-align: justify;
 }
 
 .content li p {
-  line-height: 1.8em;
+  line-height: 1.85em;
   text-indent: 0em;
 }
 
 ol > li::marker {
   font-weight: bold;
+  line-height: 1.85em;
 }
 
 ul > li::marker {
   font-weight: bold;
+  line-height: 1.85em;
 }
 
 li {
-  margin-top: 0.2em;
+  line-height: 1.85em;
+  font-family: 'Palatino', serif;
 }
 
 li:last-child {
@@ -155,6 +168,7 @@ a {
 
 code {
   font-size: 0.8em;
+  line-height: 1.5em;
   font-weight: normal;
   font-family: 'Courier New', monospace;
   background-color: #e7e7e7;
@@ -182,6 +196,7 @@ pre code {
   padding:0px;
   font-size: 1.0em;
   color: #333;
+  line-height: 1.5em;
 }
 
 figcaption {
