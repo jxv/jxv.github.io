@@ -1,7 +1,7 @@
 <!DOCTYPE HTML><html><head><title>A Game in Haskell - Dino Rush</title><link rel="stylesheet" type="text/css" href="style.css"><link rel="stylesheet" type="text/css" href="../dark-mode.css"><script src="../dark-mode.js"></script><link rel="icon" type="image/png" href="../favicon.png"></head><body><div class="container" id="container"><div class="header" id="header"><div class="dark-mode-position"><form autocomplete="off"><label class="dark-mode-switch"><input id="dark-mode-checkbox" type="checkbox" onclick="onToggleDarkMode()"><span class="dark-mode-slider round"></span></label></form></div>
 </div><div class="content" id="content"><h1>A Game in Haskell - Dino Rush</h1><h5>2018-02-28</h5><div><a href="https://github.com/jxv/dino-rush">Source code</a></div>
 <br />
-<img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="640" height="360" /><h2>Motivation</h2><p>Writing a game in Haskell appears to be an elusive, white-whale task.
+<img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="550" height="310" /><h2>Motivation</h2><p>Writing a game in Haskell appears to be an elusive, white-whale task.
 And with an existing handful of small and citable games, I wish more existed with documentation to ease the barrier of entry.
 It's disappointing because writing a game can be a challenging and fun way to explore a language.
 And Haskell could be a great language for creating small-medium sized games.
@@ -31,7 +31,7 @@ And without a doubt, it's a Skinner box game.
 It's <del>shamelessly stolen from</del> <i>inspired by</i> a certain, offline game.
 But it's fairly simple from a player perspective.
 That's important for keeping scope.</p><center>
-  <img alt src="2018-02-28-A-Game-in-Haskell/dino-rush-chrome-game.gif" width="680" height="254" />
+  <img alt src="2018-02-28-A-Game-in-Haskell/dino-rush-chrome-game.gif" width="550" height="205" />
   <figcaption>Chrome Dino Game</figcaption>
 </center><p>Of course, it wasn't as straight forward from a programmer perspective.
 That makes smartest decision overall was to pick a silly game.
@@ -224,7 +224,7 @@ drawNumbers :: Renderer m =&gt; Integer -&gt; (Int, Int) -&gt; m ()
 drawNumbers int (x,y) = mapM_
   (\(i, n) -&gt; drawNumber n (x - i * 16, y))
   (zip [0..] (toNumberReverse int))</code></pre><p>Writing the code that controls the camera was actually pretty fun.</p><center>
-  <img alt="zoom cam" src="2018-02-28-A-Game-in-Haskell/dino-rush-zoom.gif" width="640" height="360" />
+  <img alt="zoom cam" src="2018-02-28-A-Game-in-Haskell/dino-rush-zoom.gif" width="550" height="310" />
   <figcaption>Zoom mechanic</figcaption>
 </center><p><i>Zoom, zoom.</i></p><pre><code>class Monad m =&gt; CameraControl m where
   adjustCamera :: Camera -&gt; m ()
@@ -312,7 +312,7 @@ Draw and configure textures.</p><p><code>Resources</code> was appropriately extr
 The resources required unique set of detailed instructions for loading and freeing.
 The details became quite messy for <code>Config</code> in the same vein that <code>Main</code> should be concise.
 <code>Config</code> is concerned about all read-only at a higher level.</p><h3>Sprites &amp; Animations</h3><p>With 2D games, a sprite system can save a lot of repetitive work.</p><center>
-  <img alt="dino.png" src="https://github.com/jxv/dino-rush/raw/master/resource/dino.png" width="577" height="24" />
+  <img alt="dino.png" src="https://github.com/jxv/dino-rush/raw/master/resource/dino.png" width="550" height="24" />
   <figcaption>Dino spritesheet</figcaption>
 </center><p>To load sprite sheets and manage animations, I used my <a href="https://hackage.haskell.org/package/animate">animate</a> library.
 The majority of sprites aren't super complicated and can be described along a pattern.
@@ -400,7 +400,7 @@ And every part of the game depends on it.
 It's the center of what is.
 Things in here are pure.
 It's really something that was done correctly.</p><h3>Physics &amp; Collision Detection</h3><center>
-  <img alt="collision" src="2018-02-28-A-Game-in-Haskell/dino-rush-collision.gif" width="640" height="360" />
+  <img alt="collision" src="2018-02-28-A-Game-in-Haskell/dino-rush-collision.gif" width="550" height="310" />
   <figcaption>Collision boxes</figcaption>
 </center><p>The collision detection is pretty simple.
 It's just checking for an intersection between AABB types.

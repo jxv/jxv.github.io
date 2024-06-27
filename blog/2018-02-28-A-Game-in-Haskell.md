@@ -2,7 +2,7 @@
 #####  2018-02-28
 <div><a href="https://github.com/jxv/dino-rush">Source code</a></div>
 <br />
-<img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="640" height="360" />
+<img alt="Dino Rush Title screen" src="2018-02-28-A-Game-in-Haskell/dino-rush-title.png" width="550" height="310" />
 
 
 

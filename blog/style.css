@@ -1,12 +1,12 @@
 body {
   background: #f7f7f7;
-  color: #333;
-  font-family: 'Helvectica', sans-serif;
+  color: #000;
+  font-family: 'Helvetica', sans-serif;
   transition: 2s ease;
 }
 
 h1, h2, h3, h4, h5, figcaption {
-  font-family: 'Helvectica', sans-serif;
+  font-family: 'Helvetica', sans-serif;
 }
 
 hr {
@@ -14,56 +14,58 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #333;
+  border-top: 1px solid #000;
   margin: 1em 0;
   padding: 0;
 }
 
 .header {
-  width: calc(90vw / 2 + 600px / 2);
-  max-width: 700px;
+  /* width: calc(90vw / 2 + 550px / 2); */
+  max-width: 550px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .content {
-  width: calc(90vw / 2 + 600px / 2);
-  max-width: 700px;
+  /* width: calc(90vw / 2 + 550px / 2); */
+  /* max-width: 450px; */
+  /* margin-left: auto; */
+  width: 550px;
   margin-left: auto;
   margin-right: auto;
-  font-size: 1em;
-  font-weight: 300;
-  font-family: 'Palatino', serif;
+  font-size: 1.1em;
+  /* font-weight: 300; */
+  font-family: 'Helvetica', sans-serif;
 }
 
 p {
-  font-family: 'Palatino', serif;
+  font-family: 'Helvetica', sans-serif;
 }
 
 .content p {
-  line-height: 1.85em;
+  line-height: 1.5em;
   text-indent: 2em;
   text-align: justify;
 }
 
 .content li p {
-  line-height: 1.85em;
+  line-height: 1.5em;
   text-indent: 0em;
 }
 
 ol > li::marker {
   font-weight: bold;
-  line-height: 1.85em;
+  line-height: 1.5em;
 }
 
 ul > li::marker {
   font-weight: bold;
-  line-height: 1.85em;
+  line-height: 1.5em;
 }
 
 li {
-  line-height: 1.85em;
-  font-family: 'Palatino', serif;
+  line-height: 1.5em;
+  font-family: 'Helvetica', sans-serif;
 }
 
 li:last-child {
@@ -71,19 +73,19 @@ li:last-child {
 }
 
 .content > h1 {
-  color: #333;
+  color: #000;
   transition: 2s ease;
 }
 
 .content > h2,
 .content > h3,
 .content > h4 {
-  color: #777;
+  color: #000;
   transition: 2s ease;
 }
 
 .content > h5 {
-  color: #aaa;
+  color: #000;
   transition: 2s ease;
 }
 
@@ -92,7 +94,7 @@ li:last-child {
   font-size: 2em;
   letter-spacing: -0.02em;
   font-weight: 900;
-  color: #333;
+  color: #000;
 }
 
 .content > h2 {
@@ -122,7 +124,7 @@ a {
   font-size: 0.8em;
   text-decoration: none;
   font-family: 'Helvetica', sans-serif;
-  color: #777;
+  color: #000;
   padding: 0px 0px 0px 0px;
   margin: 10px 0px 0px 0px;
 }
@@ -167,7 +169,6 @@ a {
 }
 
 code {
-  font-size: 0.8em;
   line-height: 1.5em;
   font-weight: normal;
   font-family: 'Courier New', monospace;
@@ -175,7 +176,7 @@ code {
   border-radius: 3px;
   padding: 3px;
   text-indent: none;
-  color: #333;
+  color: #000;
 }
 
 b {
@@ -194,8 +195,8 @@ pre {
 pre code {
   background: #e7e7e7;
   padding:0px;
-  font-size: 1.0em;
-  color: #333;
+  font-size: 0.9em;
+  color: #000;
   line-height: 1.5em;
 }
 
